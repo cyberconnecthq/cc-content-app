@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
-import { ExternalProvider, Web3Provider } from "@ethersproject/providers";
-import detectEthereumProvider from "@metamask/detect-provider";
-import CreateProfileBtn from "./components/CreateProfileBtn";
+import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "./helpers/constants";
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "./apollo";
+import ConnectWalletBtn from "./components/ConnectWallet";
+import CreateProfileBtn from "./components/CreateProfileBtn";
+import LoginBtn from "./components/LoginBtn";
 
 function App() {
   /* State variable to store the provider */
@@ -18,6 +20,9 @@ function App() {
   /* State variable to store the handle */
   const [handle, setHandle] = useState<string | undefined>(undefined);
 
+  /* State variable to store the access token */
+  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     /* Check if the user connected with wallet */
     if (!(provider && address)) return;
@@ -30,47 +35,6 @@ function App() {
       alert(error.message);
     }
   }, [provider, address]);
-
-  const connectWallet = async () => {
-    try {
-      /* Function to detect most providers injected at window.ethereum */
-      const detectedProvider = (await detectEthereumProvider()) as ExternalProvider;
-
-      /* Check if the Ethereum provider exists */
-      if (!detectedProvider) {
-        throw new Error("Please install MetaMask!");
-      }
-
-      /* Ethers Web3Provider wraps the standard Web3 provider injected by MetaMask */
-      const web3Provider = new ethers.providers.Web3Provider(detectedProvider);
-
-      /* Connect to Ethereum. MetaMask will ask permission to connect user accounts */
-      await web3Provider.send("eth_requestAccounts", []);
-
-      /* Get the signer from the provider */
-      const signer = web3Provider.getSigner();
-
-      /* Get the address of the connected wallet */
-      const address = await signer.getAddress();
-
-      /* Set the providers in the state variables */
-      setProvider(web3Provider);
-
-      /* Set the address in the state variable */
-      setAddress(address);
-
-    } catch (error) {
-      /* This error code indicates that the user rejected the connection */
-      if (error.code === 4001) {
-        /* Reset the state variables */
-        setProvider(undefined);
-        setAddress(undefined);
-      } else {
-        /* Display error message */
-        alert(error.message);
-      }
-    }
-  };
 
   const checkNetwork = async (provider: Web3Provider) => {
     try {
@@ -93,23 +57,54 @@ function App() {
     }
   }
 
-  if (!address) {
-    return <button onClick={connectWallet}>Connect with MetaMask</button>;
-  }
-
   return (
-    <div>
-      <p>Connected with MetaMask</p>
-      <p>Address: {address}</p>
-      <CreateProfileBtn
-        provider={provider}
-        address={address}
-        checkNetwork={checkNetwork}
-        setProfileID={setProfileID}
-        setHandle={setHandle}
-        disabled={!provider}
-      />
-    </div>
+    <ApolloProvider client={apolloClient}>
+      <div className="App">
+        <div className="container">
+          <h2>Connect Wallet</h2>
+          <ConnectWalletBtn
+            setProvider={setProvider}
+            setAddress={setAddress}
+            disabled={Boolean(provider)}
+          />
+          {
+            (provider && address) &&
+            <div>
+              <div>Address:</div>
+              <div>{address}</div>
+            </div>
+          }
+          <h2>Create Profile</h2>
+          <CreateProfileBtn
+            provider={provider}
+            address={address}
+            checkNetwork={checkNetwork}
+            setProfileID={setProfileID}
+            setHandle={setHandle}
+            disabled={!Boolean(provider && address)}
+          />
+          {
+            handle &&
+            <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" height="100%" sandbox="allow-scripts" src={`https://cyberconnect.mypinata.cloud/ipfs/bafkreic7ur7evrpy45md2xpth3zvy4mjcczzodjg7xciupty6dvmliye6i?handle=${handle}`}></iframe>
+          }
+          <h2>Login</h2>
+          <LoginBtn
+            provider={provider}
+            address={address}
+            checkNetwork={checkNetwork}
+            setAccessToken={setAccessToken}
+            disabled={!Boolean(provider && address)}
+          />
+          {
+            (accessToken) &&
+            <div>
+              <div>Access token:</div>
+              <div>{accessToken}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </ApolloProvider >
   );
 }
 

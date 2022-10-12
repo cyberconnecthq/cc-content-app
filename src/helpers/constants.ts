@@ -5,3 +5,5 @@ export const PROFILE_NFT_CONTRACT =
 
 export const PROFILE_NFT_OPERATOR =
     "0x0000000000000000000000000000000000000000"; // Zero Address
+
+export const DOMAIN = "test.com"; // Domain name
