@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ExternalProvider, Web3Provider } from "@ethersproject/providers";
 import detectEthereumProvider from "@metamask/detect-provider";
-
-/* Constants */
-const CHAIN_ID = 5; // Goerli Testnet Network chain id
+import CreateProfileBtn from "./components/CreateProfileBtn";
+import { CHAIN_ID } from "./helpers/constants";
 
 function App() {
   /* State variable to store the provider */
@@ -13,12 +12,23 @@ function App() {
   /* State variable to store the address */
   const [address, setAddress] = useState<string | undefined>(undefined);
 
+  /* State variable to store the profile ID */
+  const [profileID, setProfileID] = useState<number | undefined>(undefined);
+
+  /* State variable to store the handle */
+  const [handle, setHandle] = useState<string | undefined>(undefined);
+
   useEffect(() => {
-    /* Check if the user first connected */
+    /* Check if the user connected with wallet */
     if (!(provider && address)) return;
 
-    /* Function to check if the connected network is the Goerli Testnet Network */
-    checkNetwork(provider);
+    try {
+      /* Function to check if the network is the correct one */
+      checkNetwork(provider);
+    } catch (error) {
+      /* Display error message */
+      alert(error.message);
+    }
   }, [provider, address]);
 
   const connectWallet = async () => {
@@ -58,7 +68,6 @@ function App() {
       } else {
         /* Display error message */
         alert(error.message);
-        console.error(error);
       }
     }
   };
@@ -78,9 +87,8 @@ function App() {
       if (error.code === 4902) {
         await provider.send("wallet_addEthereumChain", [{ chainId: "0x" + CHAIN_ID.toString(16), rpcUrls: ["https://goerli.infura.io/v3/"] }]);
       } else {
-        /* Display error message */
-        alert(error.message);
-        console.error(error);
+        /* Throw the error */
+        throw error;
       }
     }
   }
@@ -93,6 +101,14 @@ function App() {
     <div>
       <p>Connected with MetaMask</p>
       <p>Address: {address}</p>
+      <CreateProfileBtn
+        provider={provider}
+        address={address}
+        checkNetwork={checkNetwork}
+        setProfileID={setProfileID}
+        setHandle={setHandle}
+        disabled={!provider}
+      />
     </div>
   );
 }
