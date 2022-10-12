@@ -1,0 +1,57 @@
+[
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "to",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "handle",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "avatar",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "metadata",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "operator",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct DataTypes.CreateProfileParams",
+                "name": "params",
+                "type": "tuple"
+            },
+            { "internalType": "bytes", "name": "preData", "type": "bytes" },
+            { "internalType": "bytes", "name": "postData", "type": "bytes" }
+        ],
+        "name": "createProfile",
+        "outputs": [
+            { "internalType": "uint256", "name": "tokenID", "type": "uint256" }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "string", "name": "handle", "type": "string" }
+        ],
+        "name": "getProfileIdByHandle",
+        "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
