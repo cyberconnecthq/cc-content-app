@@ -1,16 +1,12 @@
+import { useContext } from "react";
 import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { ExternalProvider, Web3Provider } from "@ethersproject/providers";
+import { ExternalProvider } from "@ethersproject/providers";
+import { AuthContext } from "../../context/auth";
 
-function ConnectWalletBtn({
-    setAddress,
-    setProvider,
-    disabled,
-}: {
-    setAddress: (address: string | undefined) => void,
-    setProvider: (provider: Web3Provider | undefined) => void,
-    disabled: boolean,
-}) {
+function ConnectBtn() {
+    const { setProvider, setAddress } = useContext(AuthContext);
+
     const handleOnClick = async () => {
         try {
             /* Function to detect most providers injected at window.ethereum */
@@ -39,6 +35,8 @@ function ConnectWalletBtn({
             /* Set the address in the state variable */
             setAddress(address);
 
+            /* Display success message */
+            alert("Connected to MetaMask!");
         } catch (error) {
             /* This error code indicates that the user rejected the connection */
             if (error.code === 4001) {
@@ -53,10 +51,10 @@ function ConnectWalletBtn({
     };
 
     return (
-        <button onClick={handleOnClick} disabled={disabled}>
+        <button className="connect-btn" onClick={handleOnClick}>
             Connect Wallet
         </button>
     );
 }
 
-export default ConnectWalletBtn;
+export default ConnectBtn;

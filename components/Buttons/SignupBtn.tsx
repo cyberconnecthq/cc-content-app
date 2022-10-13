@@ -1,26 +1,15 @@
+import { useContext } from "react";
 import { ethers } from "ethers";
-import { Web3Provider } from "@ethersproject/providers";
-import ProfileNFTABI from "../abi/ProfileNFT.json";
-import { PROFILE_NFT_CONTRACT, PROFILE_NFT_OPERATOR } from "../helpers/constants";
-import { pinJSONToIPFS } from "../helpers/functions";
+import ProfileNFTABI from "../../abi/ProfileNFT.json";
+import { PROFILE_NFT_CONTRACT, PROFILE_NFT_OPERATOR } from "../../helpers/constants";
+import { pinJSONToIPFS } from "../../helpers/functions";
 import { randUserName, randAvatar, randPhrase, randFullName, } from "@ngneat/falso";
-import { IProfileMetadata } from "../types";
+import { IProfileMetadata } from "../../types";
+import { AuthContext } from "../../context/auth";
 
-function CreateProfileBtn({
-    provider,
-    address,
-    checkNetwork,
-    setProfileID,
-    setHandle,
-    disabled,
-}: {
-    provider: Web3Provider | undefined,
-    address: string | undefined,
-    checkNetwork: (provider: Web3Provider) => Promise<void>,
-    setProfileID: (profileID: number) => void,
-    setHandle: (handle: string) => void,
-    disabled: boolean,
-}) {
+function SignupBtn() {
+    const { provider, address, setProfileID, checkNetwork } = useContext(AuthContext);
+
     const handleOnClick = async () => {
         try {
             /* Check if the user connected with wallet */
@@ -44,10 +33,12 @@ function CreateProfileBtn({
                 handle: handle,
                 version: "1.0.0",
             };
-            console.log("IPFS Hash:", metadata);
+            console.log(handle)
+            console.log(avatar)
+            console.log(name)
             /* Upload metadata to IPFS */
             const ipfsHash = await pinJSONToIPFS(metadata);
-            console.log("IPFS Hash:", ipfsHash);
+
             /* Get the signer from the provider */
             const signer = provider.getSigner();
 
@@ -86,13 +77,12 @@ function CreateProfileBtn({
 
             /* Set the profileID in the state variables */
             setProfileID(Number(profileID));
-
-            /* Set the handle in the state variable */
-            setHandle(handle);
+            console.log(Number(profileID))
+            // /* Set the handle in the state variable */
+            // setHandle(handle);
 
             /* Display success message */
             alert("Successfully created the profile!");
-
         } catch (error) {
             /* Display error message */
             alert(error.message);
@@ -100,10 +90,13 @@ function CreateProfileBtn({
     };
 
     return (
-        <button onClick={handleOnClick} disabled={disabled}>
-            Create Profile
+        <button
+            className="signup-btn"
+            onClick={handleOnClick}
+        >
+            Sign up
         </button>
     );
 }
 
-export default CreateProfileBtn;
+export default SignupBtn;

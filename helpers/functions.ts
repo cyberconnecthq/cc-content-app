@@ -1,10 +1,9 @@
 import axios from "axios";
-import { IProfileMetadata } from "../types";
 
-const apiKey = process.env.REACT_APP_PINATA_API_KEY;
-const apiSecret = process.env.REACT_APP_PINATA_API_SECRET;
+const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
+const apiSecret = process.env.NEXT_PUBLIC_API_SECRET || "";
 
-export const pinJSONToIPFS = async (json: IProfileMetadata) => {
+export const pinJSONToIPFS = async (json: { [key: string]: any }) => {
     const data = JSON.stringify(json);
     const url = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 

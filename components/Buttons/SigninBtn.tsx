@@ -1,21 +1,11 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { useContext } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_GET_MESSAGE, LOGIN_VERIFY } from "../graphql";
-import { DOMAIN } from "../helpers/constants";
+import { LOGIN_GET_MESSAGE, LOGIN_VERIFY } from "../../graphql";
+import { DOMAIN } from "../../helpers/constants";
+import { AuthContext } from "../../context/auth";
 
-function LoginBtn({
-    provider,
-    address,
-    checkNetwork,
-    disabled,
-    setAccessToken,
-}: {
-    provider: Web3Provider | undefined,
-    address: string | undefined,
-    checkNetwork: (provider: Web3Provider) => Promise<void>,
-    disabled: boolean,
-    setAccessToken: (accessToken: string) => void,
-}) {
+function SigninBtn() {
+    const { provider, address, setAccessToken, checkNetwork } = useContext(AuthContext);
     const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE);
     const [loginVerify] = useMutation(LOGIN_VERIFY);
 
@@ -88,10 +78,13 @@ function LoginBtn({
     };
 
     return (
-        <button onClick={handleOnClick} disabled={disabled}>
-            Login
+        <button
+            className="signin-btn"
+            onClick={handleOnClick}
+        >
+            Sign in
         </button>
     );
 }
 
-export default LoginBtn;
+export default SigninBtn;
