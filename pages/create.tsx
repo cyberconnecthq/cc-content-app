@@ -21,10 +21,10 @@ const NotificationsPage: NextPage = () => {
                         <h1>Create post</h1>
                         <hr></hr>
                         <div className="post">
-                            <form>
-                                <textarea value={post} onChange={handleChange} placeholder="What's going on?" required />
+                            <textarea value={post} onChange={handleChange} placeholder="What's going on?" required />
+                            <div className="btn">
                                 <PostBtn post={post} />
-                            </form>
+                            </div>
                         </div>
                     </div>
                     <div className="g-wrapper-details">

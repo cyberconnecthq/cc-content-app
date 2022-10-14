@@ -123,6 +123,7 @@ function PostBtn({ post }: { post: string }) {
             className="post-btn"
             type="submit"
             onClick={handleOnClick}
+            disabled={Boolean(!post)}
         >
             Post
         </button>
