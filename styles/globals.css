@@ -109,6 +109,38 @@ svg {
   height: 100%;
 }
 
+/* BUTTONS */
+.create-btn,
+.signin-btn,
+.subscribe-btn,
+.post-btn,
+.collect-btn {
+  background: #fdf5f2;
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
+  border-radius: 50px;
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+}
+
+.connect-btn,
+.signup-btn {
+  background: var(--orange);
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
+  border-radius: 50px;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+}
+
 .create-btn {
   border-radius: 50%;
   width: 60px;
@@ -213,18 +245,25 @@ svg {
   grid-template-columns: 1fr;
   grid-gap: 10px;
   padding: 20px;
+  min-width: 270px;
+  position: relative;
 }
 
 .post .btn {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  max-height: 34px;
 }
 
 .post .post-btn {
   font-size: 15px;
   padding: 8px 12px;
   max-width: 100px;
+
+}
+
+.post .post-content {
+  margin-top: 20px;
 }
 
 .post textarea {
@@ -234,6 +273,19 @@ svg {
   min-height: 240px;
   font-size: 18px;
   outline: none;
+}
+
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-gap: 20px;
+}
+
+.post .collect-btn {
+  font-size: 15px;
+  padding: 8px 12px;
+  max-width: 80px;
+  margin: 0px;
 }
 
 /* SETTINGS PAGE */
@@ -267,49 +319,6 @@ svg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-/* BUTTONS */
-.create-btn,
-.signin-btn,
-.subscribe-btn,
-.post-btn,
-.collect-btn {
-  background: #fdf5f2;
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
-  border-radius: 50px;
-  color: var(--orange);
-  cursor: pointer;
-  font-size: 18px;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px 16px;
-}
-
-.connect-btn,
-.signup-btn {
-  background: var(--orange);
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
-  border-radius: 50px;
-  color: var(--white);
-  cursor: pointer;
-  font-size: 18px;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px 16px;
-}
-
-.collect-btn {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  width: 60px;
-  height: 60px;
-  padding: 0px;
 }
 
 @media screen and (min-width: 600px) {

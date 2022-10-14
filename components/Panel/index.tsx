@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import Image from "next/image";
 import { AuthContext } from "../../context/auth";
 import SigninBtn from "../../components/Buttons/SigninBtn";
 import ConnectBtn from "../../components/Buttons/ConnectBtn";
@@ -48,7 +49,12 @@ const Panel = () => {
                     suggestedProfiles.map((profile, index) => (
                         <div key={index} className="profile-card">
                             <div>
-                                <img src={profile.avatar} alt="avatar"></img>
+                                <Image
+                                    src={profile.avatar}
+                                    alt="avatar"
+                                    width={80}
+                                    height={80}
+                                />
                             </div>
                             <div className="profile-card-user">
                                 <div>{profile.name}</div>

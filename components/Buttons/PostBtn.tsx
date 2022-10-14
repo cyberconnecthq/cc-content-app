@@ -83,6 +83,7 @@ function PostBtn({ post }: { post: string }) {
                     }
                 }
             });
+
             const typedData =
                 typedDataResult.data?.createRegisterEssenceTypedData?.typedData;
             const message = typedData.data;

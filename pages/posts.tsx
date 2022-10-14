@@ -1,15 +1,25 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
-import CollectBtn from "../components/Buttons/CollectBtn";
+import { PostCard } from "../components/Cards/PostCard";
 
 const PostPage: NextPage = () => {
     const posts = [
         {
-            profileID: 22,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmdDEA2VwqvPJtLZnHSTNQakuhdyB1Q84H4EpfWW7cuXZW",
+            profileID: 26,
+            essenceID: 3,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmQja7HqkEnHU5TnoMrbK35AgxjAjjcq9fwagh6YmgpSaG"
+        },
+        {
+            profileID: 26,
             essenceID: 4,
-        }
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmRrsRq3WCm8jLnYdw2erxSSzou9wtNnbTxv2vAJrfTJ5E"
+        },
+        {
+            profileID: 27,
+            essenceID: 6,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmNcfoyNMW9fDURgd5KaLKUDLZ5wi5kVqSSHvYgH7gymUG"
+        },
     ];
 
     return (
@@ -24,9 +34,7 @@ const PostPage: NextPage = () => {
                             {
                                 posts.length > 0 &&
                                 posts.map((post, index) => (
-                                    <div className="post" key={index}>
-                                        <CollectBtn essenceID={post.essenceID} />
-                                    </div>
+                                    <PostCard key={index} profileID={post.profileID} essenceID={post.essenceID} tokenURI={post.tokenURI} />
                                 ))
                             }
                         </div>

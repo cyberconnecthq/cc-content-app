@@ -2,10 +2,9 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
-import { IoSparklesOutline } from "react-icons/io5";
 
-function CollectBtn({ essenceID }: { essenceID: number; }) {
-    const { provider, address, accessToken, profileID, checkNetwork } = useContext(AuthContext);
+function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: number; }) {
+    const { provider, address, accessToken, checkNetwork } = useContext(AuthContext);
     const [createCollectEssenceTypedData] = useMutation(
         CREATE_COLLECT_ESSENCE_TYPED_DATA
     );
@@ -30,7 +29,7 @@ function CollectBtn({ essenceID }: { essenceID: number; }) {
             const signer = provider.getSigner();
 
             /* Get the address from the provider */
-            const account = provider.getSigner();
+            const account = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -51,7 +50,7 @@ function CollectBtn({ essenceID }: { essenceID: number; }) {
                     }
                 }
             });
-            console.log(typedDataResult);
+
             const typedData =
                 typedDataResult.data?.createCollectEssenceTypedData?.typedData;
             const message = typedData.data;
@@ -90,7 +89,7 @@ function CollectBtn({ essenceID }: { essenceID: number; }) {
             className="collect-btn"
             onClick={handleOnClick}
         >
-            <IoSparklesOutline />
+            Collect
         </button>
     );
 }

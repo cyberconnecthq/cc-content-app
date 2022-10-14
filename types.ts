@@ -86,3 +86,9 @@ export interface IProfileCard {
     metadata: string;
     profileID: number;
 }
+
+export interface IPostCard {
+    essenceID: number;
+    profileID: number;
+    tokenURI: string;
+}

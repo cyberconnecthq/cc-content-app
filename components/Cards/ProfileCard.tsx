@@ -21,7 +21,6 @@ export const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCar
                 const res = await fetch(parseURL(metadata));
                 if (res.status === 200) {
                     const data = await res.json();
-                    console.log(data);
                     setData(data);
                 }
             } catch (error) {
