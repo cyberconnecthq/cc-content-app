@@ -22,7 +22,7 @@ export interface IProfileMetadata {
     version: string;
 }
 
-/* Metadata schema for Content NFT */
+/* Metadata schema for Essence NFT */
 export enum Version {
     V1 = "1.0.0",
 }
@@ -38,7 +38,7 @@ export interface Media {
     preview_image_url?: string;
 }
 
-export interface Metadata {
+export interface IEssenceMetadata {
     /* ~~ REQUIRED ~~ */
     /* Version of the metadata schema used for the issued item. */
     version: Version;
