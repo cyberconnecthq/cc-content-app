@@ -1,21 +1,11 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
+import { IoSparklesOutline } from "react-icons/io5";
 
-function CollectBtn({
-    provider,
-    namespaceName,
-    chainID,
-    profileID,
-    essenceID
-}: {
-    provider: Web3Provider | null;
-    namespaceName: string;
-    chainID: number;
-    profileID: number;
-    essenceID: number;
-}) {
+function CollectBtn({ essenceID }: { essenceID: number; }) {
+    const { provider, address, accessToken, profileID, checkNetwork } = useContext(AuthContext);
     const [createCollectEssenceTypedData] = useMutation(
         CREATE_COLLECT_ESSENCE_TYPED_DATA
     );
@@ -23,46 +13,56 @@ function CollectBtn({
 
     const handleOnClick = async () => {
         try {
-            if (!provider) {
-                throw Error("No provier detected.");
+            /* Check if the user connected with wallet */
+            if (!(provider && address)) {
+                throw Error("Connect with MetaMask.");
             }
 
-            // Check for the chain id
-            const network = await provider.getNetwork();
-            const chainId = network.chainId;
-
-            if (chainId !== chainID) {
-                throw Error("Wrong chain.");
+            /* Check if the user logged in */
+            if (!(accessToken)) {
+                throw Error("You need to log in first.");
             }
 
+            /* Check if the network is the correct one */
+            await checkNetwork(provider);
+
+            /* Get the signer from the provider */
             const signer = provider.getSigner();
-            const fromAddress = await signer.getAddress();
 
-            // Create typed data
+            /* Get the address from the provider */
+            const account = provider.getSigner();
+
+            /* Get the network from the provider */
+            const network = await provider.getNetwork();
+
+            /* Get the chain id from the network */
+            const chainID = network.chainId;
+
+            /* Create typed data in a readable format */
             const typedDataResult = await createCollectEssenceTypedData({
                 variables: {
                     input: {
                         options: {
-                            namespaceName: namespaceName,
                             chainID: chainID
                         },
-                        collector: fromAddress,
+                        collector: account,
                         profileID: profileID,
                         essenceID: essenceID
                     }
                 }
             });
+            console.log(typedDataResult);
             const typedData =
                 typedDataResult.data?.createCollectEssenceTypedData?.typedData;
             const message = typedData.data;
             const typedDataID = typedData.id;
 
-            // Get signature for typed data
-            const params = [fromAddress, message];
+            /* Get the signature for the message signed with the wallet */
+            const params = [account, message];
             const method = "eth_signTypedData_v4";
             const signature = await signer.provider.send(method, params);
 
-            // Relay
+            /* Call the relay to broadcast the transaction */
             const relayResult = await relay({
                 variables: {
                     input: {
@@ -72,11 +72,13 @@ function CollectBtn({
                 }
             });
             const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
+
+            /* Log the transation hash */
             console.log("~~ Tx hash ~~");
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully collected the essence!`);
+            alert(`Successfully collected the post!`);
         } catch (error) {
             /* Display error message */
             alert(error.message);
@@ -84,8 +86,11 @@ function CollectBtn({
     };
 
     return (
-        <button className="collect-btn" onClick={handleOnClick}>
-            Collect
+        <button
+            className="collect-btn"
+            onClick={handleOnClick}
+        >
+            <IoSparklesOutline />
         </button>
     );
 }

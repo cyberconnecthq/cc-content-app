@@ -1,4 +1,4 @@
-import { useContext, MouseEvent } from "react";
+import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { pinJSONToIPFS, renderSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
@@ -10,8 +10,7 @@ function PostBtn({ post }: { post: string }) {
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
-    const handleOnClick = async (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+    const handleOnClick = async () => {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
