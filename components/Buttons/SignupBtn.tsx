@@ -8,7 +8,7 @@ import { IProfileMetadata } from "../../types";
 import { AuthContext } from "../../context/auth";
 
 function SignupBtn() {
-    const { provider, address, setProfileID, checkNetwork } = useContext(AuthContext);
+    const { provider, address, setProfileID, setHandle, checkNetwork } = useContext(AuthContext);
 
     const handleOnClick = async () => {
         try {
@@ -33,9 +33,7 @@ function SignupBtn() {
                 handle: handle,
                 version: "1.0.0",
             };
-            console.log(handle)
-            console.log(avatar)
-            console.log(name)
+
             /* Upload metadata to IPFS */
             const ipfsHash = await pinJSONToIPFS(metadata);
 
@@ -77,9 +75,9 @@ function SignupBtn() {
 
             /* Set the profileID in the state variables */
             setProfileID(Number(profileID));
-            console.log(Number(profileID))
-            // /* Set the handle in the state variable */
-            // setHandle(handle);
+
+            /* Set the handle in the state variables */
+            setHandle(handle);
 
             /* Display success message */
             alert("Successfully created the profile!");

@@ -19,8 +19,8 @@ const Navbar = () => {
                 <Link href="/">
                     <div className={`navbar-link ${router.pathname === "/" && "active"}`}>{<MdOutlineDashboard />}</div>
                 </Link>
-                <Link href="/collection">
-                    <div className={`navbar-link ${router.pathname === "/collection" && "active"}`}>{<IoSparklesOutline />}</div>
+                <Link href="/posts">
+                    <div className={`navbar-link ${router.pathname === "/posts" && "active"}`}>{<IoSparklesOutline />}</div>
                 </Link>
                 <Link href="/settings">
                     <div className={`navbar-link ${router.pathname === "/settings" && "active"}`}>{<FiSettings />}</div>

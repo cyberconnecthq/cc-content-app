@@ -4,13 +4,16 @@ import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import { useQuery } from "@apollo/client";
 import { PROFILES } from "../graphql";
+import { ProfileCard } from "../components/Cards/ProfileCard";
+import { IProfileCard } from "../types";
 
 const Home: NextPage = () => {
-  const { data, loading, error } = useQuery(PROFILES);
+  const { data } = useQuery(PROFILES);
 
   const profiles = useMemo(() => {
-    console.log(data);
-    return [];
+    const edges = data?.profiles?.edges;
+    const profiles = edges?.map((edge: any) => edge?.node);
+    return profiles || [];
   }, [data]);
 
   return (
@@ -21,13 +24,20 @@ const Home: NextPage = () => {
           <div className="g-wrapper-content">
             <h1>Profiles</h1>
             <hr></hr>
-            {
-              profiles.length > 0 &&
-              profiles.map((profile, index) => (
-                <div key={index} className="profile-card">
-                </div>
-              ))
-            }
+            <div className="profiles">
+              {
+                profiles.length > 0 &&
+                profiles.map((profile: IProfileCard) => (
+                  <ProfileCard
+                    key={profile.profileID}
+                    profileID={profile.profileID}
+                    handle={profile.handle}
+                    avatar={profile.avatar}
+                    metadata={profile.metadata}
+                  />
+                ))
+              }
+            </div>
           </div>
           <div className="g-wrapper-details">
             <Panel />

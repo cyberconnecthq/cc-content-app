@@ -74,6 +74,8 @@ svg {
   padding: 20px 0px;
   top: 0;
   z-index: 1;
+  position: sticky;
+  position: -webkit-sticky;
 }
 
 .navbar-link {
@@ -114,6 +116,54 @@ svg {
   margin: 0 auto;
 }
 
+/* CARDS */
+.profile-card {
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  min-width: 270px;
+  padding: 20px;
+}
+
+.profile-card-img {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile-card-img .subscribe-btn {
+  font-size: 15px;
+  padding: 8px 12px;
+  max-width: 100px;
+}
+
+.profile-card-img img {
+  border: 1px solid var(--gray);
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.profile-card-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile-card-handle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.profile-card-bio {
+  margin-top: 10px;
+}
+
+.profiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-gap: 20px;
+}
+
 /* PANEL */
 .panel-profiles {
   border: 1px solid var(--gray);
@@ -123,11 +173,13 @@ svg {
 }
 
 .panel .profile-card {
+  border: none;
   display: grid;
   grid-template-columns: 40px 1fr 90px;
   align-items: center;
-  grid-gap: 16px;
-  margin-top: 16px;
+  grid-gap: 12px;
+  margin-top: 20px;
+  padding: 0px;
 }
 
 .panel .profile-card img {
@@ -149,7 +201,48 @@ svg {
 
 .panel .subscribe-btn {
   font-size: 13px;
+  max-width: 100px;
   padding: 8px 12px;
+}
+
+/* FORM */
+form {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+form label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+form .post-btn {
+  font-size: 15px;
+  padding: 8px 12px;
+  max-width: 100px;
+}
+
+form textarea {
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  min-height: 240px;
+  font-size: 18px;
+  outline: none;
+}
+
+form input[type="submit"] {
+  justify-self: flex-end;
+  margin-top: 10px;
+  font-family: var(--font-family);
+}
+
+/* CREATE PAGE */
+.post {
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  padding: 20px;
 }
 
 /* SETTINGS PAGE */
@@ -173,21 +266,23 @@ svg {
   display: none;
 }
 
-.g-sticky {
-  position: sticky;
-  position: -webkit-sticky;
-}
-
 .g-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.g-space-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 /* BUTTONS */
 .create-btn,
 .signin-btn,
-.subscribe-btn {
+.subscribe-btn,
+.post-btn {
   background: #fdf5f2;
   border: 1px solid rgba(235, 87, 87, 0.3);
   box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);

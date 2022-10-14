@@ -8,10 +8,12 @@ export const AuthContext = createContext<IAuthContext>({
     address: undefined,
     accessToken: undefined,
     profileID: undefined,
+    handle: undefined,
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
     setProfileID: () => { },
+    setHandle: () => { },
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -82,10 +84,12 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 address,
                 accessToken,
                 profileID,
+                handle,
                 setProvider,
                 setAddress,
                 setAccessToken,
                 setProfileID,
+                setHandle,
                 checkNetwork,
             }}>
             {children}
