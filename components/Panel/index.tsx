@@ -22,6 +22,12 @@ const Panel = () => {
             profileID: 16,
         },
         {
+            name: "Snowdot",
+            handle: "snowdot",
+            avatar: "https://gateway.pinata.cloud/ipfs/QmV1ZVcyC96g1HYsxXgG6BP6Kc8xrZCBqj7PNkvxhPwLoz",
+            profileID: 44,
+        },
+        {
             name: "Satoshi Nakamoto",
             handle: "satoshi",
             avatar: "https://gateway.pinata.cloud/ipfs/QmaGUuGqxJ29we67C7RbCHSQaPybPdfoNr8Zccd7pfw8et",

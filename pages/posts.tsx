@@ -11,14 +11,19 @@ const PostPage: NextPage = () => {
             tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw"
         },
         {
-            profileID: 25,
-            essenceID: 1,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmVTsttA5VsA8vhXphPjky1BPNjtniNrjNH2huKoVHjEkP"
+            profileID: 44,
+            essenceID: 5,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmRgQ55r3Q2Wwfy2VnBrfAq3GYATyUn8ww55AghdGvro6M"
         },
         {
-            profileID: 27,
-            essenceID: 1,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmNcfoyNMW9fDURgd5KaLKUDLZ5wi5kVqSSHvYgH7gymUG"
+            profileID: 44,
+            essenceID: 6,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmPgYgEvv32v8U1SZUh33f1A6zyTPtyKimGosznVhUwsVQ"
+        },
+        {
+            profileID: 44,
+            essenceID: 7,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmXE1S6jjgX88mcTdRPqiJ2SQ4UKdmu7oTqstgvg9gjHCR"
         },
     ];
 
