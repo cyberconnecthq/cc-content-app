@@ -1,14 +1,12 @@
 import { useContext } from "react";
 import { useMutation } from "@apollo/client";
-import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
-import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
-import { IEssenceMetadata, Version } from "../../types";
+import { CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
-import { v4 as uuidv4 } from "uuid";
+import { getSubscriberSVGData, pinJSONToIPFS } from "../../helpers/functions";
 
-function PostBtn({ post }: { post: string }) {
+function SetSubscribeBtn({ option }: { option: string; }) {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
-    const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
+    const [createSetSubscribeDataTypedData] = useMutation(CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
     const handleOnClick = async () => {
@@ -18,9 +16,9 @@ function PostBtn({ post }: { post: string }) {
                 throw Error("Connect with MetaMask.");
             }
 
-            /* Check if the has signed in */
-            if (!accessToken) {
-                throw Error("Youn need to Sign in.");
+            /* Check if the user logged in */
+            if (!(accessToken)) {
+                throw Error("You need to log in first.");
             }
 
             /* Check if the has signed up */
@@ -31,37 +29,11 @@ function PostBtn({ post }: { post: string }) {
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
-            /* Function to render the svg data for the NFT */
-            /* (default if the user doesn't pass a image url) */
-            const svg_data = getEssenceSVGData();
-
-            /* Collect user input for NFT image */
-            const nftImageURL = prompt("NFT image URL:");
-
-            /* Create the metadata for the Essence NFT */
-            const metadata: IEssenceMetadata = {
-                metadata_id: uuidv4(),
-                version: Version.V1,
-                app_id: "cyberconnect",
-                lang: "en",
-                issue_date: new Date().toISOString(),
-                content: post,
-                media: [],
-                tags: [],
-                image: nftImageURL ? nftImageURL : "",
-                image_data: !nftImageURL ? svg_data : "",
-                name: `@${handle}'s post`,
-                description: `@${handle}'s post on CyberConnect Content app`,
-                animation_url: "",
-                external_url: "",
-                attributes: [],
-            };
-
-            /* Upload metadata to IPFS */
-            const ipfsHash = await pinJSONToIPFS(metadata);
-
             /* Get the signer from the provider */
             const signer = provider.getSigner();
+
+            /* Get the address from the provider */
+            const account = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -69,27 +41,53 @@ function PostBtn({ post }: { post: string }) {
             /* Get the chain id from the network */
             const chainID = network.chainId;
 
+            /* Create the metadata for the Subscribe NFT */
+            const metadata = {
+                image_data: getSubscriberSVGData(),
+                name: `@${handle}'s subscriber`,
+                description: `@${handle}'s subscriber on CyberConnect Content app`,
+            };
+
+            /* Upload metadata to IPFS */
+            const ipfsHash = await pinJSONToIPFS(metadata);
+
+            let middelware;
+            if (option === "free") {
+                middelware = {
+                    subscribeFree: true
+                }
+            } else {
+                middelware = {
+                    subscribePaid: {
+                        /* Address that will receive the amount */
+                        recipient: account,
+                        /* Amount that needs to be paid to subscribe */
+                        amount: 1,
+                        /* The currency for the  amount. Chainlink token contract on Goerli */
+                        currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+                        /* If it require the subscriber to hold a NFT */
+                        nftRequired: false,
+                        /* The contract of the NFT that the subscriber needs to hold */
+                        nftAddress: "0x0000000000000000000000000000000000000000"
+                    }
+                }
+            }
+
             /* Create typed data in a readable format */
-            const typedDataResult = await createRegisterEssenceTypedData({
+            const typedDataResult = await createSetSubscribeDataTypedData({
                 variables: {
                     input: {
                         options: {
                             chainID: chainID
                         },
-                        profileID: profileID,
-                        name: "Post",
-                        symbol: "POST",
+                        profileId: profileID,
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
-                        middleware: {
-                            collectFree: true,
-                        },
-                        transferable: true
+                        middleware: middelware
                     }
                 }
             });
-
             const typedData =
-                typedDataResult.data?.createRegisterEssenceTypedData?.typedData;
+                typedDataResult.data?.createSetSubscribeDataTypedData?.typedData;
             const message = typedData.data;
             const typedDataID = typedData.id;
 
@@ -110,12 +108,12 @@ function PostBtn({ post }: { post: string }) {
             });
             const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
-            /* Log the transaction hash */
+            /* Log the transation hash */
             console.log("~~ Tx hash ~~");
             console.log(txHash);
 
             /* Display success message */
-            alert("Successfully created the post!");
+            alert(`Successfully set the middleware for subscribe!`);
         } catch (error) {
             /* Display error message */
             alert(error.message);
@@ -124,14 +122,12 @@ function PostBtn({ post }: { post: string }) {
 
     return (
         <button
-            className="post-btn"
-            type="submit"
+            className="set-subscribe-btn"
             onClick={handleOnClick}
-            disabled={Boolean(!post)}
         >
-            Post
+            Set Subscribe
         </button>
     );
 }
 
-export default PostBtn;
+export default SetSubscribeBtn;

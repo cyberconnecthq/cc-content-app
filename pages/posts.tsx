@@ -6,9 +6,9 @@ import { PostCard } from "../components/Cards/PostCard";
 const PostPage: NextPage = () => {
     const posts = [
         {
-            profileID: 22,
-            essenceID: 4,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmdDEA2VwqvPJtLZnHSTNQakuhdyB1Q84H4EpfWW7cuXZW"
+            profileID: 44,
+            essenceID: 2,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw"
         },
         {
             profileID: 25,

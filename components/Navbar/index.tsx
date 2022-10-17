@@ -27,7 +27,7 @@ const Navbar = () => {
                 </Link>
                 <hr></hr>
                 <Link href="/create">
-                    <div className="create-btn">{<MdHistoryEdu />}</div>
+                    <div className="create-btn center">{<MdHistoryEdu />}</div>
                 </Link>
             </div>
             <div className="navbar-address">

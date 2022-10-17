@@ -2,6 +2,8 @@ import { ReactNode, createContext, useState, useEffect } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
+import { useQuery } from "@apollo/client";
+import { USER_INFO_BY_ADDRESS } from "../graphql";
 
 export const AuthContext = createContext<IAuthContext>({
     provider: undefined,
@@ -36,6 +38,11 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the access token */
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
+    /* Query to get user information by wallet address */
+    const { data } = useQuery(USER_INFO_BY_ADDRESS, {
+        variables: { address },
+    });
+
     useEffect(() => {
         /* Check if the user connected with wallet */
         if (!(provider && address)) return;
@@ -48,6 +55,23 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
             alert(error.message);
         }
     }, [provider, address]);
+
+    useEffect(() => {
+        if (!data) return;
+
+        /* Get all profile for the wallet address */
+        const edges = data?.address?.goerliWallet?.profiles?.edges;
+        const accounts = edges?.map((edge: any) => edge?.node);
+
+        /* Get the primary profile */
+        const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
+
+        /* Set the profile ID */
+        setProfileID(primaryAccount?.profileID);
+
+        /* Set the handle */
+        setHandle(primaryAccount?.handle);
+    }, [data]);
 
     /* Function to check if the network is the correct one */
     const checkNetwork = async (provider: Web3Provider) => {

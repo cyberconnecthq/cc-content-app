@@ -114,7 +114,9 @@ svg {
 .signin-btn,
 .subscribe-btn,
 .post-btn,
-.collect-btn {
+.collect-btn,
+.set-subscribe-btn,
+.set-essence-btn {
   background: #fdf5f2;
   border: 1px solid rgba(235, 87, 87, 0.3);
   box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
@@ -160,8 +162,8 @@ svg {
   background-color: var(--orange);
   border-radius: 20px;
   color: var(--white);
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 6px 12px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -278,7 +280,7 @@ svg {
   font-size: 15px;
   padding: 8px 12px;
   max-width: 100px;
-
+  min-height: 34px;
 }
 
 .post .post-content {
@@ -308,13 +310,26 @@ svg {
 }
 
 /* SETTINGS PAGE */
-.settings-page {
-  max-width: 998px;
-  margin: 0px auto;
+.middleware {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 400px 1fr 130px;
+  grid-gap: 10px;
+  margin-top: 20px;
 }
 
+.middleware .set-subscribe-btn,
+.middleware .set-essence-btn {
+  border-radius: 2px;
+  height: 40px;
+  font-size: 16px;
+  padding: 6px 10px;
+}
+
+.middleware p {
+  margin: 0;
+}
+
+/* GLOBAL */
 .wrapper {
   min-height: 100vh;
 }

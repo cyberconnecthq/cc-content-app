@@ -3,13 +3,15 @@ import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
+import SetSubscribeBtn from "../components/Buttons/SetSubscribeBtn";
+import SetEssenceBtn from "../components/Buttons/SetEssenceBtn";
 import { useQuery } from "@apollo/client";
 import { USER_INFO_BY_ADDRESS } from "../graphql";
 import { AccountCard } from "../components/Cards/AccountCard";
 import { IAccountCard } from "../types";
 
 const SettingsPage: NextPage = () => {
-    const { address, accessToken } = useContext(AuthContext);
+    const { address, accessToken, profileID } = useContext(AuthContext);
     const { data } = useQuery(USER_INFO_BY_ADDRESS, {
         variables: { address },
     });
@@ -29,8 +31,8 @@ const SettingsPage: NextPage = () => {
                         <h1>Settings</h1>
                         <hr></hr>
                         {
-                            !(accessToken && address)
-                                ? <div>You need to <strong>Sign in</strong> or <strong>Sign up</strong> to view details about your account.</div>
+                            !(accessToken && address && profileID)
+                                ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view details about your account.</div>
                                 : (<div>
                                     <h2>Account</h2>
                                     <p>The list of all accounts associated to the wallet address.</p>
@@ -50,11 +52,29 @@ const SettingsPage: NextPage = () => {
                                         }
                                     </div>
                                     <br></br>
-                                    <h2>Subscribe middelware</h2>
-                                    <p>You can set the middleware to </p>
+                                    <h2>Subscribe middleware</h2>
+                                    <div className="middleware">
+                                        <p>Set <strong>PAID</strong> Subscribe middleware. Subscribers will be able to subscribe to your profile if they <strong>pay 1 LINK</strong>.</p>
+                                        <div></div>
+                                        <SetSubscribeBtn option="paid" />
+                                    </div>
+                                    <div className="middleware">
+                                        <p>Set <strong>FREE</strong> Subscribe middleware. Subscribers will be able to subscribe to your profile for <strong>free</strong>.</p>
+                                        <div></div>
+                                        <SetSubscribeBtn option="free" />
+                                    </div>
                                     <br></br>
-                                    <h2>Collect middelware</h2>
-                                    <p>You can set the middleware to </p>
+                                    <h2>Essence middleware</h2>
+                                    <div className="middleware">
+                                        <p>Set <strong>PAID</strong> Collect middleware. Collectors will will be able to collect your essence (post) if they <strong>pay 1 LINK</strong>.</p>
+                                        <div></div>
+                                        <SetEssenceBtn option="paid" />
+                                    </div>
+                                    <div className="middleware">
+                                        <p>Set <strong>FREE</strong> Collect  middleware. Collectors will be able to collect your essence (post) for <strong>free</strong>.</p>
+                                        <div></div>
+                                        <SetEssenceBtn option="free" />
+                                    </div>
                                 </div>)
                         }
                     </div>
