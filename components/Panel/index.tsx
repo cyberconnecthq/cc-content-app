@@ -47,8 +47,8 @@ const Panel = () => {
                 {
                     suggestedProfiles.length > 0 &&
                     suggestedProfiles.map((profile, index) => (
-                        <div key={index} className="profile-card">
-                            <div>
+                        <div key={index} className="panel-profile-card">
+                            <div className="panel-profile-card-img">
                                 <Image
                                     src={profile.avatar}
                                     alt="avatar"

@@ -225,7 +225,7 @@ svg {
   margin-top: 20px;
 }
 
-.panel .profile-card {
+.panel .panel-profile-card {
   border: none;
   display: grid;
   grid-template-columns: 40px 1fr 90px;
@@ -235,11 +235,15 @@ svg {
   padding: 0px;
 }
 
-.panel .profile-card img {
+.panel .panel-profile-card-img {
   border: 1px solid var(--gray);
   border-radius: 50%;
   width: 44px;
   height: 44px;
+}
+
+.panel .panel-profile-card-img img {
+  border-radius: 50%;
 }
 
 .panel .profile-card-user div:first-child {
