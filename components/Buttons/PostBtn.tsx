@@ -4,6 +4,7 @@ import { pinJSONToIPFS, renderSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { IEssenceMetadata, Version } from "../../types";
 import { AuthContext } from "../../context/auth";
+import { v4 as uuidv4 } from "uuid";
 
 function PostBtn({ post }: { post: string }) {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
@@ -39,6 +40,7 @@ function PostBtn({ post }: { post: string }) {
 
             /* Create the metadata for the NFT */
             const metadata: IEssenceMetadata = {
+                metadata_id: uuidv4(),
                 version: Version.V1,
                 app_id: "cyberconnect",
                 lang: "en",
@@ -51,6 +53,8 @@ function PostBtn({ post }: { post: string }) {
                 name: `@${handle}'s post`,
                 description: `@${handle}'s post on CyberConnect Content app`,
                 animation_url: "",
+                external_url: "",
+                attributes: [],
             };
 
             /* Upload metadata to IPFS */

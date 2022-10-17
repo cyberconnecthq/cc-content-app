@@ -27,7 +27,7 @@ export enum Version {
     V1 = "1.0.0",
 }
 
-export interface Media {
+interface Media {
     /* The MIME type for the media */
     media_type: string;
     /* The URL link for the media */
@@ -38,8 +38,21 @@ export interface Media {
     preview_image_url?: string;
 }
 
+interface Attribute {
+    /* Field indicating how you would like it to be displayed */
+    /* optional if the trait_type is string */
+    display_type?: string;
+    /* Name of the trait */
+    trait_type: string;
+    /* Value of the trait */
+    value: number;
+}
+
 export interface IEssenceMetadata {
     /* ~~ REQUIRED ~~ */
+    /* Unique id for the issued item */
+    metadata_id: string;
+
     /* Version of the metadata schema used for the issued item. */
     version: Version;
 
@@ -67,7 +80,8 @@ export interface IEssenceMetadata {
     /* URL to the image of the item. */
     image?: string;
 
-    /* SVG image data when the image is not passed. Only use this if you're not including the image parameter. */
+    /* SVG image data when the image is not passed. Only use this if you're not 
+		including the image parameter. */
     image_data?: string;
 
     /* Name of the item. */
@@ -78,6 +92,12 @@ export interface IEssenceMetadata {
 
     /* URL to a multi-media attachment for the item. */
     animation_url?: string;
+
+    /* Attributes for the item. */
+    attributes?: Attribute[];
+
+    /* URL to the item on your site. */
+    external_url?: string;
 }
 
 export interface IProfileCard {
