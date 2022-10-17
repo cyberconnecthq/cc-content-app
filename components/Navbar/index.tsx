@@ -33,7 +33,7 @@ const Navbar = () => {
             <div className="navbar-address">
                 {
                     address &&
-                    <div className="g-center">{`${address.slice(0, 4)}..`}</div>
+                    <div className="center">{`${address.slice(0, 4)}..`}</div>
                 }
             </div>
         </nav>

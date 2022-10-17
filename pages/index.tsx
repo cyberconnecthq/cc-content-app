@@ -20,8 +20,8 @@ const Home: NextPage = () => {
     <div>
       <div className="container">
         <Navbar />
-        <div className="g-wrapper">
-          <div className="g-wrapper-content">
+        <div className="wrapper">
+          <div className="wrapper-content">
             <h1>Profiles</h1>
             <hr></hr>
             <div className="profiles">
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
               }
             </div>
           </div>
-          <div className="g-wrapper-details">
+          <div className="wrapper-details">
             <Panel />
           </div>
         </div>

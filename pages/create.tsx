@@ -16,8 +16,8 @@ const NotificationsPage: NextPage = () => {
         <div>
             <div className="container">
                 <Navbar />
-                <div className="g-wrapper">
-                    <div className="g-wrapper-content">
+                <div className="wrapper">
+                    <div className="wrapper-content">
                         <h1>Create post</h1>
                         <hr></hr>
                         <div className="post">
@@ -27,7 +27,7 @@ const NotificationsPage: NextPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="g-wrapper-details">
+                    <div className="wrapper-details">
                         <Panel />
                     </div>
                 </div>

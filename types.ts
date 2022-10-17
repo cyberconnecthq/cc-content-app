@@ -92,3 +92,11 @@ export interface IPostCard {
     profileID: number;
     tokenURI: string;
 }
+
+export interface IAccountCard {
+    handle: string;
+    avatar: string;
+    metadata: string;
+    profileID: number;
+    isPrimary: boolean;
+}
