@@ -6,24 +6,36 @@ import { PostCard } from "../components/Cards/PostCard";
 const PostPage: NextPage = () => {
     const posts = [
         {
-            profileID: 44,
+            avatar: "https://gateway.pinata.cloud/ipfs/QmNcqSpCvhiyHocUaVf7qB8qwEGerSpnELeAi567YEraYm",
+            handle: "ccprotocol",
+            name: "CyberConnect",
+            profileID: 15,
             essenceID: 2,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw"
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/Qmd7G1BVZ3EQ3w2mNWBqgi4DaRrnkv5thy5UR1ParwM7AG"
         },
         {
+            avatar: "https://gateway.pinata.cloud/ipfs/QmNcqSpCvhiyHocUaVf7qB8qwEGerSpnELeAi567YEraYm",
+            handle: "ccprotocol",
+            name: "CyberConnect",
+            profileID: 15,
+            essenceID: 1,
+            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmWBjgu6Mhx1txRfzKkemoQDHjgmuwCJBp3HNUB7vZFi5F"
+        },
+        {
+            avatar: "https://gateway.pinata.cloud/ipfs/QmV1ZVcyC96g1HYsxXgG6BP6Kc8xrZCBqj7PNkvxhPwLoz",
+            handle: "snowdot",
+            name: "Snowdot",
             profileID: 44,
             essenceID: 5,
             tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmRgQ55r3Q2Wwfy2VnBrfAq3GYATyUn8ww55AghdGvro6M"
         },
         {
+            avatar: "https://gateway.pinata.cloud/ipfs/QmV1ZVcyC96g1HYsxXgG6BP6Kc8xrZCBqj7PNkvxhPwLoz",
+            handle: "snowdot",
+            name: "Snowdot",
             profileID: 44,
             essenceID: 6,
             tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmPgYgEvv32v8U1SZUh33f1A6zyTPtyKimGosznVhUwsVQ"
-        },
-        {
-            profileID: 44,
-            essenceID: 7,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmXE1S6jjgX88mcTdRPqiJ2SQ4UKdmu7oTqstgvg9gjHCR"
         },
     ];
 
@@ -39,7 +51,15 @@ const PostPage: NextPage = () => {
                             {
                                 posts.length > 0 &&
                                 posts.map((post, index) => (
-                                    <PostCard key={index} profileID={post.profileID} essenceID={post.essenceID} tokenURI={post.tokenURI} />
+                                    <PostCard
+                                        key={index}
+                                        essenceID={post.essenceID}
+                                        profileID={post.profileID}
+                                        tokenURI={post.tokenURI}
+                                        avatar={post.avatar}
+                                        handle={post.handle}
+                                        name={post.name}
+                                    />
                                 ))
                             }
                         </div>

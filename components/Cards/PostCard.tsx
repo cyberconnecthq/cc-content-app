@@ -4,7 +4,8 @@ import CollectBtn from "../Buttons/CollectBtn";
 import { IPostCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-export const PostCard = ({ essenceID, profileID, tokenURI }: IPostCard) => {
+export const PostCard = ({ essenceID, profileID, tokenURI,
+    avatar, handle, name }: IPostCard) => {
     const [data, setData] = useState({
         image: "",
         image_data: "",
@@ -33,13 +34,19 @@ export const PostCard = ({ essenceID, profileID, tokenURI }: IPostCard) => {
 
     return (
         <div className="post">
-            <div className="btn">
+            <div className="post-info space-between">
+                <div className="center">
+                    <Image src={avatar} alt="avatar" width={50} height={50} />
+                    <div>
+                        <div className="post-name">{name}</div>
+                        <div className="post-handle">@{handle}</div>
+                    </div>
+                </div>
                 <CollectBtn
                     profileID={profileID}
                     essenceID={essenceID}
                 />
             </div>
-            <Image src={data.image ? data.image : data.image_data} alt="post" width={400} height={400} />
             <div className="post-content">{data.content}</div>
         </div>
     );

@@ -270,14 +270,26 @@ svg {
   grid-template-columns: 1fr;
   grid-gap: 10px;
   padding: 20px;
-  min-width: 270px;
+  max-width: 600px;
+  margin-bottom: 20px;
   position: relative;
 }
 
-.post .btn {
-  display: flex;
-  justify-content: flex-end;
-  max-height: 34px;
+.post .post-info img {
+  border-radius: 50%;
+}
+
+.post .post-handle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin-left: 10px;
+}
+
+.post .post-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 10px;
 }
 
 .post .post-btn {
@@ -298,12 +310,6 @@ svg {
   min-height: 240px;
   font-size: 18px;
   outline: none;
-}
-
-.posts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  grid-gap: 20px;
 }
 
 .post .collect-btn {

@@ -111,6 +111,9 @@ export interface IPostCard {
     essenceID: number;
     profileID: number;
     tokenURI: string;
+    avatar: string;
+    handle: string;
+    name: string;
 }
 
 export interface IAccountCard {
