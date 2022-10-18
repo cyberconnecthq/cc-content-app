@@ -38,7 +38,7 @@ function PostBtn({ post }: { post: string }) {
             /* Collect user input for NFT image */
             const nftImageURL = prompt("NFT image URL:");
 
-            /* Create the metadata for the Essence NFT */
+            /* Construct the metadata object for the Essence NFT */
             const metadata: IEssenceMetadata = {
                 metadata_id: uuidv4(),
                 version: Version.V1,
@@ -74,15 +74,22 @@ function PostBtn({ post }: { post: string }) {
                 variables: {
                     input: {
                         options: {
+                            /* The chain id on which the Essence NFT will be minted on */
                             chainID: chainID
                         },
+                        /* The profile id under which the Essence is registered */
                         profileID: profileID,
+                        /* Name of the Essence */
                         name: "Post",
+                        /* Symbol of the Essence */
                         symbol: "POST",
+                        /* URL for the json object containing data about content and the Essence NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
+                        /* Middleware that allows users to collect the Essence NFT for free */
                         middleware: {
                             collectFree: true,
                         },
+                        /* Set if the Essence should be transferable or not */
                         transferable: true
                     }
                 }

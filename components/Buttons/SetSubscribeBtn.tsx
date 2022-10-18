@@ -41,7 +41,7 @@ function SetSubscribeBtn({ option }: { option: string; }) {
             /* Get the chain id from the network */
             const chainID = network.chainId;
 
-            /* Create the metadata for the Subscribe NFT */
+            /* Construct the metadata object for the Subscribe NFT */
             const metadata = {
                 image_data: getSubscriberSVGData(),
                 name: `@${handle}'s subscriber`,
@@ -78,9 +78,12 @@ function SetSubscribeBtn({ option }: { option: string; }) {
                 variables: {
                     input: {
                         options: {
+                            /* The chain id on which the Subscribe NFT will be minted on */
                             chainID: chainID
                         },
+                        /* The user's profile id for which the rules are enabled */
                         profileId: profileID,
+                        /* URL for the json object containing data about the Subscribe NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
                         middleware: middelware
                     }
