@@ -30,7 +30,7 @@ Clone the repo [https://github.com/cyberconnecthq/cc-content-app.git](https://gi
 
 ## Local Development
 
-To start the local development server run the following command and open up the browser window http://localhost:3000. Most changes are reflected live without having to restart the server: `npm dev` or `yarn dev`.
+To start the local development server run the following command and open up the browser window http://localhost:3000. Most changes are reflected live without having to restart the server: `npm run dev` or `yarn dev`.
 
 ## Contact
 
