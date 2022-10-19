@@ -40,33 +40,31 @@ const PostPage: NextPage = () => {
     ];
 
     return (
-        <div>
-            <div className="container">
-                <Navbar />
-                <div className="wrapper">
-                    <div className="wrapper-content">
-                        <h1>Posts</h1>
-                        <hr></hr>
-                        <div className="posts">
-                            {
-                                posts.length > 0 &&
-                                posts.map((post, index) => (
-                                    <PostCard
-                                        key={index}
-                                        essenceID={post.essenceID}
-                                        profileID={post.profileID}
-                                        tokenURI={post.tokenURI}
-                                        avatar={post.avatar}
-                                        handle={post.handle}
-                                        name={post.name}
-                                    />
-                                ))
-                            }
-                        </div>
+        <div className="container">
+            <Navbar />
+            <div className="wrapper">
+                <div className="wrapper-content">
+                    <h1>Posts</h1>
+                    <hr></hr>
+                    <div className="posts">
+                        {
+                            posts.length > 0 &&
+                            posts.map((post, index) => (
+                                <PostCard
+                                    key={index}
+                                    essenceID={post.essenceID}
+                                    profileID={post.profileID}
+                                    tokenURI={post.tokenURI}
+                                    avatar={post.avatar}
+                                    handle={post.handle}
+                                    name={post.name}
+                                />
+                            ))
+                        }
                     </div>
-                    <div className="wrapper-details">
-                        <Panel />
-                    </div>
+                </div>
+                <div className="wrapper-details">
+                    <Panel />
                 </div>
             </div>
         </div>

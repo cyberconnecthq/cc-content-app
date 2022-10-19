@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import Link from "next/link";
-import Logo from "../Logo";
 import { IoSparklesOutline } from "react-icons/io5";
 import { FiSettings } from "react-icons/fi";
 import { MdOutlineDashboard } from "react-icons/md";
@@ -14,7 +13,7 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <Logo />
+            <div></div>
             <div>
                 <Link href="/">
                     <div className={`navbar-link ${router.pathname === "/" && "active"}`}>{<MdOutlineDashboard />}</div>

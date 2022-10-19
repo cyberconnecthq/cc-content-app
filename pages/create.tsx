@@ -13,23 +13,21 @@ const NotificationsPage: NextPage = () => {
     };
 
     return (
-        <div>
-            <div className="container">
-                <Navbar />
-                <div className="wrapper">
-                    <div className="wrapper-content">
-                        <h1>Create post</h1>
-                        <hr></hr>
-                        <div className="post">
-                            <textarea value={post} onChange={handleChange} placeholder="What's going on?" required />
-                            <div className="btn">
-                                <PostBtn post={post} />
-                            </div>
+        <div className="container">
+            <Navbar />
+            <div className="wrapper">
+                <div className="wrapper-content">
+                    <h1>Create post</h1>
+                    <hr></hr>
+                    <div className="post create-post">
+                        <textarea value={post} onChange={handleChange} placeholder="What's going on?" required />
+                        <div className="btn">
+                            <PostBtn post={post} />
                         </div>
                     </div>
-                    <div className="wrapper-details">
-                        <Panel />
-                    </div>
+                </div>
+                <div className="wrapper-details">
+                    <Panel />
                 </div>
             </div>
         </div>

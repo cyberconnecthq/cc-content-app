@@ -17,31 +17,29 @@ const Home: NextPage = () => {
   }, [data]);
 
   return (
-    <div>
-      <div className="container">
-        <Navbar />
-        <div className="wrapper">
-          <div className="wrapper-content">
-            <h1>Profiles</h1>
-            <hr></hr>
-            <div className="profiles">
-              {
-                profiles.length > 0 &&
-                profiles.map((profile: IProfileCard) => (
-                  <ProfileCard
-                    key={profile.profileID}
-                    profileID={profile.profileID}
-                    handle={profile.handle}
-                    avatar={profile.avatar}
-                    metadata={profile.metadata}
-                  />
-                ))
-              }
-            </div>
+    <div className="container">
+      <Navbar />
+      <div className="wrapper">
+        <div className="wrapper-content">
+          <h1>Profiles</h1>
+          <hr></hr>
+          <div className="profiles">
+            {
+              profiles.length > 0 &&
+              profiles.map((profile: IProfileCard) => (
+                <ProfileCard
+                  key={profile.profileID}
+                  profileID={profile.profileID}
+                  handle={profile.handle}
+                  avatar={profile.avatar}
+                  metadata={profile.metadata}
+                />
+              ))
+            }
           </div>
-          <div className="wrapper-details">
-            <Panel />
-          </div>
+        </div>
+        <div className="wrapper-details">
+          <Panel />
         </div>
       </div>
     </div>

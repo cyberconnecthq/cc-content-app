@@ -47,18 +47,42 @@ svg {
   height: 100%;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 40px;
-  cursor: pointer;
-}
-
+/* GLOBAL */
 .container {
   max-width: 1398px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
+  height: 100%;
+  position: relative;
+}
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column-reverse;
+  padding: 0px 20px 0px 100px;
+  min-height: 100vh;
+}
+
+.wrapper-content {
+  padding-top: 20px;
+}
+
+.wrapper-details {
+  width: 100%;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* NAVBAR */
@@ -74,8 +98,7 @@ svg {
   padding: 20px 0px;
   top: 0;
   z-index: 1;
-  position: sticky;
-  position: -webkit-sticky;
+  position: fixed;
 }
 
 .navbar-link {
@@ -270,7 +293,7 @@ svg {
   grid-template-columns: 1fr;
   grid-gap: 10px;
   padding: 20px;
-  max-width: 600px;
+  max-width: 560px;
   margin-bottom: 20px;
   position: relative;
 }
@@ -312,6 +335,14 @@ svg {
   outline: none;
 }
 
+.create-post {
+  min-width: 100%;
+}
+
+.create-post .btn {
+  text-align: right;
+}
+
 .post .collect-btn {
   font-size: 15px;
   padding: 8px 12px;
@@ -339,56 +370,23 @@ svg {
   margin: 0;
 }
 
-/* GLOBAL */
-.wrapper {
-  min-height: 100vh;
-}
-
-.wrapper-content {
-  width: 100%;
-  padding: 90px 20px 100px 20px;
-}
-
-.wrapper-details {
-  display: none;
-}
-
-.center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.space-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-@media screen and (min-width: 600px) {
-  .container {
-    grid-template-columns: min-content 1fr;
+@media screen and (min-width: 798px) {
+  .wrapper {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .wrapper {
-    display: grid;
-    grid-template-columns: 1fr 360px;
+  .wrapper-content {
+    width: 100%;
+    padding-right: 20px;
   }
 
   .wrapper-details {
     border-left: 1px solid var(--gray);
     display: block;
     padding: 20px;
-  }
-
-  .wrapper-content {
-    padding: 20px 40px 40px 40px;
-  }
-
-  .settings-page {
-    max-width: 998px;
-    margin: 0px auto;
-    display: grid;
-    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin: 0px;
+    min-height: 100vh;
   }
 }
