@@ -26,7 +26,7 @@ Make sure that you have installed [Node.js](https://nodejs.org/en/download/) on 
 
 ## Installation
 
-Clone the repo [https://github.com/cyberconnecthq/cc-content-app.git](https://github.com/cyberconnecthq/cc-content-app.git) and run the following command in your terminal to install all the packages that are necessary to start the development server: `npm install` or `yarn add`.
+Clone the repo [https://github.com/cyberconnecthq/cc-content-app.git](https://github.com/cyberconnecthq/cc-content-app.git) and run the following command in your terminal to install all the packages that are necessary to start the development server: `npm install` or `yarn install`.
 
 ## Local Development
 
