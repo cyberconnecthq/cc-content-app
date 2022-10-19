@@ -45,7 +45,7 @@ interface Attribute {
     /* Name of the trait */
     trait_type: string;
     /* Value of the trait */
-    value: number;
+    value: number | string;
 }
 
 export interface IEssenceMetadata {
