@@ -9,7 +9,7 @@ import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
 function PostBtn({ nftImageURL, content }: IPostInput) {
-    const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
+    const { provider, address, accessToken, primayProfileID, primaryHandle, setIsCreatingPost, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
@@ -27,7 +27,7 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
             }
 
             /* Check if the has signed up */
-            if (!profileID) {
+            if (!primayProfileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -50,8 +50,8 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
                 tags: [],
                 image: nftImageURL ? nftImageURL : "",
                 image_data: !nftImageURL ? svg_data : "",
-                name: `@${handle}'s post`,
-                description: `@${handle}'s post on CyberConnect Content app`,
+                name: `@${primaryHandle}'s post`,
+                description: `@${primaryHandle}'s post on CyberConnect Content app`,
                 animation_url: "",
                 external_url: "",
                 attributes: [],
@@ -78,7 +78,7 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
                             chainID: chainID
                         },
                         /* The profile id under which the Essence is registered */
-                        profileID: profileID,
+                        profileID: primayProfileID,
                         /* Name of the Essence */
                         name: "Post",
                         /* Symbol of the Essence */
@@ -117,6 +117,12 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
             });
             const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
+            /* Close Post Modal */
+            handleModal(null, "");
+
+            /* Set the isCreatingPost in the state variables */
+            setIsCreatingPost(true);
+
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
             console.log(txHash);
@@ -124,6 +130,9 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
             /* Display success message */
             handleModal("success", "Post was created!");
         } catch (error) {
+            /* Set the isCreatingPost in the state variables */
+            setIsCreatingPost(false);
+
             /* Display error message */
             const message = error.message as string;
             handleModal("error", message);

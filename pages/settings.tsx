@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
 import Navbar from "../components/Navbar";
@@ -6,31 +6,34 @@ import Panel from "../components/Panel";
 import SetSubscribeBtn from "../components/Buttons/SetSubscribeBtn";
 import SetEssenceBtn from "../components/Buttons/SetEssenceBtn";
 import { useLazyQuery } from "@apollo/client";
-import { USER_INFO_BY_ADDRESS } from "../graphql";
+import { WALLET } from "../graphql";
 import AccountCard from "../components/Cards/AccountCard";
 import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
 import { IAccountCard } from "../types";
 import { timeout } from "../helpers/functions";
+import { CHAIN_ID } from "../helpers/constants";
 
 const SettingsPage: NextPage = () => {
-    const { address, accessToken, profileID, isCreatingProfile, initAccountCount, setIsCreatingProfile } = useContext(AuthContext);
-    /* Query to get user information by wallet address */
-    const [getUserInfoByAddress, { data, refetch }] = useLazyQuery(USER_INFO_BY_ADDRESS);
+    const { address, accessToken, primayProfileID, isCreatingProfile, accountCount, setIsCreatingProfile, setAccountCount } = useContext(AuthContext);
 
     /* State variable to store the accounts */
     const [accounts, setAccounts] = useState<IAccountCard[]>([]);
+
+    /* Query to get user information by wallet address */
+    const [getWallet, { data, refetch }] = useLazyQuery(WALLET);
 
     useEffect(() => {
         if (!address) return;
 
         (async () => {
             /* Get all profile for the wallet address */
-            const res = await getUserInfoByAddress({
+            const res = await getWallet({
                 variables: {
                     address: address,
+                    chainID: CHAIN_ID
                 },
             });
-            const edges = res?.data?.address?.goerliWallet?.profiles?.edges;
+            const edges = res?.data?.wallet?.profiles?.edges;
             const profiles = edges?.map((edge: any) => edge?.node) || [];
 
             /* Set the profile accounts */
@@ -40,6 +43,7 @@ const SettingsPage: NextPage = () => {
 
     useEffect(() => {
         let isMounted = true;
+        let counter = 0;
 
         /* Function to fetch user profiles */
         async function refetchAccounts() {
@@ -47,23 +51,42 @@ const SettingsPage: NextPage = () => {
             if (!data) return;
             if (!isCreatingProfile) return;
 
-            /* Refetch the information */
-            await refetch();
+            try {
+                /* Refetch the information */
+                await refetch();
 
-            /* Check of the initial number of accounts */
-            if (initAccountCount !== data?.address?.goerliWallet?.profiles?.totalCount) {
-                /* Get the profiles */
-                const edges = data?.address?.goerliWallet?.profiles?.edges;
-                const profiles = edges?.map((edge: any) => edge?.node) || [];
+                /* Get the new count */
+                const newAccountCount = data?.wallet?.profiles?.totalCount;
+                console.log(accountCount, newAccountCount)
+                /* Check of the initial number of accounts */
+                if (accountCount !== newAccountCount) {
+                    /* Get the profiles */
+                    const edges = data?.wallet?.profiles?.edges;
+                    const accounts = edges?.map((edge: any) => edge?.node) || [];
 
-                /* Set the isCreatingProfile in the state variable */
+                    /* Reset the isCreatingProfile in the state variable */
+                    setIsCreatingProfile(false);
+
+                    /* Set the accounts in the state variable */
+                    setAccounts(accounts);
+
+                    /* Set the account count in the state variable */
+                    setAccountCount(newAccountCount);
+                } else {
+                    /* Stop fetching after 5 mins */
+                    if (counter < 100) {
+                        await timeout(3000);
+                        refetchAccounts();
+                        counter++;
+                    } else {
+                        /* Reset the isCreatingProfile in the state variable */
+                        setIsCreatingProfile(false);
+                    }
+                }
+            } catch (error) {
+                /* Reset the isCreatingProfile in the state variable */
                 setIsCreatingProfile(false);
-
-                /* Set the accounts in the state variable */
-                setAccounts(profiles);
-            } else {
-                await timeout(3000);
-                refetchAccounts();
+                console.error(error);
             }
         }
         refetchAccounts();
@@ -72,7 +95,7 @@ const SettingsPage: NextPage = () => {
         return () => {
             isMounted = false;
         }
-    }, [address, accessToken, data, isCreatingProfile]);
+    }, [address, data, accountCount, isCreatingProfile]);
 
 
     return (
@@ -83,7 +106,7 @@ const SettingsPage: NextPage = () => {
                     <h1>Settings</h1>
                     <hr></hr>
                     {
-                        !(accessToken && address && profileID)
+                        !(accessToken && address && primayProfileID)
                             ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view details about your account.</div>
                             : (<div>
                                 <h2>Account</h2>

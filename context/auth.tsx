@@ -3,22 +3,27 @@ import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
 import { useLazyQuery } from "@apollo/client";
-import { USER_INFO_BY_ADDRESS } from "../graphql";
+import { WALLET } from "../graphql";
 
 export const AuthContext = createContext<IAuthContext>({
     provider: undefined,
     address: undefined,
     accessToken: undefined,
-    profileID: undefined,
-    handle: undefined,
+    primayProfileID: undefined,
+    primaryHandle: undefined,
     isCreatingProfile: false,
-    initAccountCount: 0,
+    isCreatingPost: false,
+    accountCount: 0,
+    postCount: 0,
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
-    setProfileID: () => { },
-    setHandle: () => { },
+    setPrimayProfileID: () => { },
+    setPrimaryHandle: () => { },
     setIsCreatingProfile: () => { },
+    setIsCreatingPost: () => { },
+    setAccountCount: () => { },
+    setPostCount: () => { },
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -33,22 +38,29 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [address, setAddress] = useState<string | undefined>(undefined);
 
     /* State variable to store the profile ID */
-    const [profileID, setProfileID] = useState<number | undefined>(undefined);
+    const [primayProfileID, setPrimayProfileID] = useState<number | undefined>(undefined);
 
     /* State variable to store the handle */
-    const [handle, setHandle] = useState<string | undefined>(undefined);
+    const [primaryHandle, setPrimaryHandle] = useState<string | undefined>(undefined);
 
     /* State variable to store the access token */
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
-    /* State variable to store the profile created */
+    /* State variable to store the initial number of accounts */
+    const [accountCount, setAccountCount] = useState<number>(0);
+
+    /* State variable to store the initial number of posts */
+    const [postCount, setPostCount] = useState<number>(0);
+
+    /* State variable to store the tokenURI for post created */
     const [isCreatingProfile, setIsCreatingProfile] = useState<boolean>(false);
 
-    /* State variable to store the initial number of accounts */
-    const [initAccountCount, setInitAccountCount] = useState<number>(0);
+    /* State variable to store the tokenURI for post created */
+    const [isCreatingPost, setIsCreatingPost] = useState<boolean>(false);
+
 
     /* Query to get user information by wallet address */
-    const [getUserInfoByAddress] = useLazyQuery(USER_INFO_BY_ADDRESS);
+    const [getWallet] = useLazyQuery(WALLET);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -68,25 +80,29 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
         (async () => {
             /* Get all profile for the wallet address */
-            const res = await getUserInfoByAddress({
+            const res = await getWallet({
                 variables: {
                     address: address,
+                    chainID: CHAIN_ID
                 },
             });
-            const edges = res?.data?.address?.goerliWallet?.profiles?.edges;
+            const edges = res?.data?.wallet?.profiles?.edges;
             const accounts = edges?.map((edge: any) => edge?.node) || [];
 
             /* Get the primary profile */
             const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
 
             /* Set the profile ID variable*/
-            setProfileID(primaryAccount?.profileID);
+            setPrimayProfileID(primaryAccount?.profileID);
 
-            /* Set the handle variable */
-            setHandle(primaryAccount?.handle);
+            /* Set the primaryHandle variable */
+            setPrimaryHandle(primaryAccount?.handle);
 
             /* Set the initial number of accounts */
-            setInitAccountCount(accounts.length);
+            setAccountCount(accounts.length);
+
+            /* Set the initial number of posts */
+            setPostCount(primaryAccount?.essences?.totalCount || 0);
         })();
     }, [address]);
 
@@ -124,16 +140,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 provider,
                 address,
                 accessToken,
-                profileID,
-                handle,
-                initAccountCount,
+                primayProfileID,
+                primaryHandle,
+                accountCount,
+                postCount,
                 isCreatingProfile,
+                isCreatingPost,
                 setProvider,
                 setAddress,
                 setAccessToken,
-                setProfileID,
-                setHandle,
+                setPrimayProfileID,
+                setPrimaryHandle,
+                setAccountCount,
+                setPostCount,
                 setIsCreatingProfile,
+                setIsCreatingPost,
                 checkNetwork,
             }}>
             {children}

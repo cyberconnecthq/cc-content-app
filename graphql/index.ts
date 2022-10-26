@@ -3,7 +3,7 @@ export { LOGIN_VERIFY } from "./LoginVerify";
 export { CREATE_SUBSCRIBE_TYPED_DATA } from "./CreateSubscribeTypedData";
 export { RELAY } from "./Relay";
 export { PROFILES } from "./Profiles";
-export { USER_INFO_BY_ADDRESS } from "./UserInfoByAddress";
+export { WALLET } from "./Wallet";
 export { CREATE_COLLECT_ESSENCE_TYPED_DATA } from "./CreateCollectEssenceTypedData";
 export { CREATE_REGISTER_ESSENCE_TYPED_DATA } from "./CreateRegisterEssenceTypedData";
 export { CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA } from "./CreateSetSubscribeDataTypedData";

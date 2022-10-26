@@ -4,16 +4,21 @@ export interface IAuthContext {
     provider: Web3Provider | undefined;
     address: string | undefined;
     accessToken: string | undefined;
-    profileID: number | undefined;
-    handle: string | undefined;
-    initAccountCount: number;
+    primayProfileID: number | undefined;
+    primaryHandle: string | undefined;
+    accountCount: number;
+    postCount: number;
     isCreatingProfile: boolean;
+    isCreatingPost: boolean;
     setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
-    setProfileID: (profileID: number | undefined) => void;
-    setHandle: (handle: string | undefined) => void;
+    setPrimayProfileID: (primayProfileID: number | undefined) => void;
+    setPrimaryHandle: (primaryHandle: string | undefined) => void;
+    setAccountCount: (accountCount: number) => void;
+    setPostCount: (postCount: number) => void;
     setIsCreatingProfile: (isCreatingProfile: boolean) => void;
+    setIsCreatingPost: (isCreatingPost: boolean) => void;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
 }
 

@@ -6,7 +6,7 @@ import { ModalContext } from "../../context/modal";
 import { getSubscriberSVGData, pinJSONToIPFS } from "../../helpers/functions";
 
 function SetSubscribeBtn({ option }: { option: string; }) {
-    const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
+    const { provider, address, accessToken, primayProfileID, primaryHandle, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetSubscribeDataTypedData] = useMutation(CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
@@ -24,7 +24,7 @@ function SetSubscribeBtn({ option }: { option: string; }) {
             }
 
             /* Check if the has signed up */
-            if (!profileID) {
+            if (!primayProfileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -46,8 +46,8 @@ function SetSubscribeBtn({ option }: { option: string; }) {
             /* Construct the metadata object for the Subscribe NFT */
             const metadata = {
                 image_data: getSubscriberSVGData(),
-                name: `@${handle}'s subscriber`,
-                description: `@${handle}'s subscriber on CyberConnect Content app`,
+                name: `@${primaryHandle}'s subscriber`,
+                description: `@${primaryHandle}'s subscriber on CyberConnect Content app`,
             };
 
             /* Upload metadata to IPFS */
@@ -84,7 +84,7 @@ function SetSubscribeBtn({ option }: { option: string; }) {
                             chainID: chainID
                         },
                         /* The user's profile id for which the rules are enabled */
-                        profileId: profileID,
+                        profileId: primayProfileID,
                         /* URL for the json object containing data about the Subscribe NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
                         middleware: middelware

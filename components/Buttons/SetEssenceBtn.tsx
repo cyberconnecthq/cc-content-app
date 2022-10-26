@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 function SetEssenceBtn({ option }: { option: string; }) {
-    const { provider, address, accessToken, profileID, checkNetwork } = useContext(AuthContext);
+    const { provider, address, accessToken, primayProfileID, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetEssenceDataTypedData] = useMutation(CREATE_SET_ESSENCE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
@@ -23,7 +23,7 @@ function SetEssenceBtn({ option }: { option: string; }) {
             }
 
             /* Check if the has signed up */
-            if (!profileID) {
+            if (!primayProfileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -77,7 +77,7 @@ function SetEssenceBtn({ option }: { option: string; }) {
                         /* The id of the essence the middleware is set for */
                         essenceId: Number(essenceID),
                         /* The id of the profile that created the essence */
-                        profileId: profileID,
+                        profileId: primayProfileID,
                         /* URL for the json object containing data about content and the Essence NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw`,
                         /* The middleware that will be set for the essence */

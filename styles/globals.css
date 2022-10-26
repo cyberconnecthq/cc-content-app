@@ -375,14 +375,21 @@ svg {
 /* PLACEHOLDERS */
 .account-placeholder {
   display: grid;
-  grid-template-columns: 54px 1fr 80px;
+  grid-template-columns: 54px 1fr;
   grid-gap: 20px;
   align-items: center;
   height: 54px;
   margin-top: 10px;
 }
 
-.account-placeholder-img {
+.post-placeholder {
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  max-width: 560px;
+  padding: 20px;
+}
+
+.placeholder-img {
   background-color: var(--gray);
   border-radius: 50%;
   margin-bottom: 10px;
@@ -390,8 +397,8 @@ svg {
   width: 54px;
 }
 
-.account-placeholder-name,
-.account-placeholder-handle {
+.placeholder-name,
+.placeholder-handle {
   border-radius: 2px;
   background-color: var(--gray);
   min-height: 20px;
@@ -399,9 +406,10 @@ svg {
   margin: 4px 0px;
 }
 
-.account-placeholder-img,
-.account-placeholder-name,
-.account-placeholder-handle {
+.placeholder-img,
+.placeholder-name,
+.placeholder-handle,
+.placeholder-content {
   width: 100%;
   height: 100%;
   margin: 5px 0px;
@@ -409,6 +417,12 @@ svg {
     linear-gradient(90deg, #0000 33%, rgba(255, 255, 255, 0.3) 50%, #0000 66%) var(--gray);
   background-size: 300% 100%;
   animation: shine 1s infinite;
+}
+
+.placeholder-content {
+  border-radius: 2px;
+  height: 40px;
+  margin-top: 20px;
 }
 
 /* MODAL */

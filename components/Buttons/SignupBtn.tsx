@@ -9,7 +9,7 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
-    const { provider, address, setProfileID, setHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
+    const { provider, address, primayProfileID, setPrimayProfileID, primaryHandle, setPrimaryHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
@@ -73,13 +73,13 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             console.log(tx.hash);
 
             /* Call the getProfileIdByHandle function to get the profile id */
-            const profileID = await contract.getProfileIdByHandle(handle);
+            const newProfileID = await contract.getProfileIdByHandle(handle);
 
-            /* Set the profileID in the state variables */
-            setProfileID(Number(profileID));
+            /* Set the primary profileID in the state variables */
+            setPrimayProfileID(primayProfileID || Number(newProfileID));
 
-            /* Set the handle in the state variables */
-            setHandle(handle);
+            /* Set the primary handle in the state variables */
+            setPrimaryHandle(primaryHandle || handle);
 
             /* Display success message */
             handleModal("success", "Profile was created!");
