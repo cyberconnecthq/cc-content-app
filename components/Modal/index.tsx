@@ -3,6 +3,7 @@ import { ModalContext } from "../../context/modal";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { TiWarning } from "react-icons/ti";
 import SignupForm from "../Forms/SignupForm";
+import PostForm from "../Forms/PostForm";
 
 const Modal = () => {
     const { modal, modalType, modalText, handleModal } = useContext(ModalContext);
@@ -34,6 +35,12 @@ const Modal = () => {
                 return (
                     <div className="modal-signup">
                         <SignupForm />
+                    </div>
+                );
+            case "post":
+                return (
+                    <div className="modal-post">
+                        <PostForm />
                     </div>
                 );
             default:

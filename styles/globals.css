@@ -138,7 +138,6 @@ svg {
 .create-btn,
 .signin-btn,
 .subscribe-btn,
-.post-btn,
 .collect-btn,
 .set-subscribe-btn,
 .set-essence-btn {
@@ -155,7 +154,8 @@ svg {
 }
 
 .connect-btn,
-.signup-btn {
+.signup-btn,
+.post-btn {
   background: var(--orange);
   border: 1px solid rgba(235, 87, 87, 0.3);
   box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
@@ -473,6 +473,11 @@ svg {
   fill: var(--red);
 }
 
+.modal-post textarea {
+  width: 100%;
+  min-height: 200px;
+}
+
 /* FORMS */
 .form button {
   margin-top: 40px;
@@ -485,6 +490,7 @@ svg {
   margin-top: 16px;
 }
 
+.form textarea,
 .form input {
   background: #fdf5f2;
   border: 1px solid rgba(235, 87, 87, 0.3);

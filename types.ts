@@ -140,3 +140,8 @@ export interface ISignupInput {
     handle: string;
     avatar: string;
 }
+
+export interface IPostInput {
+    nftImageURL: string;
+    content: string;
+}

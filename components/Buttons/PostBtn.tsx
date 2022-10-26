@@ -2,12 +2,13 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
-import { IEssenceMetadata, Version } from "../../types";
+import { IEssenceMetadata, Version, IPostInput } from "../../types";
+import { randPhrase } from "@ngneat/falso";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
-function PostBtn({ post }: { post: string }) {
+function PostBtn({ nftImageURL, content }: IPostInput) {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
@@ -37,9 +38,6 @@ function PostBtn({ post }: { post: string }) {
             /* (default if the user doesn't pass a image url) */
             const svg_data = getEssenceSVGData();
 
-            /* Collect user input for NFT image */
-            const nftImageURL = prompt("NFT image URL:");
-
             /* Construct the metadata object for the Essence NFT */
             const metadata: IEssenceMetadata = {
                 metadata_id: uuidv4(),
@@ -47,7 +45,7 @@ function PostBtn({ post }: { post: string }) {
                 app_id: "cyberconnect",
                 lang: "en",
                 issue_date: new Date().toISOString(),
-                content: post,
+                content: content || randPhrase(),
                 media: [],
                 tags: [],
                 image: nftImageURL ? nftImageURL : "",
@@ -137,7 +135,6 @@ function PostBtn({ post }: { post: string }) {
             className="post-btn"
             type="submit"
             onClick={handleOnClick}
-            disabled={Boolean(!post)}
         >
             Post
         </button>

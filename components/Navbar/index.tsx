@@ -6,9 +6,11 @@ import { MdOutlineDashboard } from "react-icons/md";
 import { MdHistoryEdu } from "react-icons/md";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 const Navbar = () => {
     const { address } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const router = useRouter();
 
     return (
@@ -25,9 +27,10 @@ const Navbar = () => {
                     <div className={`navbar-link ${router.pathname === "/settings" && "active"}`}>{<FiSettings />}</div>
                 </Link>
                 <hr></hr>
-                <Link href="/create">
-                    <div className="create-btn center">{<MdHistoryEdu />}</div>
-                </Link>
+                <button
+                    className="create-btn center"
+                    onClick={() => handleModal("post", "")}
+                >{<MdHistoryEdu />}</button>
             </div>
             <div className="navbar-address">
                 {
