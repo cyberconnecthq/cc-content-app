@@ -57,7 +57,7 @@ const SettingsPage: NextPage = () => {
 
                 /* Get the new count */
                 const newAccountCount = data?.wallet?.profiles?.totalCount;
-                console.log(accountCount, newAccountCount)
+
                 /* Check of the initial number of accounts */
                 if (accountCount !== newAccountCount) {
                     /* Get the profiles */
