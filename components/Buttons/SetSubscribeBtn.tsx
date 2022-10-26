@@ -15,7 +15,7 @@ function SetSubscribeBtn({ option }: { option: string; }) {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("You need to connect wallet.");
+                throw Error("You need to Connect wallet.");
             }
 
             /* Check if the user logged in */

@@ -47,15 +47,15 @@ function ConnectBtn() {
                 setAddress(undefined);
             } else {
                 /* Display error message */
-                handleModal("error", "Couldn't connect with wallet!");
-                console.error(error);
+                const message = error.message as string;
+                handleModal("error", message);
             }
         }
     };
 
     return (
         <button className="connect-btn" onClick={handleOnClick}>
-            Connect Wallet
+            Connect wallet
         </button>
     );
 }
