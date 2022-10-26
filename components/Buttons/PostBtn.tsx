@@ -4,10 +4,12 @@ import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { IEssenceMetadata, Version } from "../../types";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
 function PostBtn({ post }: { post: string }) {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
@@ -15,12 +17,12 @@ function PostBtn({ post }: { post: string }) {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
-            /* Check if the has signed in */
-            if (!accessToken) {
-                throw Error("Youn need to Sign in.");
+            /* Check if the user logged in */
+            if (!(accessToken)) {
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the has signed up */
@@ -122,10 +124,11 @@ function PostBtn({ post }: { post: string }) {
             console.log(txHash);
 
             /* Display success message */
-            alert("Successfully created the post!");
+            handleModal("success", "Post was created!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

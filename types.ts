@@ -6,12 +6,21 @@ export interface IAuthContext {
     accessToken: string | undefined;
     profileID: number | undefined;
     handle: string | undefined;
+    isCreatingProfile: boolean;
     setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
     setProfileID: (profileID: number | undefined) => void;
     setHandle: (handle: string | undefined) => void;
+    setIsCreatingProfile: (isCreatingProfile: boolean) => void;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
+}
+
+export interface IModalContext {
+    modal: boolean;
+    modalType: string | null;
+    modalText: string;
+    handleModal: (type: string | null, text: string) => void;
 }
 
 /* Metadata schema for Profile NFT */

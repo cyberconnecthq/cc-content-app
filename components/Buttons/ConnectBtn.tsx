@@ -3,9 +3,11 @@ import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ExternalProvider } from "@ethersproject/providers";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function ConnectBtn() {
     const { setProvider, setAddress } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
         try {
@@ -36,7 +38,7 @@ function ConnectBtn() {
             setAddress(address);
 
             /* Display success message */
-            alert("Connected to MetaMask!");
+            handleModal("success", "Connected with wallet!");
         } catch (error) {
             /* This error code indicates that the user rejected the connection */
             if (error.code === 4001) {
@@ -45,7 +47,8 @@ function ConnectBtn() {
                 setAddress(undefined);
             } else {
                 /* Display error message */
-                alert(error.message);
+                handleModal("error", "Couldn't connect with wallet!");
+                console.error(error);
             }
         }
     };

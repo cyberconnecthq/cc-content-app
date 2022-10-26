@@ -2,9 +2,11 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_SET_ESSENCE_DATA_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function SetEssenceBtn({ option }: { option: string; }) {
     const { provider, address, accessToken, profileID, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createSetEssenceDataTypedData] = useMutation(CREATE_SET_ESSENCE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
@@ -12,12 +14,12 @@ function SetEssenceBtn({ option }: { option: string; }) {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the user logged in */
             if (!(accessToken)) {
-                throw Error("You need to log in first.");
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the has signed up */
@@ -110,10 +112,11 @@ function SetEssenceBtn({ option }: { option: string; }) {
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully set the middleware for essence!`);
+            handleModal("success", "Essence middleware was set!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

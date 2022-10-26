@@ -2,7 +2,7 @@ import { ReactNode, createContext, useState, useEffect } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { USER_INFO_BY_ADDRESS } from "../graphql";
 
 export const AuthContext = createContext<IAuthContext>({
@@ -11,11 +11,13 @@ export const AuthContext = createContext<IAuthContext>({
     accessToken: undefined,
     profileID: undefined,
     handle: undefined,
+    isCreatingProfile: false,
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
     setProfileID: () => { },
     setHandle: () => { },
+    setIsCreatingProfile: () => { },
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -39,9 +41,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
     /* Query to get user information by wallet address */
-    const { data } = useQuery(USER_INFO_BY_ADDRESS, {
-        variables: { address },
-    });
+    const [getUserInfoByAddress] = useLazyQuery(USER_INFO_BY_ADDRESS);
+
+    /* State variable to store the profile created */
+    const [isCreatingProfile, setIsCreatingProfile] = useState<boolean>(false);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -57,21 +60,28 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }, [provider, address]);
 
     useEffect(() => {
-        if (!data) return;
+        if (!address) return;
 
-        /* Get all profile for the wallet address */
-        const edges = data?.address?.goerliWallet?.profiles?.edges;
-        const accounts = edges?.map((edge: any) => edge?.node);
+        (async () => {
+            /* Get all profile for the wallet address */
+            const res = await getUserInfoByAddress({
+                variables: {
+                    address: address,
+                },
+            });
+            const edges = res?.data?.address?.goerliWallet?.profiles?.edges;
+            const accounts = edges?.map((edge: any) => edge?.node);
 
-        /* Get the primary profile */
-        const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
+            /* Get the primary profile */
+            const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
 
-        /* Set the profile ID */
-        setProfileID(primaryAccount?.profileID);
+            /* Set the profile ID */
+            setProfileID(primaryAccount?.profileID);
 
-        /* Set the handle */
-        setHandle(primaryAccount?.handle);
-    }, [data]);
+            /* Set the handle */
+            setHandle(primaryAccount?.handle);
+        })();
+    }, [address]);
 
     /* Function to check if the network is the correct one */
     const checkNetwork = async (provider: Web3Provider) => {
@@ -109,11 +119,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 accessToken,
                 profileID,
                 handle,
+                isCreatingProfile,
                 setProvider,
                 setAddress,
                 setAccessToken,
                 setProfileID,
                 setHandle,
+                setIsCreatingProfile,
                 checkNetwork,
             }}>
             {children}

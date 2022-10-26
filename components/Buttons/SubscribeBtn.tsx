@@ -2,9 +2,11 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function SubscribeBtn({ profileID }: { profileID: number; }) {
     const { provider, address, accessToken, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
@@ -12,12 +14,12 @@ function SubscribeBtn({ profileID }: { profileID: number; }) {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the user logged in */
             if (!(accessToken)) {
-                throw Error("You need to log in first.");
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the network is the correct one */
@@ -70,10 +72,11 @@ function SubscribeBtn({ profileID }: { profileID: number; }) {
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully subscribed to profile!`);
+            handleModal("success", "Subscribed to profile!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

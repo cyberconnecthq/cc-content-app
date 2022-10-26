@@ -2,10 +2,12 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 import { getSubscriberSVGData, pinJSONToIPFS } from "../../helpers/functions";
 
 function SetSubscribeBtn({ option }: { option: string; }) {
     const { provider, address, accessToken, profileID, handle, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createSetSubscribeDataTypedData] = useMutation(CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
@@ -13,12 +15,12 @@ function SetSubscribeBtn({ option }: { option: string; }) {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the user logged in */
             if (!(accessToken)) {
-                throw Error("You need to log in first.");
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the has signed up */
@@ -116,10 +118,11 @@ function SetSubscribeBtn({ option }: { option: string; }) {
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully set the middleware for subscribe!`);
+            handleModal("success", "Subscribe middleware was set!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

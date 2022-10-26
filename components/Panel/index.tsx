@@ -42,7 +42,8 @@ const Panel = () => {
                     (provider && address) ?
                         <div>
                             {!accessToken && <SigninBtn />}
-                            {!profileID && <SignupBtn />}
+                            {<SignupBtn />}
+                            {/* {!profileID && <SignupBtn />} */}
                         </div>
                         : <ConnectBtn />
 

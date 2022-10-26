@@ -2,9 +2,11 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: number; }) {
     const { provider, address, accessToken, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [createCollectEssenceTypedData] = useMutation(
         CREATE_COLLECT_ESSENCE_TYPED_DATA
     );
@@ -14,12 +16,12 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the user logged in */
             if (!(accessToken)) {
-                throw Error("You need to log in first.");
+                throw Error("You need to Sign in.");
             }
 
             /* Check if the network is the correct one */
@@ -77,10 +79,11 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
             console.log(txHash);
 
             /* Display success message */
-            alert(`Successfully collected the post!`);
+            handleModal("success", "Post was collected!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

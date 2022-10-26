@@ -6,15 +6,17 @@ import { pinJSONToIPFS } from "../../helpers/functions";
 import { randUserName, randAvatar, randPhrase, randFullName, } from "@ngneat/falso";
 import { IProfileMetadata } from "../../types";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function SignupBtn() {
-    const { provider, address, setProfileID, setHandle, checkNetwork } = useContext(AuthContext);
+    const { provider, address, setProfileID, setHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the network is the correct one */
@@ -63,6 +65,9 @@ function SignupBtn() {
                 0x0
             );
 
+            /* Set the isCreatingProfile in the state variables */
+            setIsCreatingProfile(true);
+
             /* Wait for the transaction to be mined */
             await tx.wait();
 
@@ -80,10 +85,14 @@ function SignupBtn() {
             setHandle(handle);
 
             /* Display success message */
-            alert("Successfully created the profile!");
+            handleModal("success", "Profile was created!");
         } catch (error) {
+            /* Set the isCreatingProfile in the state variables */
+            setIsCreatingProfile(false);
+
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 

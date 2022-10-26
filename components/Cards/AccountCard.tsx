@@ -30,7 +30,7 @@ export const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: 
 
     return (
         <div className="account-card">
-            <div className="account-card-img">
+            <div className="account-card-img center">
                 <Image src={parseURL(avatar)} alt="avatar" width={60} height={60} />
             </div>
             <div>

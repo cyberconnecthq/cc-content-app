@@ -3,9 +3,11 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_GET_MESSAGE, LOGIN_VERIFY } from "../../graphql";
 import { DOMAIN } from "../../helpers/constants";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 
 function SigninBtn() {
     const { provider, address, setAccessToken, checkNetwork } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE);
     const [loginVerify] = useMutation(LOGIN_VERIFY);
 
@@ -13,7 +15,7 @@ function SigninBtn() {
         try {
             /* Check if the user connected with wallet */
             if (!(provider && address)) {
-                throw Error("Connect with MetaMask.");
+                throw Error("You need to connect wallet.");
             }
 
             /* Check if the network is the correct one */
@@ -70,10 +72,11 @@ function SigninBtn() {
             setAccessToken(accessToken);
 
             /* Display success message */
-            alert(`Successfully logged in!`);
+            handleModal("success", "You are now logged in!");
         } catch (error) {
             /* Display error message */
-            alert(error.message);
+            const message = error.message as string;
+            handleModal("error", message);
         }
     };
 
