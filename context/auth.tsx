@@ -12,6 +12,7 @@ export const AuthContext = createContext<IAuthContext>({
     profileID: undefined,
     handle: undefined,
     isCreatingProfile: false,
+    initAccountCount: 0,
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
@@ -40,11 +41,14 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the access token */
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
-    /* Query to get user information by wallet address */
-    const [getUserInfoByAddress] = useLazyQuery(USER_INFO_BY_ADDRESS);
-
     /* State variable to store the profile created */
     const [isCreatingProfile, setIsCreatingProfile] = useState<boolean>(false);
+
+    /* State variable to store the initial number of accounts */
+    const [initAccountCount, setInitAccountCount] = useState<number>(0);
+
+    /* Query to get user information by wallet address */
+    const [getUserInfoByAddress] = useLazyQuery(USER_INFO_BY_ADDRESS);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -70,16 +74,19 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 },
             });
             const edges = res?.data?.address?.goerliWallet?.profiles?.edges;
-            const accounts = edges?.map((edge: any) => edge?.node);
+            const accounts = edges?.map((edge: any) => edge?.node) || [];
 
             /* Get the primary profile */
             const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
 
-            /* Set the profile ID */
+            /* Set the profile ID variable*/
             setProfileID(primaryAccount?.profileID);
 
-            /* Set the handle */
+            /* Set the handle variable */
             setHandle(primaryAccount?.handle);
+
+            /* Set the initial number of accounts */
+            setInitAccountCount(accounts.length);
         })();
     }, [address]);
 
@@ -119,6 +126,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 accessToken,
                 profileID,
                 handle,
+                initAccountCount,
                 isCreatingProfile,
                 setProvider,
                 setAddress,

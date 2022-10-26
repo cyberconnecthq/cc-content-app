@@ -3,7 +3,7 @@ import Image from "next/image";
 import { IAccountCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-export const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: IAccountCard) => {
+const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: IAccountCard) => {
     const [data, setData] = useState({
         name: "",
         bio: ""
@@ -48,3 +48,5 @@ export const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: 
         </div>
     );
 };
+
+export default AccountCard;

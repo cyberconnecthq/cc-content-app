@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import Image from "next/image";
 import { AuthContext } from "../../context/auth";
+import { ModalContext } from "../../context/modal";
 import SigninBtn from "../../components/Buttons/SigninBtn";
 import ConnectBtn from "../../components/Buttons/ConnectBtn";
-import SignupBtn from "../../components/Buttons/SignupBtn";
 import SubscribeBtn from "../Buttons/SubscribeBtn";
 
 const Panel = () => {
-    const { provider, address, accessToken, profileID } = useContext(AuthContext);
+    const { provider, address, accessToken } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
     const suggestedProfiles = [
         {
             name: "CyberConnect",
@@ -42,8 +43,10 @@ const Panel = () => {
                     (provider && address) ?
                         <div>
                             {!accessToken && <SigninBtn />}
-                            {<SignupBtn />}
-                            {/* {!profileID && <SignupBtn />} */}
+                            <button
+                                className="signup-btn"
+                                onClick={() => handleModal("signup", "")}
+                            >Sign up</button>
                         </div>
                         : <ConnectBtn />
 

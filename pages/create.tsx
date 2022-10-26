@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import PostBtn from "../components/Buttons/PostBtn";
 
-const NotificationsPage: NextPage = () => {
+const CreatePage: NextPage = () => {
     const [post, setPost] = useState<string>("");
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,4 +34,4 @@ const NotificationsPage: NextPage = () => {
     );
 };
 
-export default NotificationsPage;
+export default CreatePage;

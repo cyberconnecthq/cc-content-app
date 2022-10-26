@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
-import { PostCard } from "../components/Cards/PostCard";
+import PostCard from "../components/Cards/PostCard";
 
 const PostPage: NextPage = () => {
     const posts = [

@@ -4,11 +4,11 @@ import ProfileNFTABI from "../../abi/ProfileNFT.json";
 import { PROFILE_NFT_CONTRACT, PROFILE_NFT_OPERATOR } from "../../helpers/constants";
 import { pinJSONToIPFS } from "../../helpers/functions";
 import { randUserName, randAvatar, randPhrase, randFullName, } from "@ngneat/falso";
-import { IProfileMetadata } from "../../types";
+import { IProfileMetadata, ISignupInput } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SignupBtn() {
+function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
     const { provider, address, setProfileID, setHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
@@ -22,17 +22,11 @@ function SignupBtn() {
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
-            /* Collect user input */
-            const handle = prompt("Handle:") || randUserName();
-            const avatar = prompt("Avatar URL:") || randAvatar({ size: 200 });
-            const name = prompt("Name:") || randFullName();
-            const bio = prompt("Bio:") || randPhrase();
-
             /* Construct metadata schema */
             const metadata: IProfileMetadata = {
-                name: name,
-                bio: bio,
-                handle: handle,
+                name: name || randFullName(),
+                bio: bio || randPhrase(),
+                handle: handle || randUserName(),
                 version: "1.0.0",
             };
 
@@ -54,16 +48,19 @@ function SignupBtn() {
                 /* CreateProfileParams */
                 {
                     to: address,
-                    handle: handle,
-                    avatar: avatar,
+                    handle: handle || randUserName(),
+                    avatar: avatar || randAvatar({ size: 200 }),
                     metadata: ipfsHash,
                     operator: PROFILE_NFT_OPERATOR,
                 },
                 /* preData */
                 0x0,
                 /* postData */
-                0x0
+                0x0,
             );
+
+            /* Close Signup Modal */
+            handleModal(null, "");
 
             /* Set the isCreatingProfile in the state variables */
             setIsCreatingProfile(true);

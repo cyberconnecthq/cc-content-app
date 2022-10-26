@@ -4,7 +4,7 @@ import SubscribeBtn from "../Buttons/SubscribeBtn";
 import { IProfileCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-export const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCard) => {
+const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCard) => {
     const [data, setData] = useState({
         name: "",
         bio: ""
@@ -43,3 +43,5 @@ export const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCar
         </div>
     );
 };
+
+export default ProfileCard;

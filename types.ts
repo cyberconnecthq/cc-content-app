@@ -6,6 +6,7 @@ export interface IAuthContext {
     accessToken: string | undefined;
     profileID: number | undefined;
     handle: string | undefined;
+    initAccountCount: number;
     isCreatingProfile: boolean;
     setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
@@ -131,4 +132,11 @@ export interface IAccountCard {
     metadata: string;
     profileID: number;
     isPrimary: boolean;
+}
+
+export interface ISignupInput {
+    name: string;
+    bio: string;
+    handle: string;
+    avatar: string;
 }

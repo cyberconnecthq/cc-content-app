@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import { useQuery } from "@apollo/client";
 import { PROFILES } from "../graphql";
-import { ProfileCard } from "../components/Cards/ProfileCard";
+import ProfileCard from "../components/Cards/ProfileCard";
 import { IProfileCard } from "../types";
 
 const Home: NextPage = () => {

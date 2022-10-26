@@ -4,7 +4,7 @@ import CollectBtn from "../Buttons/CollectBtn";
 import { IPostCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-export const PostCard = ({ essenceID, profileID, tokenURI,
+const PostCard = ({ essenceID, profileID, tokenURI,
     avatar, handle, name }: IPostCard) => {
     const [data, setData] = useState({
         image: "",
@@ -51,3 +51,5 @@ export const PostCard = ({ essenceID, profileID, tokenURI,
         </div>
     );
 };
+
+export default PostCard;

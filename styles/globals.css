@@ -432,7 +432,7 @@ svg {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 40px 60px 40px 30px;
+  padding: 40px 50px 40px 40px;
   outline: none;
   position: relative;
   user-select: none;
@@ -473,6 +473,33 @@ svg {
   fill: var(--red);
 }
 
+/* FORMS */
+.form button {
+  margin-top: 40px;
+}
+
+.form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  margin-top: 16px;
+}
+
+.form input {
+  background: #fdf5f2;
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  width: 100%;
+  outline: none;
+  padding: 10px 12px;
+}
+
+.form-note {
+  color: var(--dark-gray);
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
 @keyframes shine {
   0% {
     background-position: right;
@@ -501,8 +528,13 @@ svg {
 
   .middleware {
     display: grid;
-    grid-template-columns: 400px 1fr 130px;
-    grid-gap: 10px;
+    grid-template-columns: 1fr 130px;
+    align-items: center;
+    grid-gap: 20px;
     margin-top: 20px;
+  }
+
+  .middleware p {
+    max-width: 400px;
   }
 }

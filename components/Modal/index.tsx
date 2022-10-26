@@ -1,8 +1,8 @@
 import React, { useContext, MouseEvent } from "react";
 import { ModalContext } from "../../context/modal";
 import { BsFillCheckCircleFill } from "react-icons/bs";
-import { RiErrorWarningFill } from "react-icons/ri";
 import { TiWarning } from "react-icons/ti";
+import SignupForm from "../Forms/SignupForm";
 
 const Modal = () => {
     const { modal, modalType, modalText, handleModal } = useContext(ModalContext);
@@ -28,6 +28,12 @@ const Modal = () => {
                     <div className="modal-error">
                         <TiWarning />
                         <div><strong>Error</strong>: {modalText}</div>
+                    </div>
+                );
+            case "signup":
+                return (
+                    <div className="modal-signup">
+                        <SignupForm />
                     </div>
                 );
             default:
