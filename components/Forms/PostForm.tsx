@@ -5,7 +5,8 @@ import PostBtn from "../Buttons/PostBtn";
 const PostForm = () => {
     const [postInput, setPostInput] = useState<IPostInput>({
         nftImageURL: "",
-        content: ""
+        content: "",
+        middleware: "free"
     });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -35,7 +36,19 @@ const PostForm = () => {
                     name="content"
                     value={postInput.content}
                     onChange={handleChange}
+                    placeholder="What's on your mind?"
                 ></textarea>
+            </div>
+            <div className="form-post-middleware">
+                <div>Middleware</div>
+                <div>
+                    <label><strong>FREE:</strong> users collect post for free
+                        <input type="radio" name="middleware" value="free" defaultChecked onChange={handleChange} />
+                    </label>
+                    <label><strong>PAID:</strong> users pay 1 LINK to collect
+                        <input type="radio" name="middleware" value="paid" onChange={handleChange} />
+                    </label>
+                </div>
             </div>
             <div className="form-note"><strong>Note:</strong> For empty fields we will randomly generate values.</div>
             <PostBtn {...postInput} />

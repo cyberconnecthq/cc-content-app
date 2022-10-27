@@ -244,6 +244,10 @@ svg {
   grid-gap: 20px;
 }
 
+.posts {
+  margin-bottom: 60px;
+}
+
 /* PANEL */
 .panel-profiles {
   border: 1px solid var(--gray);
@@ -471,22 +475,14 @@ svg {
 
 .modal-success,
 .modal-error {
+  border-radius: 4px;
   display: grid;
   grid-template-columns: 30px 1fr;
-  grid-gap: 20px;
+  grid-gap: 16px;
   align-items: center;
   font-size: 18px;
   overflow: hidden;
-}
-
-.modal-success {
-  background-color: var(--green);
-  padding: 20px 50px 20px 20px;
-}
-
-.modal-error {
-  background-color: var(--red);
-  padding: 20px 50px 20px 20px;
+  padding: 20px 60px 20px 20px;
 }
 
 .modal-success div,
@@ -499,16 +495,21 @@ svg {
   width: 30px;
 }
 
+.modal-success svg path {
+  fill: var(--green);
+}
+
+.modal-error svg path {
+  fill: var(--red);
+}
+
 .modal-post textarea {
+  font-family: var(--font-family);
   width: 100%;
   min-height: 200px;
 }
 
 /* FORMS */
-.form button {
-  margin-top: 40px;
-}
-
 .form label {
   display: block;
   font-weight: 600;
@@ -520,6 +521,7 @@ svg {
 .form input {
   background: #fdf5f2;
   border: 1px solid rgba(235, 87, 87, 0.3);
+  accent-color: var(--orange);
   width: 100%;
   outline: none;
   padding: 10px 12px;
@@ -529,7 +531,28 @@ svg {
   color: var(--dark-gray);
   font-style: italic;
   font-size: 14px;
-  margin-top: 20px;
+  margin: 40px;
+  text-align: center;
+}
+
+.form-post-middleware label {
+  display: grid;
+  grid-template-columns: 40px 1fr 20px;
+  grid-gap: 10px;
+  cursor: pointer;
+  padding: 10px 12px;
+  margin: 0px;
+}
+
+.form-post-middleware div:first-child {
+  margin: 16px 0px 4px;
+  font-weight: 500;
+}
+
+.form-post-middleware div:last-child {
+  background: #fdf5f2;
+  border: 1px solid rgba(235, 87, 87, 0.3);
+  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
 }
 
 @keyframes shine {

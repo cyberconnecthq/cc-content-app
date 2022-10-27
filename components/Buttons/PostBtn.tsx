@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
-function PostBtn({ nftImageURL, content }: IPostInput) {
+function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
     const { provider, address, accessToken, primayProfileID, primaryHandle, setIsCreatingPost, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
@@ -63,6 +63,9 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
             /* Get the signer from the provider */
             const signer = provider.getSigner();
 
+            /* Get the address from the provider */
+            const account = await signer.getAddress();
+
             /* Get the network from the provider */
             const network = await provider.getNetwork();
 
@@ -86,9 +89,22 @@ function PostBtn({ nftImageURL, content }: IPostInput) {
                         /* URL for the json object containing data about content and the Essence NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
                         /* Middleware that allows users to collect the Essence NFT for free */
-                        middleware: {
-                            collectFree: true,
-                        },
+                        middleware: middleware === "free"
+                            ? { collectFree: true }
+                            : {
+                                collectPaid: {
+                                    /* Address that will receive the amount */
+                                    recipient: account,
+                                    /* Number of times the Essence can be collected */
+                                    totalSupply: 1000,
+                                    /* Amount that needs to be paid to collect essence */
+                                    amount: 1,
+                                    /* The currency for the  amount. Chainlink token contract on Goerli */
+                                    currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+                                    /* If it require that the collector is also subscribed */
+                                    subscribeRequired: false
+                                }
+                            },
                         /* Set if the Essence should be transferable or not */
                         transferable: true
                     }

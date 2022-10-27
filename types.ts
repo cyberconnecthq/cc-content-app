@@ -149,4 +149,5 @@ export interface ISignupInput {
 export interface IPostInput {
     nftImageURL: string;
     content: string;
+    middleware: string;
 }
