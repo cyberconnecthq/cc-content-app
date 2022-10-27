@@ -258,7 +258,8 @@ svg {
   padding: 2px 4px;
 }
 
-.essence-mw-card:hover {
+.essence-mw-card:hover,
+.subscribe-mw-card:hover {
   background: #fdf5f2;
 }
 
