@@ -33,6 +33,28 @@ export const ADDRESS = gql`
                         cursor
                     }
                 }
+                primaryProfile {
+                    id
+                    profileID
+                    handle
+                    metadata
+                    avatar
+                    isPrimary
+                    essences {
+                        totalCount
+                        edges {
+                            node {
+                                essenceID
+                                tokenURI
+                                createdBy {
+                                    handle
+                                    metadata
+                                    avatar
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

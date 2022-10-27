@@ -10,7 +10,7 @@ const SignupForm = () => {
         avatar: ""
     });
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
         const name = event.target.name;
         const value = event.target.value;
         setSignupInput({
@@ -27,7 +27,7 @@ const SignupForm = () => {
                 <input
                     name="handle"
                     value={signupInput.handle}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                     placeholder="@"
                 ></input>
             </div>
@@ -36,7 +36,7 @@ const SignupForm = () => {
                 <input
                     name="avatar"
                     value={signupInput.avatar}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                     placeholder="https://"
                 ></input>
             </div>
@@ -45,7 +45,7 @@ const SignupForm = () => {
                 <input
                     name="name"
                     value={signupInput.name}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                 ></input>
             </div>
             <div>
@@ -53,7 +53,7 @@ const SignupForm = () => {
                 <input
                     name="bio"
                     value={signupInput.bio}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                 ></input>
             </div>
             <div className="form-note"><strong>Note:</strong> For empty fields we will randomly generate values.</div>

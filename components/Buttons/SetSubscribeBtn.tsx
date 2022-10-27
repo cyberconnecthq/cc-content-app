@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import { getSubscriberSVGData, pinJSONToIPFS } from "../../helpers/functions";
 
-function SetSubscribeBtn({ option }: { option: string; }) {
+function SetSubscribeBtn({ profileID, middleware }: { profileID: number, middleware: string }) {
     const { provider, address, accessToken, primayProfileID, primaryHandle, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetSubscribeDataTypedData] = useMutation(CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA);
@@ -53,28 +53,6 @@ function SetSubscribeBtn({ option }: { option: string; }) {
             /* Upload metadata to IPFS */
             const ipfsHash = await pinJSONToIPFS(metadata);
 
-            let middelware;
-            if (option === "free") {
-                middelware = {
-                    subscribeFree: true
-                }
-            } else {
-                middelware = {
-                    subscribePaid: {
-                        /* Address that will receive the amount */
-                        recipient: account,
-                        /* Amount that needs to be paid to subscribe */
-                        amount: 1,
-                        /* The currency for the  amount. Chainlink token contract on Goerli */
-                        currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
-                        /* If it require the subscriber to hold a NFT */
-                        nftRequired: false,
-                        /* The contract of the NFT that the subscriber needs to hold */
-                        nftAddress: "0x0000000000000000000000000000000000000000"
-                    }
-                }
-            }
-
             /* Create typed data in a readable format */
             const typedDataResult = await createSetSubscribeDataTypedData({
                 variables: {
@@ -84,10 +62,25 @@ function SetSubscribeBtn({ option }: { option: string; }) {
                             chainID: chainID
                         },
                         /* The user's profile id for which the rules are enabled */
-                        profileId: primayProfileID,
+                        profileId: profileID,
                         /* URL for the json object containing data about the Subscribe NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
-                        middleware: middelware
+                        middleware: middleware === "free"
+                            ? { subscribeFree: true }
+                            : {
+                                subscribePaid: {
+                                    /* Address that will receive the amount */
+                                    recipient: account,
+                                    /* Amount that needs to be paid to subscribe */
+                                    amount: 1,
+                                    /* The currency for the  amount. Chainlink token contract on Goerli */
+                                    currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+                                    /* If it require the subscriber to hold a NFT */
+                                    nftRequired: false,
+                                    /* The contract of the NFT that the subscriber needs to hold */
+                                    nftAddress: "0x0000000000000000000000000000000000000000"
+                                }
+                            }
                     }
                 }
             });

@@ -131,6 +131,20 @@ export interface IPostCard {
     name: string;
 }
 
+export interface IEssenceMwCard {
+    essenceID: number;
+    tokenURI: string;
+    setSelectedEssenceId: (essenceID: number) => void;
+    setShowDropdown: (showDropdown: boolean) => void;
+}
+
+export interface IProfileMwCard {
+    profileID: number;
+    metadata: string;
+    setSelectedProfileId: (profileID: number) => void;
+    setShowDropdown: (showDropdown: boolean) => void;
+}
+
 export interface IAccountCard {
     handle: string;
     avatar: string;

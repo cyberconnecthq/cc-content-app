@@ -9,7 +9,7 @@ const PostForm = () => {
         middleware: "free"
     });
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleOnChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const name = event.target.name;
         const value = event.target.value;
         setPostInput({
@@ -26,7 +26,7 @@ const PostForm = () => {
                 <input
                     name="nftImageURL"
                     value={postInput.nftImageURL}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                     placeholder="https://"
                 ></input>
             </div>
@@ -35,7 +35,7 @@ const PostForm = () => {
                 <textarea
                     name="content"
                     value={postInput.content}
-                    onChange={handleChange}
+                    onChange={handleOnChange}
                     placeholder="What's on your mind?"
                 ></textarea>
             </div>
@@ -43,10 +43,10 @@ const PostForm = () => {
                 <div>Middleware</div>
                 <div>
                     <label><strong>FREE:</strong> users collect post for free
-                        <input type="radio" name="middleware" value="free" defaultChecked onChange={handleChange} />
+                        <input type="radio" name="middleware" value="free" defaultChecked onChange={handleOnChange} />
                     </label>
                     <label><strong>PAID:</strong> users pay 1 LINK to collect
-                        <input type="radio" name="middleware" value="paid" onChange={handleChange} />
+                        <input type="radio" name="middleware" value="paid" onChange={handleOnChange} />
                     </label>
                 </div>
             </div>

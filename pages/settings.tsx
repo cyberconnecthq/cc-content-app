@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
+import { ModalContext } from "../context/modal";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import SetSubscribeBtn from "../components/Buttons/SetSubscribeBtn";
@@ -15,6 +16,7 @@ import { CHAIN_ID } from "../helpers/constants";
 
 const SettingsPage: NextPage = () => {
     const { address, accessToken, primayProfileID, isCreatingProfile, accountCount, setIsCreatingProfile, setAccountCount } = useContext(AuthContext);
+    const { handleModal } = useContext(ModalContext);
 
     /* State variable to store the accounts */
     const [accounts, setAccounts] = useState<IAccountCard[]>([]);
@@ -131,25 +133,29 @@ const SettingsPage: NextPage = () => {
                                     }
                                 </div>
                                 <br></br>
-                                <h2>Subscribe middleware</h2>
+                                <h2>Middlewares</h2>
                                 <div className="middleware">
-                                    <p>Set <strong>PAID</strong> Subscribe middleware. Subscribers will be able to subscribe to your profile if they <strong>pay 1 LINK</strong>.</p>
-                                    <SetSubscribeBtn option="paid" />
+                                    <div>
+                                        <h2>Subscribe</h2>
+                                        <p>Set the middleware for your profile to be either <strong>FREE</strong> or <strong>PAID</strong> when users subscribe to it.</p>
+                                    </div>
+                                    <button
+                                        className="middleware-btn"
+                                        onClick={() => handleModal("subscribe-mw", "")}
+                                    >Set Subscribe MW</button>
                                 </div>
                                 <div className="middleware">
-                                    <p>Set <strong>FREE</strong> Subscribe middleware. Subscribers will be able to subscribe to your profile for <strong>free</strong>.</p>
-                                    <SetSubscribeBtn option="free" />
+                                    <div>
+                                        <h2>Essence</h2>
+                                        <p>Set the middleware for your posts to be either <strong>FREE</strong> or <strong>PAID</strong> when users collect them.</p>
+                                    </div>
+                                    <button
+                                        className="middleware-btn"
+                                        onClick={() => handleModal("essence-mw", "")}
+                                    >Set Essence MW</button>
                                 </div>
                                 <br></br>
-                                <h2>Essence middleware</h2>
-                                <div className="middleware">
-                                    <p>Set <strong>PAID</strong> Collect middleware. Collectors will will be able to collect your essence (post) if they <strong>pay 1 LINK</strong>.</p>
-                                    <SetEssenceBtn option="paid" />
-                                </div>
-                                <div className="middleware">
-                                    <p>Set <strong>FREE</strong> Collect  middleware. Collectors will be able to collect your essence (post) for <strong>free</strong>.</p>
-                                    <SetEssenceBtn option="free" />
-                                </div>
+                                <br></br>
                             </div>)
                     }
                 </div>

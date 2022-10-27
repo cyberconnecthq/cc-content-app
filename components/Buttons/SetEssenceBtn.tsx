@@ -4,7 +4,7 @@ import { CREATE_SET_ESSENCE_DATA_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SetEssenceBtn({ option }: { option: string; }) {
+function SetEssenceBtn({ essenceID, middleware }: { essenceID: number, middleware: string }) {
     const { provider, address, accessToken, primayProfileID, checkNetwork } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetEssenceDataTypedData] = useMutation(CREATE_SET_ESSENCE_DATA_TYPED_DATA);
@@ -42,31 +42,7 @@ function SetEssenceBtn({ option }: { option: string; }) {
             /* Get the chain id from the network */
             const chainID = network.chainId;
 
-            /* Collect user input */
-            const essenceID = prompt("Enter the essence ID") || 1;
-
             /* Create typed data in a readable format */
-            let middelware;
-            if (option === "free") {
-                middelware = {
-                    collectFree: true
-                }
-            } else {
-                middelware = {
-                    collectPaid: {
-                        /* Address that will receive the amount */
-                        recipient: account,
-                        /* Number of times the Essence can be collected */
-                        totalSupply: 1000,
-                        /* Amount that needs to be paid to collect essence */
-                        amount: 1,
-                        /* The currency for the  amount. Chainlink token contract on Goerli */
-                        currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
-                        /* If it require that the collector is also subscribed */
-                        subscribeRequired: false
-                    }
-                }
-            }
             const typedDataResult = await createSetEssenceDataTypedData({
                 variables: {
                     input: {
@@ -75,13 +51,28 @@ function SetEssenceBtn({ option }: { option: string; }) {
                             chainID: chainID
                         },
                         /* The id of the essence the middleware is set for */
-                        essenceId: Number(essenceID),
+                        essenceId: essenceID,
                         /* The id of the profile that created the essence */
                         profileId: primayProfileID,
                         /* URL for the json object containing data about content and the Essence NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw`,
                         /* The middleware that will be set for the essence */
-                        middleware: middelware
+                        middleware: middleware === "free"
+                            ? { collectFree: true }
+                            : {
+                                collectPaid: {
+                                    /* Address that will receive the amount */
+                                    recipient: account,
+                                    /* Number of times the Essence can be collected */
+                                    totalSupply: 1000,
+                                    /* Amount that needs to be paid to collect essence */
+                                    amount: 1,
+                                    /* The currency for the  amount. Chainlink token contract on Goerli */
+                                    currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+                                    /* If it require that the collector is also subscribed */
+                                    subscribeRequired: false
+                                }
+                            },
                     }
                 }
             });
@@ -124,6 +115,7 @@ function SetEssenceBtn({ option }: { option: string; }) {
         <button
             className="set-essence-btn"
             onClick={handleOnClick}
+            disabled={!Boolean(essenceID)}
         >
             Set Essence
         </button>

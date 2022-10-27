@@ -4,6 +4,8 @@ import { BsFillCheckCircleFill } from "react-icons/bs";
 import { TiWarning } from "react-icons/ti";
 import SignupForm from "../Forms/SignupForm";
 import PostForm from "../Forms/PostForm";
+import EssenceMwForm from "../Forms/EssenceMwForm";
+import SubscribeMwForm from "../Forms/SubscribeMwForm";
 
 const Modal = () => {
     const { modal, modalType, modalText, handleModal } = useContext(ModalContext);
@@ -41,6 +43,18 @@ const Modal = () => {
                 return (
                     <div className="modal-post">
                         <PostForm />
+                    </div>
+                );
+            case "essence-mw":
+                return (
+                    <div className="modal-essence-mw">
+                        <EssenceMwForm />
+                    </div>
+                );
+            case "subscribe-mw":
+                return (
+                    <div className="modal-subscribe-mw">
+                        <SubscribeMwForm />
                     </div>
                 );
             default:
