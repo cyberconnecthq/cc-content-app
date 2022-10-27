@@ -108,7 +108,7 @@ const PostPage: NextPage = () => {
                 if (postCount !== newPostCount) {
                     const accountRes = await fetch(parseURL(primaryAccount?.metadata))
                     const accountData = await accountRes.json();
-                    const latestPost = primaryAccount?.essences?.edges[postCount - 1];
+                    const latestPost = primaryAccount?.essences?.edges[newPostCount - 1];
 
                     const post = {
                         avatar: primaryAccount?.avatar,
