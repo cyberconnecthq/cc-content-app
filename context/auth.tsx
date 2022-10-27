@@ -3,7 +3,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
 import { useLazyQuery } from "@apollo/client";
-import { WALLET } from "../graphql";
+import { ADDRESS } from "../graphql";
 
 export const AuthContext = createContext<IAuthContext>({
     provider: undefined,
@@ -60,7 +60,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
 
     /* Query to get user information by wallet address */
-    const [getWallet] = useLazyQuery(WALLET);
+    const [getAddress] = useLazyQuery(ADDRESS);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -80,13 +80,14 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
         (async () => {
             /* Get all profile for the wallet address */
-            const res = await getWallet({
+            const res = await getAddress({
                 variables: {
                     address: address,
                     chainID: CHAIN_ID
                 },
             });
-            const edges = res?.data?.wallet?.profiles?.edges;
+
+            const edges = res?.data?.address?.wallet?.profiles?.edges;
             const accounts = edges?.map((edge: any) => edge?.node) || [];
 
             /* Get the primary profile */

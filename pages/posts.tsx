@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
 import { useLazyQuery } from "@apollo/client";
-import { WALLET } from "../graphql";
+import { ADDRESS } from "../graphql";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
@@ -55,20 +55,20 @@ const PostPage: NextPage = () => {
     const [primaryAccount, setPrimaryAccount] = useState<any>();
 
     /* Query to get user information by wallet address */
-    const [getWallet, { data, refetch }] = useLazyQuery(WALLET);
+    const [getAddress, { data, refetch }] = useLazyQuery(ADDRESS);
 
     useEffect(() => {
         if (!(address && accessToken)) return;
 
         (async () => {
             /* Get all profile for the wallet address */
-            const res = await getWallet({
+            const res = await getAddress({
                 variables: {
                     address: address,
                     chainID: CHAIN_ID
                 },
             });
-            const edges = res?.data?.wallet?.profiles?.edges;
+            const edges = res?.data?.address?.wallet?.profiles?.edges;
             const accounts = edges?.map((edge: any) => edge?.node) || [];
 
             /* Get the primary profile */
@@ -95,7 +95,7 @@ const PostPage: NextPage = () => {
                 await refetch();
 
                 /* Get all the accounts */
-                const edges = data?.wallet?.profiles?.edges;
+                const edges = data?.address?.wallet?.profiles?.edges;
                 const accounts = edges?.map((edge: any) => edge?.node) || [];
 
                 /* Get the primary profile */
@@ -108,7 +108,7 @@ const PostPage: NextPage = () => {
                 if (postCount !== newPostCount) {
                     const accountRes = await fetch(parseURL(primaryAccount?.metadata))
                     const accountData = await accountRes.json();
-                    const latestPost = primaryAccount?.essences[postCount];
+                    const latestPost = primaryAccount?.essences?.edges[postCount - 1];
 
                     const post = {
                         avatar: primaryAccount?.avatar,

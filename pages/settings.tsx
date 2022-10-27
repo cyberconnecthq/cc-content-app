@@ -6,7 +6,7 @@ import Panel from "../components/Panel";
 import SetSubscribeBtn from "../components/Buttons/SetSubscribeBtn";
 import SetEssenceBtn from "../components/Buttons/SetEssenceBtn";
 import { useLazyQuery } from "@apollo/client";
-import { WALLET } from "../graphql";
+import { ADDRESS } from "../graphql";
 import AccountCard from "../components/Cards/AccountCard";
 import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
 import { IAccountCard } from "../types";
@@ -20,20 +20,20 @@ const SettingsPage: NextPage = () => {
     const [accounts, setAccounts] = useState<IAccountCard[]>([]);
 
     /* Query to get user information by wallet address */
-    const [getWallet, { data, refetch }] = useLazyQuery(WALLET);
+    const [getAddress, { data, refetch }] = useLazyQuery(ADDRESS);
 
     useEffect(() => {
         if (!address) return;
 
         (async () => {
             /* Get all profile for the wallet address */
-            const res = await getWallet({
+            const res = await getAddress({
                 variables: {
                     address: address,
                     chainID: CHAIN_ID
                 },
             });
-            const edges = res?.data?.wallet?.profiles?.edges;
+            const edges = res?.data?.address?.wallet?.profiles?.edges;
             const profiles = edges?.map((edge: any) => edge?.node) || [];
 
             /* Set the profile accounts */
@@ -61,7 +61,7 @@ const SettingsPage: NextPage = () => {
                 /* Check of the initial number of accounts */
                 if (accountCount !== newAccountCount) {
                     /* Get the profiles */
-                    const edges = data?.wallet?.profiles?.edges;
+                    const edges = data?.address?.wallet?.profiles?.edges;
                     const accounts = edges?.map((edge: any) => edge?.node) || [];
 
                     /* Reset the isCreatingProfile in the state variable */

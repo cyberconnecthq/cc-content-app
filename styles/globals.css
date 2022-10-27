@@ -5,7 +5,7 @@
   --dark-gray: #00000099;
   --orange: #EB5757;
   --green: #65c819;
-  --red: #FF002F;
+  --red: #c8192a;
   --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
@@ -446,10 +446,15 @@ svg {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 40px 50px 40px 40px;
   outline: none;
+  overflow: hidden;
   position: relative;
   user-select: none;
+}
+
+.modal-post,
+.modal-signup {
+  padding: 40px 50px 40px 40px;
 }
 
 .modal-close-btn {
@@ -474,17 +479,24 @@ svg {
   overflow: hidden;
 }
 
+.modal-success {
+  background-color: var(--green);
+  padding: 20px 50px 20px 20px;
+}
+
+.modal-error {
+  background-color: var(--red);
+  padding: 20px 50px 20px 20px;
+}
+
+.modal-success div,
+.modal-error div {
+  overflow: hidden;
+}
+
 .modal-success svg,
 .modal-error svg {
   width: 30px;
-}
-
-.modal-success svg path {
-  fill: var(--green);
-}
-
-.modal-error svg path {
-  fill: var(--red);
 }
 
 .modal-post textarea {
