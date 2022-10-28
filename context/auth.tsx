@@ -2,8 +2,9 @@ import { ReactNode, createContext, useState, useEffect } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
-import { useLazyQuery } from "@apollo/client";
 import { ADDRESS } from "../graphql";
+import { useCancellableQuery } from "../hooks/useCancellableQuery";
+import { timeout } from "../helpers/functions";
 
 export const AuthContext = createContext<IAuthContext>({
     provider: undefined,
@@ -13,8 +14,10 @@ export const AuthContext = createContext<IAuthContext>({
     primaryHandle: undefined,
     isCreatingProfile: false,
     isCreatingPost: false,
-    accountCount: 0,
+    profileCount: 0,
     postCount: 0,
+    posts: [],
+    profiles: [],
     setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
@@ -22,8 +25,10 @@ export const AuthContext = createContext<IAuthContext>({
     setPrimaryHandle: () => { },
     setIsCreatingProfile: () => { },
     setIsCreatingPost: () => { },
-    setAccountCount: () => { },
+    setProfileCount: () => { },
     setPostCount: () => { },
+    setPosts: () => { },
+    setProfiles: () => { },
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -47,7 +52,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
 
     /* State variable to store the initial number of accounts */
-    const [accountCount, setAccountCount] = useState<number>(0);
+    const [profileCount, setProfileCount] = useState<number>(0);
 
     /* State variable to store the initial number of posts */
     const [postCount, setPostCount] = useState<number>(0);
@@ -58,9 +63,11 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the tokenURI for post created */
     const [isCreatingPost, setIsCreatingPost] = useState<boolean>(false);
 
+    /* State variable to store the posts */
+    const [posts, setPosts] = useState<any[]>([]);
 
-    /* Query to get user information by wallet address */
-    const [getAddress] = useLazyQuery(ADDRESS);
+    /* State variable to store the profiles */
+    const [profiles, setProfiles] = useState<any[]>([]);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -76,36 +83,124 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }, [provider, address]);
 
     useEffect(() => {
-        if (!address) return;
+        if (!(address && accessToken)) return;
 
-        (async () => {
-            /* Get all profile for the wallet address */
-            const res = await getAddress({
-                variables: {
-                    address: address,
-                    chainID: CHAIN_ID
-                },
-            });
+        let query: any;
+        let counter: number = 0;
 
-            const edges = res?.data?.address?.wallet?.profiles?.edges;
-            const accounts = edges?.map((edge: any) => edge?.node) || [];
+        const fetchData = async () => {
+            try {
+                query = useCancellableQuery({
+                    query: ADDRESS,
+                    variables: {
+                        address: address,
+                        chainID: CHAIN_ID
+                    },
+                });
+                const res = await query;
+                /* Get the primary profile */
+                const primaryProfile = res?.data?.address?.wallet?.primaryProfile;
 
-            /* Get the primary profile */
-            const primaryAccount = accounts?.find((account: any) => account?.isPrimary);
+                /* Get the posts */
+                const edgesPosts = primaryProfile?.essences?.edges;
+                const posts = edgesPosts?.map((edge: any) => edge?.node) || [];
 
-            /* Set the profile ID variable*/
-            setPrimayProfileID(primaryAccount?.profileID);
+                /* Get the profiles */
+                const edgesProfiles = res?.data?.address?.wallet?.profiles?.edges;
+                const profiles = edgesProfiles?.map((edge: any) => edge?.node) || [];
 
-            /* Set the primaryHandle variable */
-            setPrimaryHandle(primaryAccount?.handle);
+                if (!isCreatingProfile && !isCreatingPost) {
+                    /* Get the total count of essences */
+                    const postCount = primaryProfile?.essences?.totalCount;
 
-            /* Set the initial number of accounts */
-            setAccountCount(accounts.length);
+                    /* Get the total count of profiles */
+                    const profileCount = profiles.length;
 
-            /* Set the initial number of posts */
-            setPostCount(primaryAccount?.essences?.totalCount || 0);
-        })();
-    }, [address]);
+                    /* Set the profile ID variable*/
+                    setPrimayProfileID(primaryProfile?.profileID);
+
+                    /* Set the primaryHandle variable */
+                    setPrimaryHandle(primaryProfile?.handle);
+
+                    /* Set the posts */
+                    setPosts(posts);
+
+                    /* Set the profiles */
+                    setProfiles(profiles);
+
+                    /* Set the initial number of posts */
+                    setPostCount(postCount);
+
+                    /* Set the initial number of accounts */
+                    setProfileCount(profileCount);
+                } else {
+                    /* Get the updated count of essences */
+                    const updatedPostCount = primaryProfile?.essences?.totalCount;
+
+                    /* Get the updated count of profiles */
+                    const updatedProfileCount = profiles.length;
+
+                    if (postCount !== updatedPostCount) {
+                        const latestPost = primaryProfile?.essences?.edges[updatedPostCount - 1]?.node;
+
+                        /* Reset the isCreatingPost in the state variable */
+                        setIsCreatingPost(false);
+
+                        /* Set the posts in the state variable */
+                        setPosts([...posts, latestPost]);
+
+                        /* Set the post count in the state variable */
+                        setPostCount(updatedPostCount);
+                    } else if (profileCount !== updatedProfileCount) {
+                        const latestProfile = profiles[updatedProfileCount - 1];
+
+                        /* Reset the isCreatingProfile in the state variable */
+                        setIsCreatingProfile(false);
+
+                        /* Set the profiles in the state variable */
+                        setProfiles([...profiles, latestProfile]);
+
+                        /* Set the profiles count in the state variable */
+                        setProfileCount(updatedProfileCount);
+                    } else {
+                        /* Data hasn't been indexed try to fetch again every 2s */
+                        if (counter < 150) {
+                            /* Wait 2s before fetching data again */
+                            counter++;
+                            console.log("Fetching data again.");
+                            await timeout(2000);
+                            fetchData();
+                        } else {
+                            /* Cancel the query */
+                            query.cancel();
+                            console.log("Fetching data cancelled.");
+
+                            /* Reset the isCreatingPost in the state variable */
+                            setIsCreatingPost(false);
+
+                            /* Reset the isCreatingProfile in the state variable */
+                            setIsCreatingProfile(false);
+                        }
+                    }
+                }
+            } catch (error) {
+                /* Reset the isCreatingPost in the state variable */
+                setIsCreatingPost(false);
+
+                /* Reset the isCreatingProfile in the state variable */
+                setIsCreatingProfile(false);
+
+                console.error(error);
+            }
+        }
+        fetchData();
+
+        return () => {
+            if (query) {
+                query.cancel();
+            }
+        }
+    }, [address, accessToken, postCount, profileCount, isCreatingPost, isCreatingProfile,]);
 
     /* Function to check if the network is the correct one */
     const checkNetwork = async (provider: Web3Provider) => {
@@ -143,8 +238,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 accessToken,
                 primayProfileID,
                 primaryHandle,
-                accountCount,
+                profileCount,
                 postCount,
+                posts,
+                profiles,
                 isCreatingProfile,
                 isCreatingPost,
                 setProvider,
@@ -152,10 +249,12 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 setAccessToken,
                 setPrimayProfileID,
                 setPrimaryHandle,
-                setAccountCount,
+                setProfileCount,
                 setPostCount,
                 setIsCreatingProfile,
                 setIsCreatingPost,
+                setPosts,
+                setProfiles,
                 checkNetwork,
             }}>
             {children}

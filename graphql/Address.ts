@@ -25,6 +25,7 @@ export const ADDRESS = gql`
                                             handle
                                             metadata
                                             avatar
+                                            profileID
                                         }
                                     }
                                 }

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { pinJSONToIPFS, getEssenceSVGData } from "../../helpers/functions";
 import { CREATE_REGISTER_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
-import { IEssenceMetadata, Version, IPostInput } from "../../types";
+import { IEssenceMetadata, IPostInput } from "../../types";
 import { randPhrase } from "@ngneat/falso";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
@@ -41,7 +41,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             /* Construct the metadata object for the Essence NFT */
             const metadata: IEssenceMetadata = {
                 metadata_id: uuidv4(),
-                version: Version.V1,
+                version: "1.0.0",
                 app_id: "cyberconnect",
                 lang: "en",
                 issue_date: new Date().toISOString(),

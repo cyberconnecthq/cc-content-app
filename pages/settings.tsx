@@ -1,104 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
 import { ModalContext } from "../context/modal";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
-import SetSubscribeBtn from "../components/Buttons/SetSubscribeBtn";
-import SetEssenceBtn from "../components/Buttons/SetEssenceBtn";
-import { useLazyQuery } from "@apollo/client";
-import { ADDRESS } from "../graphql";
 import AccountCard from "../components/Cards/AccountCard";
 import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
 import { IAccountCard } from "../types";
-import { timeout } from "../helpers/functions";
-import { CHAIN_ID } from "../helpers/constants";
 
 const SettingsPage: NextPage = () => {
-    const { address, accessToken, primayProfileID, isCreatingProfile, accountCount, setIsCreatingProfile, setAccountCount } = useContext(AuthContext);
+    const { address, accessToken, primayProfileID, isCreatingProfile, profiles } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
-
-    /* State variable to store the accounts */
-    const [accounts, setAccounts] = useState<IAccountCard[]>([]);
-
-    /* Query to get user information by wallet address */
-    const [getAddress, { data, refetch }] = useLazyQuery(ADDRESS);
-
-    useEffect(() => {
-        if (!address) return;
-
-        (async () => {
-            /* Get all profile for the wallet address */
-            const res = await getAddress({
-                variables: {
-                    address: address,
-                    chainID: CHAIN_ID
-                },
-            });
-            const edges = res?.data?.address?.wallet?.profiles?.edges;
-            const profiles = edges?.map((edge: any) => edge?.node) || [];
-
-            /* Set the profile accounts */
-            setAccounts(profiles);
-        })();
-    }, [address]);
-
-    useEffect(() => {
-        let isMounted = true;
-        let counter = 0;
-
-        /* Function to fetch user profiles */
-        async function refetchAccounts() {
-            if (!isMounted) return;
-            if (!data) return;
-            if (!isCreatingProfile) return;
-
-            try {
-                /* Refetch the information */
-                await refetch();
-
-                /* Get the new count */
-                const newAccountCount = data?.wallet?.profiles?.totalCount;
-
-                /* Check of the initial number of accounts */
-                if (accountCount !== newAccountCount) {
-                    /* Get the profiles */
-                    const edges = data?.address?.wallet?.profiles?.edges;
-                    const accounts = edges?.map((edge: any) => edge?.node) || [];
-
-                    /* Reset the isCreatingProfile in the state variable */
-                    setIsCreatingProfile(false);
-
-                    /* Set the accounts in the state variable */
-                    setAccounts(accounts);
-
-                    /* Set the account count in the state variable */
-                    setAccountCount(newAccountCount);
-                } else {
-                    /* Stop fetching after 5 mins */
-                    if (counter < 100) {
-                        await timeout(3000);
-                        refetchAccounts();
-                        counter++;
-                    } else {
-                        /* Reset the isCreatingProfile in the state variable */
-                        setIsCreatingProfile(false);
-                    }
-                }
-            } catch (error) {
-                /* Reset the isCreatingProfile in the state variable */
-                setIsCreatingProfile(false);
-                console.error(error);
-            }
-        }
-        refetchAccounts();
-
-        /* Cleanup function */
-        return () => {
-            isMounted = false;
-        }
-    }, [address, data, accountCount, isCreatingProfile]);
-
 
     return (
         <div className="container">
@@ -115,10 +27,10 @@ const SettingsPage: NextPage = () => {
                                 <p>The list of all accounts associated to the wallet address.</p>
                                 <div className="accounts">
                                     {
-                                        accounts.length > 0 &&
-                                        accounts.map((account: IAccountCard) => (
+                                        profiles.length > 0 &&
+                                        profiles.map((account: IAccountCard, index: number) => (
                                             <AccountCard
-                                                key={account.profileID}
+                                                key={index}
                                                 profileID={account.profileID}
                                                 handle={account.handle}
                                                 avatar={account.avatar}

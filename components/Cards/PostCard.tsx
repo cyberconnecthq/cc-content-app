@@ -4,8 +4,9 @@ import CollectBtn from "../Buttons/CollectBtn";
 import { IPostCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-const PostCard = ({ essenceID, profileID, tokenURI,
-    avatar, handle, name }: IPostCard) => {
+const PostCard = ({ essenceID, tokenURI, createdBy }: IPostCard) => {
+    const { avatar, handle, profileID, metadata } = createdBy;
+    const [name, setName] = useState("");
     const [data, setData] = useState({
         image: "",
         image_data: "",
@@ -31,6 +32,22 @@ const PostCard = ({ essenceID, profileID, tokenURI,
             }
         })();
     }, [tokenURI]);
+
+    useEffect(() => {
+        if (!metadata) return;
+        (async () => {
+            setName("");
+            try {
+                const res = await fetch(parseURL(metadata));
+                if (res.status === 200) {
+                    const data = await res.json();
+                    setName(data?.name);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [metadata]);
 
     return (
         <div className="post">
