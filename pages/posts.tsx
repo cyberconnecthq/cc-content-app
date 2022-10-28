@@ -61,7 +61,7 @@ const PostPage: NextPage = () => {
                                 : (<div>
                                     {
                                         posts.length === 0
-                                            ? <div>You don't have any posts yet.</div>
+                                            ? <div>You do not have any posts yet.</div>
                                             : posts.map((post, index) => (
                                                 <PostCard
                                                     key={index}

@@ -39,7 +39,7 @@ const SubscribeMwForm = () => {
             /* Set the profile profiles */
             setProfiles(profiles);
         })();
-    }, [address, accessToken]);
+    }, [address, accessToken, getAddress]);
 
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {

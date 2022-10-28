@@ -39,7 +39,7 @@ const EssenceMwForm = () => {
             /* Set the essences */
             setEssences(essences);
         })();
-    }, [address, accessToken]);
+    }, [address, accessToken, getAddress]);
 
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
