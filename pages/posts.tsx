@@ -62,26 +62,36 @@ const PostPage: NextPage = () => {
                         <h2>My posts</h2>
                         <br></br>
                         {
-                            !(accessToken && address && primaryProfile?.profileID)
-                                ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view your posts.</div>
-                                : (<div>
-                                    {
-                                        posts.length === 0
-                                            ? <div>You do not have any posts yet.</div>
-                                            : posts.map((post, index) => (
-                                                <PostCard
-                                                    key={index}
-                                                    essenceID={post.essenceID}
-                                                    createdBy={post.createdBy}
-                                                    tokenURI={post.tokenURI}
-                                                />
-                                            ))
-                                    }
-                                    {
-                                        isCreatingPost &&
-                                        <PostPlaceholder />
-                                    }
-                                </div>)
+                            !accessToken
+                                ? <div>You need to <strong>Sign in</strong> to view your posts.</div>
+                                : (
+                                    <div>
+                                        {
+                                            posts.length === 0 &&
+                                            (
+                                                isCreatingPost
+                                                    ? <PostPlaceholder />
+                                                    : <div>You do not have a post yet.</div>
+                                            )
+                                        }
+                                        {
+                                            posts.length > 0 &&
+                                            <>
+                                                {
+                                                    posts.map((post, index) => (
+                                                        <PostCard
+                                                            key={index}
+                                                            essenceID={post.essenceID}
+                                                            createdBy={post.createdBy}
+                                                            tokenURI={post.tokenURI}
+                                                        />
+                                                    ))
+                                                }
+                                                {isCreatingPost && <PostPlaceholder />}
+                                            </>
+                                        }
+                                    </div>
+                                )
                         }
                     </div>
                 </div>

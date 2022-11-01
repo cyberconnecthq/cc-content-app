@@ -36,15 +36,17 @@ const PrimaryProfileCard = ({ handle, avatar, metadata }: IPrimaryProfileCard) =
         <div className="profile-card">
             <div className="profile-card-img center">
                 <Link href="/settings">
-                    <Image
-                        src={src}
-                        alt="avatar"
-                        width={80}
-                        height={80}
-                        onError={() => setSrc("/assets/avatar-placeholder.svg")}
-                        placeholder="blur"
-                        blurDataURL="/assets/avatar-placeholder.svg"
-                    />
+                    <div>
+                        <Image
+                            src={src}
+                            alt="avatar"
+                            width={80}
+                            height={80}
+                            onError={() => setSrc("/assets/avatar-placeholder.svg")}
+                            placeholder="blur"
+                            blurDataURL="/assets/avatar-placeholder.svg"
+                        />
+                    </div>
                 </Link>
                 {
                     address &&

@@ -94,9 +94,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     },
                 });
                 const res = await query;
+
                 /* Get the primary profile */
                 const primaryProfile = res?.data?.address?.wallet?.primaryProfile;
-                console.log(primaryProfile);
+
                 /* Get the posts */
                 const edgesPosts = primaryProfile?.essences?.edges;
                 const posts = edgesPosts?.map((edge: any) => edge?.node) || [];
@@ -159,7 +160,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
                     } else {
                         /* Data hasn't been indexed try to fetch again after 2s */
-                        if (counter < 60) {
+                        if (counter < 150) {
                             /* Wait 2s before fetching data again */
                             counter++;
                             console.log("Fetching data again.");
