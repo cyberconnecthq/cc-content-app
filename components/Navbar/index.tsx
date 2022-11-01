@@ -33,12 +33,12 @@ const Navbar = () => {
                 >{<MdHistoryEdu />}</button>
             </div>
             <div className="navbar-address">
-                <Link href="/settings">
-                    {
-                        address &&
+                {
+                    address &&
+                    <Link href="/settings">
                         <div className="center">{`${address.slice(0, 4)}..`}</div>
-                    }
-                </Link>
+                    </Link>
+                }
             </div>
         </nav>
     );
