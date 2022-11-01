@@ -3,7 +3,8 @@ import Image from "next/image";
 import { IAccountCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: IAccountCard) => {
+const AccountCard = ({ handle, avatar, metadata, isPrimary }: IAccountCard) => {
+    const [src, setSrc] = useState(parseURL(avatar));
     const [data, setData] = useState({
         name: "",
         bio: ""
@@ -31,7 +32,15 @@ const AccountCard = ({ handle, avatar, metadata, profileID, isPrimary }: IAccoun
     return (
         <div className="account-card">
             <div className="account-card-img center">
-                <Image src={parseURL(avatar)} alt="avatar" width={60} height={60} />
+                <Image
+                    src={src}
+                    alt="avatar"
+                    width={60}
+                    height={60}
+                    onError={() => setSrc("/assets/avatar-placeholder.svg")}
+                    placeholder="blur"
+                    blurDataURL="/assets/avatar-placeholder.svg"
+                />
             </div>
             <div>
                 <div className="account-card-name">{data.name}</div>
