@@ -51,7 +51,6 @@ const AccountCard = ({ handle, avatar, metadata, isPrimary }: IAccountCard) => {
                     isPrimary
                         ? <div className="account-card-primary">Primary</div>
                         : <div></div>
-
                 }
             </div>
         </div>

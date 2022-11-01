@@ -14,8 +14,7 @@ function SetSubscribeBtn({
 }) {
     const {
         accessToken,
-        primayProfileID,
-        primaryHandle,
+        primaryProfile,
         connectWallet,
         checkNetwork
     } = useContext(AuthContext);
@@ -31,7 +30,7 @@ function SetSubscribeBtn({
             }
 
             /* Check if the has signed up */
-            if (!primayProfileID) {
+            if (!primaryProfile?.profileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -56,8 +55,8 @@ function SetSubscribeBtn({
             /* Construct the metadata object for the Subscribe NFT */
             const metadata = {
                 image_data: getSubscriberSVGData(),
-                name: `@${primaryHandle}'s subscriber`,
-                description: `@${primaryHandle}'s subscriber on CyberConnect Content app`,
+                name: `@${primaryProfile?.handle}'s subscriber`,
+                description: `@${primaryProfile.handle}'s subscriber on CyberConnect Content app`,
             };
 
             /* Upload metadata to IPFS */

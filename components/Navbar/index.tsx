@@ -9,14 +9,14 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 const Navbar = () => {
-    const { address, accessToken, primayProfileID } = useContext(AuthContext);
+    const { accessToken, primaryProfile } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const router = useRouter();
 
     const handleOnClick = () => {
         if (!accessToken) {
             handleModal("error", "You need to Sign in.");
-        } else if (!primayProfileID) {
+        } else if (!primaryProfile?.profileID) {
             handleModal("error", "You need to Sign up.");
         } else {
             handleModal("post", "");
@@ -25,7 +25,6 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <div></div>
             <div>
                 <Link href="/">
                     <div className={`navbar-link ${router.pathname === "/" && "active"}`}>{<MdOutlineDashboard />}</div>
@@ -41,14 +40,6 @@ const Navbar = () => {
                     className="create-btn center"
                     onClick={handleOnClick}
                 >{<MdHistoryEdu />}</button>
-            </div>
-            <div className="navbar-address">
-                {
-                    address &&
-                    <Link href="/settings">
-                        <div className="center">{`${address.slice(0, 4)}..`}</div>
-                    </Link>
-                }
             </div>
         </nav>
     );

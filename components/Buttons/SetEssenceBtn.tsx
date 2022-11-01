@@ -13,7 +13,7 @@ function SetEssenceBtn({
 }) {
     const {
         accessToken,
-        primayProfileID,
+        primaryProfile,
         connectWallet,
         checkNetwork
     } = useContext(AuthContext);
@@ -29,7 +29,7 @@ function SetEssenceBtn({
             }
 
             /* Check if the has signed up */
-            if (!primayProfileID) {
+            if (!primaryProfile?.profileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -62,7 +62,7 @@ function SetEssenceBtn({
                         /* The id of the essence the middleware is set for */
                         essenceId: essenceID,
                         /* The id of the profile that created the essence */
-                        profileId: primayProfileID,
+                        profileId: primaryProfile?.profileID,
                         /* URL for the json object containing data about content and the Essence NFT */
                         tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw`,
                         /* The middleware that will be set for the essence */

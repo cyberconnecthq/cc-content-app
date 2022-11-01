@@ -8,7 +8,13 @@ import PostPlaceholder from "../components/Placeholders/PostPlaceholder";
 import { IPostCard } from "../types";
 
 const PostPage: NextPage = () => {
-    const { address, accessToken, primayProfileID, isCreatingPost, posts } = useContext(AuthContext);
+    const {
+        address,
+        accessToken,
+        primaryProfile,
+        isCreatingPost,
+        posts
+    } = useContext(AuthContext);
     const featuredPosts: IPostCard[] = [
         {
             essenceID: 2,
@@ -56,7 +62,7 @@ const PostPage: NextPage = () => {
                         <h2>My posts</h2>
                         <br></br>
                         {
-                            !(accessToken && address && primayProfileID)
+                            !(accessToken && address && primaryProfile?.profileID)
                                 ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view your posts.</div>
                                 : (<div>
                                     {

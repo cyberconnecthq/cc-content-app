@@ -11,8 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
     const {
         accessToken,
-        primayProfileID,
-        primaryHandle,
+        primaryProfile,
         setIsCreatingPost,
         connectWallet,
         checkNetwork
@@ -29,7 +28,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             }
 
             /* Check if the has signed up */
-            if (!primayProfileID) {
+            if (!primaryProfile?.profileID) {
                 throw Error("Youn need to Sign up.");
             }
 
@@ -55,8 +54,8 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
                 tags: [],
                 image: nftImageURL ? nftImageURL : "",
                 image_data: !nftImageURL ? svg_data : "",
-                name: `@${primaryHandle}'s post`,
-                description: `@${primaryHandle}'s post on CyberConnect Content app`,
+                name: `@${primaryProfile?.handle}'s post`,
+                description: `@${primaryProfile?.handle}'s post on CyberConnect Content app`,
                 animation_url: "",
                 external_url: "",
                 attributes: [],
@@ -86,7 +85,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
                             chainID: chainID
                         },
                         /* The profile id under which the Essence is registered */
-                        profileID: primayProfileID,
+                        profileID: primaryProfile?.profileID,
                         /* Name of the Essence */
                         name: "Post",
                         /* Symbol of the Essence */

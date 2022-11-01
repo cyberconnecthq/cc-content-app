@@ -3,22 +3,22 @@ import { Web3Provider } from "@ethersproject/providers";
 export interface IAuthContext {
     address: string | undefined;
     accessToken: string | undefined;
-    primayProfileID: number | undefined;
-    primaryHandle: string | undefined;
+    primaryProfile: IPrimaryProfileCard | undefined;
     profileCount: number;
     postCount: number;
-    posts: any[];
-    profiles: any[];
+    posts: IPostCard[];
+    profiles: IAccountCard[];
     isCreatingProfile: boolean;
     isCreatingPost: boolean;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
-    setPrimayProfileID: (primayProfileID: number | undefined) => void;
-    setPrimaryHandle: (primaryHandle: string | undefined) => void;
+    setPrimaryProfile: (
+        primaryProfile: IPrimaryProfileCard | undefined
+    ) => void;
     setProfileCount: (profileCount: number) => void;
     setPostCount: (postCount: number) => void;
-    setPosts: (posts: any[]) => void;
-    setProfiles: (profiles: any[]) => void;
+    setPosts: (posts: IPostCard[]) => void;
+    setProfiles: (profiles: IAccountCard[]) => void;
     setIsCreatingProfile: (isCreatingProfile: boolean) => void;
     setIsCreatingPost: (isCreatingPost: boolean) => void;
     connectWallet: () => Promise<Web3Provider>;
@@ -165,4 +165,11 @@ export interface IPostInput {
     nftImageURL: string;
     content: string;
     middleware: string;
+}
+
+export interface IPrimaryProfileCard {
+    profileID: number;
+    handle: string;
+    avatar: string;
+    metadata: string;
 }

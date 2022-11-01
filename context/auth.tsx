@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ExternalProvider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
-import { IAuthContext } from "../types";;
+import { IAuthContext, IPrimaryProfileCard, IPostCard, IAccountCard } from "../types";;
 import { ADDRESS } from "../graphql";
 import { useCancellableQuery } from "../hooks/useCancellableQuery";
 import { timeout } from "../helpers/functions";
@@ -12,8 +12,7 @@ import { timeout } from "../helpers/functions";
 export const AuthContext = createContext<IAuthContext>({
     address: undefined,
     accessToken: undefined,
-    primayProfileID: undefined,
-    primaryHandle: undefined,
+    primaryProfile: undefined,
     isCreatingProfile: false,
     isCreatingPost: false,
     profileCount: 0,
@@ -22,8 +21,7 @@ export const AuthContext = createContext<IAuthContext>({
     profiles: [],
     setAddress: () => { },
     setAccessToken: () => { },
-    setPrimayProfileID: () => { },
-    setPrimaryHandle: () => { },
+    setPrimaryProfile: () => { },
     setIsCreatingProfile: () => { },
     setIsCreatingPost: () => { },
     setProfileCount: () => { },
@@ -37,21 +35,16 @@ AuthContext.displayName = "AuthContext";
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the provider */
-    const [provider, setProvider] = useState<Web3Provider | undefined>(
-        undefined
-    );
+    const [provider, setProvider] = useState<Web3Provider | undefined>(undefined);
 
     /* State variable to store the address */
     const [address, setAddress] = useState<string | undefined>(undefined);
 
-    /* State variable to store the profile ID */
-    const [primayProfileID, setPrimayProfileID] = useState<number | undefined>(undefined);
-
-    /* State variable to store the handle */
-    const [primaryHandle, setPrimaryHandle] = useState<string | undefined>(undefined);
-
     /* State variable to store the access token */
     const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
+
+    /* State variable to store the primary profile */
+    const [primaryProfile, setPrimaryProfile] = useState<IPrimaryProfileCard | undefined>(undefined);
 
     /* State variable to store the initial number of accounts */
     const [profileCount, setProfileCount] = useState<number>(0);
@@ -66,10 +59,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [isCreatingPost, setIsCreatingPost] = useState<boolean>(false);
 
     /* State variable to store the posts */
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<IPostCard[]>([]);
 
     /* State variable to store the profiles */
-    const [profiles, setProfiles] = useState<any[]>([]);
+    const [profiles, setProfiles] = useState<IAccountCard[]>([]);
 
     useEffect(() => {
         /* Check if the user connected with wallet */
@@ -103,7 +96,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 const res = await query;
                 /* Get the primary profile */
                 const primaryProfile = res?.data?.address?.wallet?.primaryProfile;
-
+                console.log(primaryProfile);
                 /* Get the posts */
                 const edgesPosts = primaryProfile?.essences?.edges;
                 const posts = edgesPosts?.map((edge: any) => edge?.node) || [];
@@ -120,10 +113,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     const profileCount = profiles.length;
 
                     /* Set the profile ID variable*/
-                    setPrimayProfileID(primaryProfile?.profileID);
-
-                    /* Set the primaryHandle variable */
-                    setPrimaryHandle(primaryProfile?.handle);
+                    setPrimaryProfile(primaryProfile);
 
                     /* Set the posts */
                     setPosts(posts);
@@ -276,8 +266,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 address,
                 accessToken,
-                primayProfileID,
-                primaryHandle,
+                primaryProfile,
                 profileCount,
                 postCount,
                 posts,
@@ -286,8 +275,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 isCreatingPost,
                 setAddress,
                 setAccessToken,
-                setPrimayProfileID,
-                setPrimaryHandle,
+                setPrimaryProfile,
                 setProfileCount,
                 setPostCount,
                 setIsCreatingProfile,

@@ -94,7 +94,7 @@ svg {
   flex-direction: column;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 80px;
   height: 100vh;
   padding: 20px 0px;
@@ -116,23 +116,6 @@ svg {
 
 .navbar-link.active {
   color: #000000;
-}
-
-.navbar-address {
-  border-radius: 50%;
-  min-width: 60px;
-  min-height: 60px;
-  margin: 0 auto;
-}
-
-.navbar-address div {
-  background-color: black;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  width: 100%;
-  height: 100%;
 }
 
 /* BUTTONS */
@@ -238,6 +221,20 @@ svg {
 
 .profile-card-bio {
   margin-top: 10px;
+}
+
+.profile-card-address {
+  display: grid;
+  grid-template-columns: 1fr 10px;
+  grid-gap: 10px;
+  align-items: center;
+}
+
+.profile-card-address div:last-child {
+  background-color: var(--green);
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
 }
 
 .profiles {

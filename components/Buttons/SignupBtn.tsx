@@ -10,10 +10,6 @@ import { ModalContext } from "../../context/modal";
 
 function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
     const {
-        primayProfileID,
-        primaryHandle,
-        setPrimayProfileID,
-        setPrimaryHandle,
         setIsCreatingProfile,
         connectWallet,
         checkNetwork
@@ -80,15 +76,6 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
             console.log(tx.hash);
-
-            /* Call the getProfileIdByHandle function to get the profile id */
-            const newProfileID = await contract.getProfileIdByHandle(handle);
-
-            /* Set the primary profileID in the state variables */
-            setPrimayProfileID(primayProfileID || Number(newProfileID));
-
-            /* Set the primary handle in the state variables */
-            setPrimaryHandle(primaryHandle || handle);
 
             /* Display success message */
             handleModal("success", "Profile was created!");

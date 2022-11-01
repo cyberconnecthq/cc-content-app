@@ -4,9 +4,10 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import SigninBtn from "../../components/Buttons/SigninBtn";
 import SubscribeBtn from "../Buttons/SubscribeBtn";
+import PrimaryProfileCard from "../Cards/PrimaryProfileCard";
 
 const Panel = () => {
-    const { accessToken, primayProfileID } = useContext(AuthContext);
+    const { accessToken, primaryProfile } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const suggestedProfiles = [
         {
@@ -38,10 +39,14 @@ const Panel = () => {
     return (
         <div className="panel">
             <div>
+                {
+                    primaryProfile &&
+                    <PrimaryProfileCard {...primaryProfile} />
+                }
                 <div>
                     {!accessToken && <SigninBtn />}
                     {
-                        !primayProfileID &&
+                        !primaryProfile?.profileID &&
                         <button
                             className="signup-btn"
                             onClick={() => handleModal("signup", "")}

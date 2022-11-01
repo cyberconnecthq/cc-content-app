@@ -9,7 +9,13 @@ import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
 import { IAccountCard } from "../types";
 
 const SettingsPage: NextPage = () => {
-    const { address, accessToken, primayProfileID, isCreatingProfile, profiles } = useContext(AuthContext);
+    const {
+        address,
+        accessToken,
+        primaryProfile,
+        isCreatingProfile,
+        profiles
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
     return (
@@ -20,7 +26,7 @@ const SettingsPage: NextPage = () => {
                     <h1>Settings</h1>
                     <hr></hr>
                     {
-                        !(accessToken && address && primayProfileID)
+                        !(accessToken && address && primaryProfile?.profileID)
                             ? <div>You need to <strong>Sign in</strong> and <strong>Sign up</strong> to view details about your account.</div>
                             : (<div>
                                 <h2>Account</h2>
@@ -44,6 +50,7 @@ const SettingsPage: NextPage = () => {
                                         <AccountPlaceholder />
                                     }
                                 </div>
+                                <br></br>
                                 <br></br>
                                 <h2>Middlewares</h2>
                                 <div className="middleware">
