@@ -4,8 +4,18 @@ import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: number; }) {
-    const { provider, address, accessToken, checkNetwork } = useContext(AuthContext);
+function CollectBtn({
+    profileID,
+    essenceID
+}: {
+    profileID: number,
+    essenceID: number;
+}) {
+    const {
+        accessToken,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createCollectEssenceTypedData] = useMutation(
         CREATE_COLLECT_ESSENCE_TYPED_DATA
@@ -14,15 +24,13 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
-
             /* Check if the user logged in */
             if (!(accessToken)) {
                 throw Error("You need to Sign in.");
             }
+
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
@@ -31,7 +39,7 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
             const signer = provider.getSigner();
 
             /* Get the address from the provider */
-            const account = await signer.getAddress();
+            const address = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -46,7 +54,7 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
                         options: {
                             chainID: chainID
                         },
-                        collector: account,
+                        collector: address,
                         profileID: profileID,
                         essenceID: essenceID
                     }
@@ -59,7 +67,7 @@ function CollectBtn({ profileID, essenceID }: { profileID: number, essenceID: nu
             const typedDataID = typedData.id;
 
             /* Get the signature for the message signed with the wallet */
-            const params = [account, message];
+            const params = [address, message];
             const method = "eth_signTypedData_v4";
             const signature = await signer.provider.send(method, params);
 

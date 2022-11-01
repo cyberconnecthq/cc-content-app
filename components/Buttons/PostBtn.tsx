@@ -9,18 +9,20 @@ import { ModalContext } from "../../context/modal";
 import { v4 as uuidv4 } from "uuid";
 
 function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
-    const { provider, address, accessToken, primayProfileID, primaryHandle, setIsCreatingPost, checkNetwork } = useContext(AuthContext);
+    const {
+        accessToken,
+        primayProfileID,
+        primaryHandle,
+        setIsCreatingPost,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createRegisterEssenceTypedData] = useMutation(CREATE_REGISTER_ESSENCE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
-
             /* Check if the user logged in */
             if (!(accessToken)) {
                 throw Error("You need to Sign in.");
@@ -30,6 +32,9 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             if (!primayProfileID) {
                 throw Error("Youn need to Sign up.");
             }
+
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
@@ -64,7 +69,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             const signer = provider.getSigner();
 
             /* Get the address from the provider */
-            const account = await signer.getAddress();
+            const address = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -94,7 +99,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
                             : {
                                 collectPaid: {
                                     /* Address that will receive the amount */
-                                    recipient: account,
+                                    recipient: address,
                                     /* Number of times the Essence can be collected */
                                     totalSupply: 1000,
                                     /* Amount that needs to be paid to collect essence */

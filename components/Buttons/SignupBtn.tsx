@@ -9,15 +9,21 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
-    const { provider, address, primayProfileID, setPrimayProfileID, primaryHandle, setPrimaryHandle, setIsCreatingProfile, checkNetwork } = useContext(AuthContext);
+    const {
+        primayProfileID,
+        primaryHandle,
+        setPrimayProfileID,
+        setPrimaryHandle,
+        setIsCreatingProfile,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);
@@ -35,6 +41,9 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
 
             /* Get the signer from the provider */
             const signer = provider.getSigner();
+
+            /* Get the address from the provider */
+            const address = await signer.getAddress();
 
             /* Get the contract instance */
             const contract = new ethers.Contract(
@@ -65,7 +74,7 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Set the isCreatingProfile in the state variables */
             setIsCreatingProfile(true);
 
-            /* Wait for the transaction to be mined */
+            /* Wait for the transaction to be executed */
             await tx.wait();
 
             /* Log the transaction hash */

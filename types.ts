@@ -1,7 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 
 export interface IAuthContext {
-    provider: Web3Provider | undefined;
     address: string | undefined;
     accessToken: string | undefined;
     primayProfileID: number | undefined;
@@ -12,7 +11,6 @@ export interface IAuthContext {
     profiles: any[];
     isCreatingProfile: boolean;
     isCreatingPost: boolean;
-    setProvider: (provider: Web3Provider | undefined) => void;
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
     setPrimayProfileID: (primayProfileID: number | undefined) => void;
@@ -23,6 +21,7 @@ export interface IAuthContext {
     setProfiles: (profiles: any[]) => void;
     setIsCreatingProfile: (isCreatingProfile: boolean) => void;
     setIsCreatingPost: (isCreatingPost: boolean) => void;
+    connectWallet: () => Promise<Web3Provider>;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
 }
 

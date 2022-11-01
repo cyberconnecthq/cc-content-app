@@ -6,17 +6,19 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 function SigninBtn() {
-    const { provider, address, setAccessToken, checkNetwork } = useContext(AuthContext);
+    const {
+        setAccessToken,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE);
     const [loginVerify] = useMutation(LOGIN_VERIFY);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
 
             /* Check if the network is the correct one */
             await checkNetwork(provider);

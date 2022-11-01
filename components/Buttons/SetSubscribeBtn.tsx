@@ -5,19 +5,26 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import { getSubscriberSVGData, pinJSONToIPFS } from "../../helpers/functions";
 
-function SetSubscribeBtn({ profileID, middleware }: { profileID: number, middleware: string }) {
-    const { provider, address, accessToken, primayProfileID, primaryHandle, checkNetwork } = useContext(AuthContext);
+function SetSubscribeBtn({
+    profileID,
+    middleware
+}: {
+    profileID: number,
+    middleware: string
+}) {
+    const {
+        accessToken,
+        primayProfileID,
+        primaryHandle,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetSubscribeDataTypedData] = useMutation(CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
-
             /* Check if the user logged in */
             if (!(accessToken)) {
                 throw Error("You need to Sign in.");
@@ -28,6 +35,9 @@ function SetSubscribeBtn({ profileID, middleware }: { profileID: number, middlew
                 throw Error("Youn need to Sign up.");
             }
 
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
+
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
@@ -35,7 +45,7 @@ function SetSubscribeBtn({ profileID, middleware }: { profileID: number, middlew
             const signer = provider.getSigner();
 
             /* Get the address from the provider */
-            const account = await signer.getAddress();
+            const address = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -70,7 +80,7 @@ function SetSubscribeBtn({ profileID, middleware }: { profileID: number, middlew
                             : {
                                 subscribePaid: {
                                     /* Address that will receive the amount */
-                                    recipient: account,
+                                    recipient: address,
                                     /* Amount that needs to be paid to subscribe */
                                     amount: 1,
                                     /* The currency for the  amount. Chainlink token contract on Goerli */

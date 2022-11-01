@@ -4,19 +4,25 @@ import { CREATE_SET_ESSENCE_DATA_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SetEssenceBtn({ essenceID, middleware }: { essenceID: number, middleware: string }) {
-    const { provider, address, accessToken, primayProfileID, checkNetwork } = useContext(AuthContext);
+function SetEssenceBtn({
+    essenceID,
+    middleware
+}: {
+    essenceID: number,
+    middleware: string
+}) {
+    const {
+        accessToken,
+        primayProfileID,
+        connectWallet,
+        checkNetwork
+    } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const [createSetEssenceDataTypedData] = useMutation(CREATE_SET_ESSENCE_DATA_TYPED_DATA);
     const [relay] = useMutation(RELAY);
 
     const handleOnClick = async () => {
         try {
-            /* Check if the user connected with wallet */
-            if (!(provider && address)) {
-                throw Error("You need to Connect wallet.");
-            }
-
             /* Check if the user logged in */
             if (!(accessToken)) {
                 throw Error("You need to Sign in.");
@@ -27,6 +33,9 @@ function SetEssenceBtn({ essenceID, middleware }: { essenceID: number, middlewar
                 throw Error("Youn need to Sign up.");
             }
 
+            /* Connect wallet and get provider */
+            const provider = await connectWallet();
+
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
@@ -34,7 +43,7 @@ function SetEssenceBtn({ essenceID, middleware }: { essenceID: number, middlewar
             const signer = provider.getSigner();
 
             /* Get the address from the provider */
-            const account = await signer.getAddress();
+            const address = await signer.getAddress();
 
             /* Get the network from the provider */
             const network = await provider.getNetwork();
@@ -62,7 +71,7 @@ function SetEssenceBtn({ essenceID, middleware }: { essenceID: number, middlewar
                             : {
                                 collectPaid: {
                                     /* Address that will receive the amount */
-                                    recipient: account,
+                                    recipient: address,
                                     /* Number of times the Essence can be collected */
                                     totalSupply: 1000,
                                     /* Amount that needs to be paid to collect essence */

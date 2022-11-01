@@ -3,11 +3,10 @@ import Image from "next/image";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 import SigninBtn from "../../components/Buttons/SigninBtn";
-import ConnectBtn from "../../components/Buttons/ConnectBtn";
 import SubscribeBtn from "../Buttons/SubscribeBtn";
 
 const Panel = () => {
-    const { provider, address, accessToken } = useContext(AuthContext);
+    const { accessToken, primayProfileID } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
     const suggestedProfiles = [
         {
@@ -39,18 +38,16 @@ const Panel = () => {
     return (
         <div className="panel">
             <div>
-                {
-                    (provider && address) ?
-                        <div>
-                            {!accessToken && <SigninBtn />}
-                            <button
-                                className="signup-btn"
-                                onClick={() => handleModal("signup", "")}
-                            >Sign up</button>
-                        </div>
-                        : <ConnectBtn />
-
-                }
+                <div>
+                    {!accessToken && <SigninBtn />}
+                    {
+                        !primayProfileID &&
+                        <button
+                            className="signup-btn"
+                            onClick={() => handleModal("signup", "")}
+                        >Sign up</button>
+                    }
+                </div>
             </div>
             <div className="panel-profiles">
                 <h2>Who to subscribe</h2>

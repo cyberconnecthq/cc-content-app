@@ -1,5 +1,8 @@
 import { ReactNode, createContext, useState, useEffect } from "react";
 import { Web3Provider } from "@ethersproject/providers";
+import { ethers } from "ethers";
+import detectEthereumProvider from "@metamask/detect-provider";
+import { ExternalProvider } from "@ethersproject/providers";
 import { CHAIN_ID } from "../helpers/constants";
 import { IAuthContext } from "../types";;
 import { ADDRESS } from "../graphql";
@@ -7,7 +10,6 @@ import { useCancellableQuery } from "../hooks/useCancellableQuery";
 import { timeout } from "../helpers/functions";
 
 export const AuthContext = createContext<IAuthContext>({
-    provider: undefined,
     address: undefined,
     accessToken: undefined,
     primayProfileID: undefined,
@@ -18,7 +20,6 @@ export const AuthContext = createContext<IAuthContext>({
     postCount: 0,
     posts: [],
     profiles: [],
-    setProvider: () => { },
     setAddress: () => { },
     setAccessToken: () => { },
     setPrimayProfileID: () => { },
@@ -29,6 +30,7 @@ export const AuthContext = createContext<IAuthContext>({
     setPostCount: () => { },
     setPosts: () => { },
     setProfiles: () => { },
+    connectWallet: async () => new Promise(() => { }),
     checkNetwork: async () => new Promise(() => { }),
 });
 AuthContext.displayName = "AuthContext";
@@ -202,6 +204,42 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [address, accessToken, postCount, profileCount, isCreatingPost, isCreatingProfile,]);
 
+    /* Function to connect with MetaMask wallet */
+    const connectWallet = async () => {
+        try {
+            /* Function to detect most providers injected at window.ethereum */
+            const detectedProvider = (await detectEthereumProvider()) as ExternalProvider;
+
+            /* Check if the Ethereum provider exists */
+            if (!detectedProvider) {
+                throw new Error("Please install MetaMask!");
+            }
+
+            /* Ethers Web3Provider wraps the standard Web3 provider injected by MetaMask */
+            const web3Provider = new ethers.providers.Web3Provider(detectedProvider);
+
+            /* Connect to Ethereum. MetaMask will ask permission to connect user accounts */
+            await web3Provider.send("eth_requestAccounts", []);
+
+            /* Get the signer from the provider */
+            const signer = web3Provider.getSigner();
+
+            /* Get the address of the connected wallet */
+            const address = await signer.getAddress();
+
+            /* Set the providers in the state variables */
+            setProvider(web3Provider);
+
+            /* Set the address in the state variable */
+            setAddress(address);
+
+            return web3Provider;
+        } catch (error) {
+            /* Throw the error */
+            throw error;
+        }
+    }
+
     /* Function to check if the network is the correct one */
     const checkNetwork = async (provider: Web3Provider) => {
         try {
@@ -233,7 +271,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     return (
         <AuthContext.Provider
             value={{
-                provider,
                 address,
                 accessToken,
                 primayProfileID,
@@ -244,7 +281,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 profiles,
                 isCreatingProfile,
                 isCreatingPost,
-                setProvider,
                 setAddress,
                 setAccessToken,
                 setPrimayProfileID,
@@ -256,6 +292,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 setPosts,
                 setProfiles,
                 checkNetwork,
+                connectWallet
             }}>
             {children}
         </AuthContext.Provider>

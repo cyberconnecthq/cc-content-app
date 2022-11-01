@@ -54,7 +54,7 @@ const PostCard = ({ essenceID, tokenURI, createdBy }: IPostCard) => {
     return (
         <>
             {
-                data?.attributes.length === 0 &&
+                data?.attributes?.length === 0 &&
                 <div className="post">
                     <div className="post-info space-between">
                         <div className="center">
