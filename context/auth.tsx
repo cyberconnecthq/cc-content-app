@@ -92,6 +92,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
         const fetchData = async () => {
             try {
+                /* Fetch data */
                 query = useCancellableQuery({
                     query: ADDRESS,
                     variables: {
@@ -153,6 +154,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
                         /* Set the post count in the state variable */
                         setPostCount(updatedPostCount);
+
                     } else if (profileCount !== updatedProfileCount) {
                         const latestProfile = profiles[updatedProfileCount - 1];
 
@@ -164,9 +166,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
                         /* Set the profiles count in the state variable */
                         setProfileCount(updatedProfileCount);
+
                     } else {
-                        /* Data hasn't been indexed try to fetch again every 2s */
-                        if (counter < 150) {
+                        /* Data hasn't been indexed try to fetch again after 2s */
+                        if (counter < 60) {
                             /* Wait 2s before fetching data again */
                             counter++;
                             console.log("Fetching data again.");
