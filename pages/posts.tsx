@@ -74,7 +74,7 @@ const PostPage: NextPage = () => {
                                                             ))
                                                         }
                                                     </div>)
-                                                    : <div>You haven't created any posts yet.</div>
+                                                    : <div>You havent created any posts yet.</div>
                                             )
                                         }
                                         {
