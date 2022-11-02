@@ -10,3 +10,4 @@ export { CREATE_SET_SUBSCRIBE_DATA_TYPED_DATA } from "./CreateSetSubscribeDataTy
 export { CREATE_SET_ESSENCE_DATA_TYPED_DATA } from "./CreateSetEssenceDataTypedData";
 export { PRIMARY_PROFILE } from "./PrimaryProfile";
 export { PRIMARY_PROFILE_ESSENCES } from "./PrimaryProfileEssences";
+export { ADDRESS } from "./Address";
