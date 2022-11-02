@@ -12,7 +12,8 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
     const {
         accessToken,
         primaryProfile,
-        setIsCreatingPost,
+        indexingPosts,
+        setIndexingPosts,
         connectWallet,
         checkNetwork
     } = useContext(AuthContext);
@@ -140,8 +141,18 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             /* Close Post Modal */
             handleModal(null, "");
 
-            /* Set the isCreatingPost in the state variables */
-            setIsCreatingPost(true);
+            /* Set the indexingPosts in the state variables */
+            setIndexingPosts([...indexingPosts, {
+                createdBy: {
+                    handle: primaryProfile?.handle,
+                    avatar: primaryProfile?.avatar,
+                    metadata: primaryProfile?.metadata,
+                    profileID: primaryProfile?.profileID,
+                },
+                essenceID: 0, // Value will be updated once it's indexed
+                tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
+                isIndexed: false
+            }]);
 
             /* Log the transaction hash */
             console.log("~~ Tx hash ~~");
@@ -150,8 +161,8 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
             /* Display success message */
             handleModal("success", "Post was created!");
         } catch (error) {
-            /* Set the isCreatingPost in the state variables */
-            setIsCreatingPost(false);
+            /* Set the indexingPosts in the state variables */
+            setIndexingPosts([...indexingPosts]);
 
             /* Display error message */
             const message = error.message as string;

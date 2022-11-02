@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IAccountCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
+import Loader from "../Loader";
 
-const AccountCard = ({ handle, avatar, metadata, isPrimary }: IAccountCard) => {
+const AccountCard = ({ handle, avatar, metadata, isPrimary, isIndexed }: IAccountCard) => {
     const [src, setSrc] = useState(parseURL(avatar));
     const [data, setData] = useState({
         name: "",
@@ -48,9 +49,15 @@ const AccountCard = ({ handle, avatar, metadata, isPrimary }: IAccountCard) => {
             </div>
             <div>
                 {
-                    isPrimary
-                        ? <div className="account-card-primary">Primary</div>
-                        : <div></div>
+                    !isIndexed
+                        ? <Loader />
+                        : <div>
+                            {
+                                isPrimary
+                                    ? <div className="account-card-primary">Primary</div>
+                                    : <div></div>
+                            }
+                        </div>
                 }
             </div>
         </div>

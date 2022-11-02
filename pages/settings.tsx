@@ -5,13 +5,12 @@ import { ModalContext } from "../context/modal";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import AccountCard from "../components/Cards/AccountCard";
-import AccountPlaceholder from "../components/Placeholders/AccountPlaceholder";
 import { IAccountCard } from "../types";
 
 const SettingsPage: NextPage = () => {
     const {
         accessToken,
-        isCreatingProfile,
+        indexingProfiles,
         profiles
     } = useContext(AuthContext);
     const { handleModal } = useContext(ModalContext);
@@ -34,8 +33,15 @@ const SettingsPage: NextPage = () => {
                                         {
                                             profiles.length === 0 &&
                                             (
-                                                isCreatingProfile
-                                                    ? <AccountPlaceholder />
+                                                indexingProfiles.length > 0
+                                                    ? (<div>
+                                                        {
+
+                                                            indexingProfiles.map((account: IAccountCard, index: number) => (
+                                                                <AccountCard key={index} {...account} />
+                                                            ))
+                                                        }
+                                                    </div>)
                                                     : <div>You do not have a profile yet. <strong>Sign up</strong> to create one.</div>
                                             )
                                         }
@@ -48,16 +54,18 @@ const SettingsPage: NextPage = () => {
                                                     profiles.map((account: IAccountCard, index: number) => (
                                                         <AccountCard
                                                             key={index}
-                                                            profileID={account.profileID}
-                                                            handle={account.handle}
-                                                            avatar={account.avatar}
-                                                            metadata={account.metadata}
-                                                            isPrimary={account.isPrimary}
+                                                            {...account}
+                                                            isIndexed={true}
                                                         />
                                                     )
                                                     )
                                                 }
-                                                {isCreatingProfile && <AccountPlaceholder />}
+                                                {
+                                                    indexingProfiles.length > 0 &&
+                                                    indexingProfiles.map((account: IAccountCard, index: number) => (
+                                                        <AccountCard key={index} {...account} />
+                                                    ))
+                                                }
                                             </>
                                         }
                                     </div>

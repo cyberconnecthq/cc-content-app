@@ -8,8 +8,8 @@ export interface IAuthContext {
     postCount: number;
     posts: IPostCard[];
     profiles: IAccountCard[];
-    isCreatingProfile: boolean;
-    isCreatingPost: boolean;
+    indexingProfiles: IAccountCard[];
+    indexingPosts: IPostCard[];
     setAddress: (address: string | undefined) => void;
     setAccessToken: (accessToken: string | undefined) => void;
     setPrimaryProfile: (
@@ -19,8 +19,8 @@ export interface IAuthContext {
     setPostCount: (postCount: number) => void;
     setPosts: (posts: IPostCard[]) => void;
     setProfiles: (profiles: IAccountCard[]) => void;
-    setIsCreatingProfile: (isCreatingProfile: boolean) => void;
-    setIsCreatingPost: (isCreatingPost: boolean) => void;
+    setIndexingProfiles: (indexingProfiles: IAccountCard[]) => void;
+    setIndexingPosts: (indexingPosts: IPostCard[]) => void;
     connectWallet: () => Promise<Web3Provider>;
     checkNetwork: (provider: Web3Provider) => Promise<void>;
 }
@@ -130,6 +130,7 @@ export interface IPostCard {
     };
     essenceID: number;
     tokenURI: string;
+    isIndexed?: boolean;
 }
 
 export interface IEssenceMwCard {
@@ -150,8 +151,8 @@ export interface IAccountCard {
     handle: string;
     avatar: string;
     metadata: string;
-    profileID: number;
-    isPrimary: boolean;
+    isPrimary?: boolean;
+    isIndexed?: boolean;
 }
 
 export interface ISignupInput {

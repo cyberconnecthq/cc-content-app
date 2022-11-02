@@ -4,15 +4,12 @@ import { AuthContext } from "../context/auth";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
-import PostPlaceholder from "../components/Placeholders/PostPlaceholder";
 import { IPostCard } from "../types";
 
 const PostPage: NextPage = () => {
     const {
-        address,
         accessToken,
-        primaryProfile,
-        isCreatingPost,
+        indexingPosts,
         posts
     } = useContext(AuthContext);
     const featuredPosts: IPostCard[] = [
@@ -53,9 +50,8 @@ const PostPage: NextPage = () => {
                             featuredPosts.map((post, index) => (
                                 <PostCard
                                     key={index}
-                                    essenceID={post.essenceID}
-                                    createdBy={post.createdBy}
-                                    tokenURI={post.tokenURI}
+                                    {...post}
+                                    isIndexed={true}
                                 />
                             ))
                         }
@@ -69,9 +65,16 @@ const PostPage: NextPage = () => {
                                         {
                                             posts.length === 0 &&
                                             (
-                                                isCreatingPost
-                                                    ? <PostPlaceholder />
-                                                    : <div>You do not have a post yet.</div>
+                                                indexingPosts.length > 0
+                                                    ? (<div>
+                                                        {
+                                                            indexingPosts.length > 0 &&
+                                                            indexingPosts.map((post: IPostCard, index: number) => (
+                                                                <PostCard key={index} {...post} />
+                                                            ))
+                                                        }
+                                                    </div>)
+                                                    : <div>You haven't created any posts yet.</div>
                                             )
                                         }
                                         {
@@ -81,13 +84,17 @@ const PostPage: NextPage = () => {
                                                     posts.map((post, index) => (
                                                         <PostCard
                                                             key={index}
-                                                            essenceID={post.essenceID}
-                                                            createdBy={post.createdBy}
-                                                            tokenURI={post.tokenURI}
+                                                            {...post}
+                                                            isIndexed={true}
                                                         />
                                                     ))
                                                 }
-                                                {isCreatingPost && <PostPlaceholder />}
+                                                {
+                                                    indexingPosts.length > 0 &&
+                                                    indexingPosts.map((post: IPostCard, index: number) => (
+                                                        <PostCard key={index} {...post} />
+                                                    ))
+                                                }
                                             </>
                                         }
                                     </div>

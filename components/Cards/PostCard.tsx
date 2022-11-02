@@ -3,8 +3,9 @@ import Image from "next/image";
 import CollectBtn from "../Buttons/CollectBtn";
 import { IPostCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
+import Loader from "../Loader";
 
-const PostCard = ({ essenceID, tokenURI, createdBy }: IPostCard) => {
+const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
     const { avatar, handle, profileID, metadata } = createdBy;
     const [name, setName] = useState("");
     const [data, setData] = useState({
@@ -64,10 +65,14 @@ const PostCard = ({ essenceID, tokenURI, createdBy }: IPostCard) => {
                                 <div className="post-handle">@{handle}</div>
                             </div>
                         </div>
-                        <CollectBtn
-                            profileID={profileID}
-                            essenceID={essenceID}
-                        />
+                        {
+                            isIndexed
+                                ? <CollectBtn
+                                    profileID={profileID}
+                                    essenceID={essenceID}
+                                />
+                                : <Loader />
+                        }
                     </div>
                     <div className="post-content">{data.content}</div>
                 </div>

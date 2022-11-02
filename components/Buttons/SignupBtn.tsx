@@ -10,7 +10,8 @@ import { ModalContext } from "../../context/modal";
 
 function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
     const {
-        setIsCreatingProfile,
+        indexingProfiles,
+        setIndexingProfiles,
         connectWallet,
         checkNetwork
     } = useContext(AuthContext);
@@ -24,11 +25,16 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Check if the network is the correct one */
             await checkNetwork(provider);
 
+            const profileName = name || randFullName();
+            const profileHandle = handle || randUserName();
+            const profileAvatar = avatar || randAvatar();
+            const profileBio = bio || randPhrase();
+
             /* Construct metadata schema */
             const metadata: IProfileMetadata = {
-                name: name || randFullName(),
-                bio: bio || randPhrase(),
-                handle: handle || randUserName(),
+                name: profileName,
+                bio: profileBio,
+                handle: profileHandle,
                 version: "1.0.0",
             };
 
@@ -67,8 +73,13 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Close Signup Modal */
             handleModal(null, "");
 
-            /* Set the isCreatingProfile in the state variables */
-            setIsCreatingProfile(true);
+            /* Set the indexingProfiles in the state variables */
+            setIndexingProfiles([...indexingProfiles, {
+                handle: profileHandle,
+                avatar: profileAvatar,
+                metadata: ipfsHash,
+                isIndexed: false,
+            }]);
 
             /* Wait for the transaction to be executed */
             await tx.wait();
@@ -80,8 +91,8 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Display success message */
             handleModal("success", "Profile was created!");
         } catch (error) {
-            /* Set the isCreatingProfile in the state variables */
-            setIsCreatingProfile(false);
+            /* Set the indexingProfiles in the state variables */
+            setIndexingProfiles([...indexingProfiles]);
 
             /* Display error message */
             const message = error.message as string;
