@@ -132,6 +132,7 @@ function SetSubscribeBtn({
         <button
             className="set-subscribe-btn"
             onClick={handleOnClick}
+            disabled={Boolean(!profileID)}
         >
             Set Subscribe
         </button>

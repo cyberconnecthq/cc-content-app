@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { IProfileMwCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-const SubscribeMwCard = ({ profileID, metadata, setSelectedProfileId, setShowDropdown }: IProfileMwCard) => {
+const SubscribeMwCard = ({
+    profileID,
+    metadata,
+    setSelectedProfileId,
+    setSelectedProfileHandle,
+    setShowDropdown
+}: IProfileMwCard) => {
     const [handle, setHandle] = useState<string>("");
 
     useEffect(() => {
@@ -23,6 +29,7 @@ const SubscribeMwCard = ({ profileID, metadata, setSelectedProfileId, setShowDro
 
     const handleOnClick = () => {
         setSelectedProfileId(profileID);
+        setSelectedProfileHandle(handle);
         setShowDropdown(false);
     }
 
@@ -30,10 +37,7 @@ const SubscribeMwCard = ({ profileID, metadata, setSelectedProfileId, setShowDro
         <div
             className="subscribe-mw-card"
             onClick={handleOnClick}
-        >
-            <div>{profileID}</div>
-            <div>@{handle}</div>
-        </div>
+        ><div>@{handle}</div></div>
     );
 };
 

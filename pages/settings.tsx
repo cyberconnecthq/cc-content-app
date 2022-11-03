@@ -94,7 +94,8 @@ const SettingsPage: NextPage = () => {
                                     </div>
                                     <br></br>
                                     <br></br>
-                                </div>)
+                                </div>
+                            )
                     }
                 </div>
                 <div className="wrapper-details">

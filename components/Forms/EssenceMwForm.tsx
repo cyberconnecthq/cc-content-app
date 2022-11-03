@@ -6,6 +6,7 @@ import { ADDRESS } from "../../graphql";
 import { IEssenceMwCard } from "../../types";
 import EssenceMwCard from "../Cards/EssenceMwCard";
 import SetEssenceBtn from "../Buttons/SetEssenceBtn";
+import { BsCaretUpFill, BsFillCaretDownFill } from "react-icons/bs";
 
 const EssenceMwForm = () => {
     const { address, accessToken } = useContext(AuthContext);
@@ -16,6 +17,9 @@ const EssenceMwForm = () => {
 
     /* State variable to store the selected essence */
     const [selectedEssenceId, setSelectedEssenceId] = useState<number>(0);
+
+    /* State variable to store the selected content */
+    const [selectedEssenceContent, setSelectedEssenceContent] = useState<string>("");
 
     /* Query to get user information by wallet address */
     const [getAddress] = useLazyQuery(ADDRESS);
@@ -49,7 +53,7 @@ const EssenceMwForm = () => {
 
     const handleOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLDivElement;
-        if (target.className !== "dropdown-select") {
+        if (target.className !== "dropdown-select-btn") {
             setShowDropdown(false);
         }
     }
@@ -60,12 +64,22 @@ const EssenceMwForm = () => {
             onClick={handleOnClick}
         >
             <h2>Set middleware for Post</h2>
-            <label>Select post</label>
+            <label>Post</label>
             <div className="dropdown">
-                <div
-                    className="dropdown-select"
-                    onClick={() => setShowDropdown(prev => !prev)}
-                >Essence ID: {selectedEssenceId}</div>
+                <div className="dropdown-select">
+                    <div className="dropdown-select-post">
+                        {selectedEssenceId === 0 ? "Select post" : `${selectedEssenceContent}`}
+                    </div>
+                    <div>
+                        {showDropdown ? <BsCaretUpFill /> : <BsFillCaretDownFill />}
+                    </div>
+                    <button
+                        className="dropdown-select-btn"
+                        onClick={() => {
+                            console.log("clicked");
+                            setShowDropdown(prev => !prev)
+                        }}></button>
+                </div>
                 {
                     showDropdown &&
                     <div className="dropdown-options">
@@ -75,7 +89,9 @@ const EssenceMwForm = () => {
                                     key={essence.essenceID}
                                     essenceID={essence.essenceID}
                                     tokenURI={essence.tokenURI}
+                                    selectedEssenceContent={selectedEssenceContent}
                                     setSelectedEssenceId={setSelectedEssenceId}
+                                    setSelectedEssenceContent={setSelectedEssenceContent}
                                     setShowDropdown={setShowDropdown}
                                 />
                             ))

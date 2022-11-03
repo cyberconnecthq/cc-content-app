@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { IEssenceMwCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-const EssenceMwCard = ({ essenceID, tokenURI, setSelectedEssenceId, setShowDropdown }: IEssenceMwCard) => {
+const EssenceMwCard = ({
+    essenceID,
+    tokenURI,
+    setSelectedEssenceId,
+    setSelectedEssenceContent,
+    setShowDropdown
+}: IEssenceMwCard) => {
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -23,6 +29,7 @@ const EssenceMwCard = ({ essenceID, tokenURI, setSelectedEssenceId, setShowDropd
 
     const handleOnClick = () => {
         setSelectedEssenceId(essenceID);
+        setSelectedEssenceContent(content);
         setShowDropdown(false);
     }
 
@@ -30,10 +37,7 @@ const EssenceMwCard = ({ essenceID, tokenURI, setSelectedEssenceId, setShowDropd
         <div
             className="essence-mw-card"
             onClick={handleOnClick}
-        >
-            <div>{essenceID}</div>
-            <div>{content}</div>
-        </div>
+        ><div>{content}</div></div>
     );
 };
 

@@ -6,6 +6,7 @@ import { ADDRESS } from "../../graphql";
 import { IProfileMwCard } from "../../types";
 import SubscribeMwCard from "../Cards/SubscribeMwCard";
 import SetSubscribeBtn from "../Buttons/SetSubscribeBtn";
+import { BsCaretUpFill, BsFillCaretDownFill } from "react-icons/bs";
 
 const SubscribeMwForm = () => {
     const { address, accessToken } = useContext(AuthContext);
@@ -14,8 +15,11 @@ const SubscribeMwForm = () => {
     /* State variable to store the profiles */
     const [profiles, setProfiles] = useState<any[]>([]);
 
-    /* State variable to store the selected profile */
+    /* State variable to store the selected profile id */
     const [selectedProfileId, setSelectedProfileId] = useState<number>(0);
+
+    /* State variable to store the selected handle */
+    const [selectedProfileHandle, setSelectedProfileHandle] = useState<string>("");
 
     /* Query to get user information by wallet address */
     const [getAddress] = useLazyQuery(ADDRESS);
@@ -49,7 +53,7 @@ const SubscribeMwForm = () => {
 
     const handleOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLDivElement;
-        if (target.className !== "dropdown-select") {
+        if (target.className !== "dropdown-select-btn") {
             setShowDropdown(false);
         }
     }
@@ -60,12 +64,19 @@ const SubscribeMwForm = () => {
             onClick={handleOnClick}
         >
             <h2>Set middleware for Profile</h2>
-            <label>Select profile</label>
+            <label>Profile</label>
             <div className="dropdown">
-                <div
-                    className="dropdown-select"
-                    onClick={() => setShowDropdown(prev => !prev)}
-                >Profile ID: {selectedProfileId}</div>
+                <div className="dropdown-select">
+                    <div>
+                        {selectedProfileId === 0 ? "Select profile" : `@${selectedProfileHandle}`}
+                    </div>
+                    <div>
+                        {showDropdown ? <BsCaretUpFill /> : <BsFillCaretDownFill />}
+                    </div>
+                    <button
+                        className="dropdown-select-btn"
+                        onClick={() => setShowDropdown(prev => !prev)}></button>
+                </div>
                 {
                     showDropdown &&
                     <div className="dropdown-options">
@@ -75,7 +86,9 @@ const SubscribeMwForm = () => {
                                     key={profile.profileID}
                                     profileID={profile.profileID}
                                     metadata={profile.metadata}
+                                    selectedProfileHandle={selectedProfileHandle}
                                     setSelectedProfileId={setSelectedProfileId}
+                                    setSelectedProfileHandle={setSelectedProfileHandle}
                                     setShowDropdown={setShowDropdown}
                                 />
                             ))
