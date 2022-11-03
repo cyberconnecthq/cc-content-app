@@ -134,10 +134,15 @@ export interface IPostCard {
 }
 
 export interface IEssenceMwCard {
-    essenceID: number;
-    tokenURI: string;
+    essence: {
+        essenceID: number;
+        tokenURI: string;
+    };
     selectedEssenceContent: string;
-    setSelectedEssenceId: (essenceID: number) => void;
+    setSelectedEssence: (essence: {
+        essenceID: number;
+        tokenURI: string;
+    }) => void;
     setSelectedEssenceContent: (selectedEssenceContent: string) => void;
     setShowDropdown: (showDropdown: boolean) => void;
 }

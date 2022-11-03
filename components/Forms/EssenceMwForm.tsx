@@ -16,9 +16,12 @@ const EssenceMwForm = () => {
     const [essences, setEssences] = useState<IEssenceMwCard[]>([]);
 
     /* State variable to store the selected essence */
-    const [selectedEssenceId, setSelectedEssenceId] = useState<number>(0);
+    const [selectedEssence, setSelectedEssence] = useState({
+        essenceID: 0,
+        tokenURI: "",
+    });
 
-    /* State variable to store the selected content */
+    /* State variable to store the selected essence */
     const [selectedEssenceContent, setSelectedEssenceContent] = useState<string>("");
 
     /* Query to get user information by wallet address */
@@ -68,29 +71,25 @@ const EssenceMwForm = () => {
             <div className="dropdown">
                 <div className="dropdown-select">
                     <div className="dropdown-select-post">
-                        {selectedEssenceId === 0 ? "Select post" : `${selectedEssenceContent}`}
+                        {!selectedEssence ? "Select post" : `${selectedEssenceContent}`}
                     </div>
                     <div>
                         {showDropdown ? <BsCaretUpFill /> : <BsFillCaretDownFill />}
                     </div>
                     <button
                         className="dropdown-select-btn"
-                        onClick={() => {
-                            console.log("clicked");
-                            setShowDropdown(prev => !prev)
-                        }}></button>
+                        onClick={() => setShowDropdown(prev => !prev)}></button>
                 </div>
                 {
                     showDropdown &&
                     <div className="dropdown-options">
                         {
-                            essences.map((essence: IEssenceMwCard) => (
+                            essences.map((essence: any, index: number) => (
                                 <EssenceMwCard
-                                    key={essence.essenceID}
-                                    essenceID={essence.essenceID}
-                                    tokenURI={essence.tokenURI}
+                                    key={index}
+                                    essence={essence}
                                     selectedEssenceContent={selectedEssenceContent}
-                                    setSelectedEssenceId={setSelectedEssenceId}
+                                    setSelectedEssence={setSelectedEssence}
                                     setSelectedEssenceContent={setSelectedEssenceContent}
                                     setShowDropdown={setShowDropdown}
                                 />
@@ -113,7 +112,7 @@ const EssenceMwForm = () => {
             <div className="form-note"><strong>Note:</strong> You will set the middleware for the selected post.</div>
             <SetEssenceBtn
                 middleware={essenceMw}
-                essenceID={selectedEssenceId}
+                essence={selectedEssence}
             />
         </div>
     );

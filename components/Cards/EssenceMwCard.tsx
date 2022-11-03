@@ -3,20 +3,19 @@ import { IEssenceMwCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
 const EssenceMwCard = ({
-    essenceID,
-    tokenURI,
-    setSelectedEssenceId,
+    essence,
+    setSelectedEssence,
     setSelectedEssenceContent,
     setShowDropdown
 }: IEssenceMwCard) => {
     const [content, setContent] = useState("");
 
     useEffect(() => {
-        if (!tokenURI) return;
+        if (!essence?.tokenURI) return;
         (async () => {
             setContent("");
             try {
-                const res = await fetch(parseURL(tokenURI));
+                const res = await fetch(parseURL(essence?.tokenURI));
                 if (res.status === 200) {
                     const data = await res.json();
                     setContent(data?.content);
@@ -25,10 +24,10 @@ const EssenceMwCard = ({
                 console.error(error);
             }
         })();
-    }, [tokenURI]);
+    }, [essence]);
 
     const handleOnClick = () => {
-        setSelectedEssenceId(essenceID);
+        setSelectedEssence(essence);
         setSelectedEssenceContent(content);
         setShowDropdown(false);
     }

@@ -5,11 +5,14 @@ import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
 function SetEssenceBtn({
-    essenceID,
-    middleware
+    essence,
+    middleware,
 }: {
-    essenceID: number,
-    middleware: string
+    essence: {
+        essenceID: number,
+        tokenURI: string,
+    }
+    middleware: string,
 }) {
     const {
         accessToken,
@@ -60,11 +63,11 @@ function SetEssenceBtn({
                             chainID: chainID
                         },
                         /* The id of the essence the middleware is set for */
-                        essenceId: essenceID,
+                        essenceId: essence.essenceID,
                         /* The id of the profile that created the essence */
                         profileId: primaryProfile?.profileID,
                         /* URL for the json object containing data about content and the Essence NFT */
-                        tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/QmWeusbdbY2SEry1GEiJpmzd3Frp29wMNS3ZbNN21hLbVw`,
+                        tokenURI: essence.tokenURI,
                         /* The middleware that will be set for the essence */
                         middleware: middleware === "free"
                             ? { collectFree: true }
@@ -124,7 +127,7 @@ function SetEssenceBtn({
         <button
             className="set-essence-btn"
             onClick={handleOnClick}
-            disabled={!Boolean(essenceID)}
+            disabled={!Boolean(essence.essenceID)}
         >
             Set Essence
         </button>
