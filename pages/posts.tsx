@@ -42,19 +42,21 @@ const PostPage: NextPage = () => {
                 <div className="wrapper-content">
                     <h1>Posts</h1>
                     <hr></hr>
-                    <div className="posts">
+                    <div>
                         <h2>Featured</h2>
                         <br></br>
-                        {
-                            featuredPosts.length > 0 &&
-                            featuredPosts.map((post, index) => (
-                                <PostCard
-                                    key={index}
-                                    {...post}
-                                    isIndexed={true}
-                                />
-                            ))
-                        }
+                        <div className="posts">
+                            {
+                                featuredPosts.length > 0 &&
+                                featuredPosts.map((post, index) => (
+                                    <PostCard
+                                        key={index}
+                                        {...post}
+                                        isIndexed={true}
+                                    />
+                                ))
+                            }
+                        </div>
                         <h2>My posts</h2>
                         <br></br>
                         {
@@ -66,7 +68,7 @@ const PostPage: NextPage = () => {
                                             posts.length === 0 &&
                                             (
                                                 indexingPosts.length > 0
-                                                    ? (<div>
+                                                    ? (<div className="posts">
                                                         {
                                                             indexingPosts.length > 0 &&
                                                             indexingPosts.map((post: IPostCard, index: number) => (
@@ -79,7 +81,7 @@ const PostPage: NextPage = () => {
                                         }
                                         {
                                             posts.length > 0 &&
-                                            <>
+                                            <div className="posts">
                                                 {
                                                     posts.map((post, index) => (
                                                         <PostCard
@@ -95,7 +97,7 @@ const PostPage: NextPage = () => {
                                                         <PostCard key={index} {...post} />
                                                     ))
                                                 }
-                                            </>
+                                            </div>
                                         }
                                     </div>
                                 )

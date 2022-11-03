@@ -66,6 +66,8 @@ const Panel = () => {
                                     alt="avatar"
                                     width={80}
                                     height={80}
+                                    placeholder="blur"
+                                    blurDataURL="/assets/avatar-placeholder.svg"
                                 />
                             </div>
                             <div className="profile-card-user">

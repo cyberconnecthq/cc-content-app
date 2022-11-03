@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import CollectBtn from "../Buttons/CollectBtn";
 import { IPostCard } from "../../types";
-import { parseURL } from "../../helpers/functions";
+import { parseURL, timeSince } from "../../helpers/functions";
 import Loader from "../Loader";
 
 const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
@@ -12,8 +12,11 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
         image: "",
         image_data: "",
         content: "",
+        issue_date: "",
         attributes: [],
     });
+    const [avatarSrc, setAvatarSrc] = useState(parseURL(avatar));
+    const [nftSrc, setNftSrc] = useState(parseURL(data.image ? data.image : data.image_data));
 
     useEffect(() => {
         if (!tokenURI) return;
@@ -22,6 +25,7 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
                 image: "",
                 image_data: "",
                 content: "",
+                issue_date: "",
                 attributes: [],
             });
             try {
@@ -56,15 +60,38 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
         <>
             {
                 data?.attributes?.length === 0 &&
-                <div className="post">
-                    <div className="post-info space-between">
-                        <div className="center">
-                            <Image src={avatar} alt="avatar" width={50} height={50} />
-                            <div>
-                                <div className="post-name">{name}</div>
-                                <div className="post-handle">@{handle}</div>
-                            </div>
+                <div className="post-card">
+                    <div className="post-avatar center">
+                        <Image
+                            src={avatarSrc}
+                            alt="avatar"
+                            width={50}
+                            height={50}
+                            onError={() => setAvatarSrc("/assets/avatar-placeholder.svg")}
+                            placeholder="blur"
+                            blurDataURL="/assets/avatar-placeholder.svg"
+                        />
+                    </div>
+                    <div className="post-profile">
+                        <div className="post-profile-details">
+                            <div className="post-profile-name">{name}</div>
+                            <div className="post-profile-handle">@{handle} •</div>
+                            <div className="post-profile-time">{timeSince(new Date(data.issue_date))}</div>
                         </div>
+                        <div className="post-content">{data.content}</div>
+                    </div>
+                    <div className="post-nft center">
+                        <Image
+                            src={nftSrc}
+                            alt="nft"
+                            width={350}
+                            height={350}
+                            onError={() => setNftSrc("/assets/essence-placeholder.svg")}
+                            placeholder="blur"
+                            blurDataURL="/assets/essence-placeholder.svg"
+                        />
+                    </div>
+                    <div className="post-collect">
                         {
                             isIndexed
                                 ? <CollectBtn
@@ -74,7 +101,6 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
                                 : <Loader />
                         }
                     </div>
-                    <div className="post-content">{data.content}</div>
                 </div>
             }
         </>
