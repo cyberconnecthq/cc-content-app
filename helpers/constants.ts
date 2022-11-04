@@ -104,16 +104,4 @@ export const FEATURED_POSTS = [
         },
         isCollectedByMe: false,
     },
-    {
-        essenceID: 1,
-        tokenURI:
-            "https://cyberconnect.mypinata.cloud/ipfs/QmWBjgu6Mhx1txRfzKkemoQDHjgmuwCJBp3HNUB7vZFi5F",
-        createdBy: {
-            avatar: "https://gateway.pinata.cloud/ipfs/QmNcqSpCvhiyHocUaVf7qB8qwEGerSpnELeAi567YEraYm",
-            handle: "ccprotocol",
-            profileID: 15,
-            metadata: "QmRiyArHF4abhXo4pdKVQj3fVg6jLvcnH4DitVijuTaoyq",
-        },
-        isCollectedByMe: false,
-    },
 ];

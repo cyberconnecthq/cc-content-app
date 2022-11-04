@@ -26,7 +26,7 @@ const PostPage: NextPage = () => {
                 },
             });
             const filtered = data?.essenceByFilter?.filter((post: any) => post.createdBy.handle == "snowdot") || [];
-            setFeaturedPosts([...filtered.slice(1, 3)]);
+            setFeaturedPosts([...filtered.slice(1, 2)]);
         };
 
         if (accessToken) {
