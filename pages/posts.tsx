@@ -25,7 +25,7 @@ const PostPage: NextPage = () => {
                     appID: "cyberconnect"
                 },
             });
-            const filtered = data?.essenceByFilter?.filter((post: any) => post.createdBy.handle == "snowdot") || [];
+            const filtered = data?.essenceByFilter?.filter((post: any) => post.createdBy.profileID == "snowdot") || [];
             setFeaturedPosts([...filtered.slice(1, 2)]);
         };
 
@@ -51,7 +51,7 @@ const PostPage: NextPage = () => {
                                 featuredPosts.length > 0 &&
                                 featuredPosts.map(post => (
                                     <PostCard
-                                        key={post.essenceID}
+                                        key={`${post.createdBy.profileID}-${post.essenceID}`}
                                         {...post}
                                         isIndexed={true}
                                     />
@@ -75,7 +75,10 @@ const PostPage: NextPage = () => {
                                                         {
                                                             indexingPosts.length > 0 &&
                                                             indexingPosts.map(post => (
-                                                                <PostCard key={post.essenceID} {...post} />
+                                                                <PostCard
+                                                                    key={`${post.createdBy.profileID}-${post.essenceID}`}
+                                                                    {...post}
+                                                                />
                                                             ))
                                                         }
                                                     </div>)
@@ -88,7 +91,7 @@ const PostPage: NextPage = () => {
                                                 {
                                                     posts.map(post => (
                                                         <PostCard
-                                                            key={post.essenceID}
+                                                            key={`${post.createdBy.profileID}-${post.essenceID}`}
                                                             {...post}
                                                             isIndexed={true}
                                                         />
@@ -96,8 +99,11 @@ const PostPage: NextPage = () => {
                                                 }
                                                 {
                                                     indexingPosts.length > 0 &&
-                                                    indexingPosts.map((post: IPostCard, index: number) => (
-                                                        <PostCard key={index} {...post} />
+                                                    indexingPosts.map(post => (
+                                                        <PostCard
+                                                            key={`${post.createdBy.profileID}-${post.essenceID}`}
+                                                            {...post}
+                                                        />
                                                     ))
                                                 }
                                             </div>

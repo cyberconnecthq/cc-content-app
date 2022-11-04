@@ -52,10 +52,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     /* State variable to store the initial number of posts */
     const [postCount, setPostCount] = useState<number>(0);
 
-    /* State variable to store the tokenURI for post created */
+    /* State variable to store indexing profiles */
     const [indexingProfiles, setIndexingProfiles] = useState<IAccountCard[]>([]);
 
-    /* State variable to store the tokenURI for post created */
+    /* State variable to store indexing posts */
     const [indexingPosts, setIndexingPosts] = useState<IPostCard[]>([]);
 
     /* State variable to store the posts */

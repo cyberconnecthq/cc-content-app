@@ -652,12 +652,6 @@ svg {
   }
 }
 
-@keyframes shine {
-  0% {
-    background-position: right;
-  }
-}
-
 @media screen and (min-width: 798px) {
   .wrapper {
     flex-direction: row;

@@ -37,8 +37,8 @@ const SettingsPage: NextPage = () => {
                                                     ? (<div>
                                                         {
 
-                                                            indexingProfiles.map((account: IAccountCard, index: number) => (
-                                                                <AccountCard key={index} {...account} />
+                                                            indexingProfiles.map(account => (
+                                                                <AccountCard key={`${account.handle}-${account.profileID}`} {...account} />
                                                             ))
                                                         }
                                                     </div>)
@@ -51,9 +51,9 @@ const SettingsPage: NextPage = () => {
                                                 <div>The list of all accounts associated to the connected wallet.</div>
                                                 <br></br>
                                                 {
-                                                    profiles.map((account: IAccountCard, index: number) => (
+                                                    profiles.map(account => (
                                                         <AccountCard
-                                                            key={index}
+                                                            key={`${account.handle}-${account.profileID}`}
                                                             {...account}
                                                             isIndexed={true}
                                                         />
@@ -62,8 +62,8 @@ const SettingsPage: NextPage = () => {
                                                 }
                                                 {
                                                     indexingProfiles.length > 0 &&
-                                                    indexingProfiles.map((account: IAccountCard, index: number) => (
-                                                        <AccountCard key={index} {...account} />
+                                                    indexingProfiles.map(account => (
+                                                        <AccountCard key={`${account.handle}-${account.profileID}`} {...account} />
                                                     ))
                                                 }
                                             </>

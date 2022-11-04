@@ -78,7 +78,7 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
 
             /* Set the indexingProfiles in the state variables */
             setIndexingProfiles([...indexingProfiles, {
-                profileID: profileID,
+                profileID: Number(profileID),
                 handle: profileHandle,
                 avatar: profileAvatar,
                 metadata: ipfsHash,
