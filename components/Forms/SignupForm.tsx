@@ -24,25 +24,15 @@ const SignupForm = () => {
         <div className="form signup-form">
             <h2>Create profile</h2>
             <div>
-                <label>Operator address</label>
-                <input
-                    name="operator"
-                    value={signupInput.operator}
-                    onChange={handleOnChange}
-                    placeholder="0x..."
-                ></input>
-            </div>
-            <div>
-                <label>Handle</label>
+                <label>Handle (w/o @)</label>
                 <input
                     name="handle"
                     value={signupInput.handle}
                     onChange={handleOnChange}
-                    placeholder="@"
                 ></input>
             </div>
             <div>
-                <label>Avatar url</label>
+                <label>Avatar URL</label>
                 <input
                     name="avatar"
                     value={signupInput.avatar}
@@ -64,6 +54,15 @@ const SignupForm = () => {
                     name="bio"
                     value={signupInput.bio}
                     onChange={handleOnChange}
+                ></input>
+            </div>
+            <div>
+                <label>Operator address (optional)</label>
+                <input
+                    name="operator"
+                    value={signupInput.operator}
+                    onChange={handleOnChange}
+                    placeholder="0x..."
                 ></input>
             </div>
             <div className="form-note"><strong>Note:</strong> For empty fields we will randomly generate values.</div>
