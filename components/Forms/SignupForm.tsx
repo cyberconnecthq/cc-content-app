@@ -7,7 +7,8 @@ const SignupForm = () => {
         handle: "",
         name: "",
         bio: "",
-        avatar: ""
+        avatar: "",
+        operator: "",
     });
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +23,15 @@ const SignupForm = () => {
     return (
         <div className="form signup-form">
             <h2>Create profile</h2>
+            <div>
+                <label>Operator address</label>
+                <input
+                    name="operator"
+                    value={signupInput.operator}
+                    onChange={handleOnChange}
+                    placeholder="0x..."
+                ></input>
+            </div>
             <div>
                 <label>Handle</label>
                 <input

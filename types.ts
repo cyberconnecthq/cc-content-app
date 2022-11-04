@@ -119,6 +119,7 @@ export interface IProfileCard {
     avatar: string;
     metadata: string;
     profileID: number;
+    isSubscribedByMe: boolean;
 }
 
 export interface IPostCard {
@@ -130,6 +131,7 @@ export interface IPostCard {
     };
     essenceID: number;
     tokenURI: string;
+    isCollectedByMe: boolean;
     isIndexed?: boolean;
 }
 
@@ -157,6 +159,7 @@ export interface IProfileMwCard {
 }
 
 export interface IAccountCard {
+    profileID: number;
     handle: string;
     avatar: string;
     metadata: string;
@@ -169,6 +172,7 @@ export interface ISignupInput {
     bio: string;
     handle: string;
     avatar: string;
+    operator: string;
 }
 
 export interface IPostInput {

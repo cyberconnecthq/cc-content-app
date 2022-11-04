@@ -151,7 +151,8 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
                 },
                 essenceID: 0, // Value will be updated once it's indexed
                 tokenURI: `https://cyberconnect.mypinata.cloud/ipfs/${ipfsHash}`,
-                isIndexed: false
+                isIndexed: false,
+                isCollectedByMe: false,
             }]);
 
             /* Log the transaction hash */

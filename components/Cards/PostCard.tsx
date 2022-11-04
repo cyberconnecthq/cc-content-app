@@ -5,7 +5,7 @@ import { IPostCard } from "../../types";
 import { parseURL, timeSince } from "../../helpers/functions";
 import Loader from "../Loader";
 
-const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
+const PostCard = ({ essenceID, tokenURI, createdBy, isCollectedByMe, isIndexed }: IPostCard) => {
     const { avatar, handle, profileID, metadata } = createdBy;
     const [name, setName] = useState("");
     const [data, setData] = useState({
@@ -16,7 +16,7 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
         attributes: [],
     });
     const [avatarSrc, setAvatarSrc] = useState(parseURL(avatar));
-    const [nftSrc, setNftSrc] = useState(parseURL(data.image ? data.image : data.image_data));
+    const [nftSrc, setNftSrc] = useState(data.image ? parseURL(data.image) : data.image_data);
 
     useEffect(() => {
         if (!tokenURI) return;
@@ -97,6 +97,7 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isIndexed }: IPostCard) => {
                                 ? <CollectBtn
                                     profileID={profileID}
                                     essenceID={essenceID}
+                                    isCollectedByMe={isCollectedByMe}
                                 />
                                 : <Loader />
                         }

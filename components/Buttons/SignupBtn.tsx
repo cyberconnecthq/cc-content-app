@@ -8,7 +8,7 @@ import { IProfileMetadata, ISignupInput } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
+function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
     const {
         indexingProfiles,
         setIndexingProfiles,
@@ -62,7 +62,7 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
                     handle: handle || randUserName(),
                     avatar: avatar || randAvatar({ size: 200 }),
                     metadata: ipfsHash,
-                    operator: PROFILE_NFT_OPERATOR,
+                    operator: operator || PROFILE_NFT_OPERATOR,
                 },
                 /* preData */
                 0x0,
@@ -73,8 +73,12 @@ function SignupBtn({ handle, avatar, name, bio }: ISignupInput) {
             /* Close Signup Modal */
             handleModal(null, "");
 
+            /* Call the getProfileIdByHandle function to get the profile id */
+            const profileID = await contract.getProfileIdByHandle(handle);
+
             /* Set the indexingProfiles in the state variables */
             setIndexingProfiles([...indexingProfiles, {
+                profileID: profileID,
                 handle: profileHandle,
                 avatar: profileAvatar,
                 metadata: ipfsHash,

@@ -1,20 +1,36 @@
 import type { NextPage } from "next";
-import { useMemo } from "react";
+import { useContext, useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
-import { useQuery } from "@apollo/client";
-import { PROFILES } from "../graphql";
+import { useLazyQuery } from "@apollo/client";
+import { PROFILES_BY_IDS } from "../graphql";
+import { PROFILES } from "../helpers/constants";
 import ProfileCard from "../components/Cards/ProfileCard";
 import { IProfileCard } from "../types";
+import { AuthContext } from "../context/auth";
 
 const Home: NextPage = () => {
-  const { data } = useQuery(PROFILES);
+  const { accessToken } = useContext(AuthContext);
+  const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
+  const [profiles, setProfiles] = useState<IProfileCard[]>([]);
 
-  const profiles = useMemo(() => {
-    const edges = data?.profiles?.edges;
-    const profiles = edges?.map((edge: any) => edge?.node);
-    return profiles || [];
-  }, [data]);
+  useEffect(() => {
+    const getProfiles = async () => {
+      const { data } = await getProfilesByIDs({
+        variables: {
+          chainID: 5,
+          profileIDs: [2, 5, 12, 10, 15, 16, 77],
+        },
+      });
+      setProfiles([...data.profilesByIDs]);
+    };
+
+    if (accessToken) {
+      getProfiles();
+    } else {
+      setProfiles(PROFILES);
+    }
+  }, [accessToken]);
 
   return (
     <div className="container">
@@ -26,13 +42,10 @@ const Home: NextPage = () => {
           <div className="profiles">
             {
               profiles.length > 0 &&
-              profiles.map((profile: IProfileCard) => (
+              profiles.map(profile => (
                 <ProfileCard
                   key={profile.profileID}
-                  profileID={profile.profileID}
-                  handle={profile.handle}
-                  avatar={profile.avatar}
-                  metadata={profile.metadata}
+                  {...profile}
                 />
               ))
             }

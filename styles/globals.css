@@ -160,6 +160,11 @@ svg {
   margin: 0 auto;
 }
 
+.subscribe-btn:disabled,
+.collect-btn:disabled {
+  cursor: not-allowed;
+}
+
 /* CARDS */
 .account-card {
   display: grid;
@@ -174,9 +179,23 @@ svg {
   background-color: var(--orange);
   border-radius: 20px;
   color: var(--white);
-  font-size: 14px;
+  font-size: 12px;
   padding: 6px;
+  width: 68px;
   text-align: center;
+}
+
+.account-card-info {
+  display: flex;
+  align-items: flex-end;
+}
+
+.account-card-info div:last-child {
+  margin-left: 6px;
+}
+
+.account-card-id {
+  font-size: 15px;
 }
 
 .profile-card {
@@ -324,6 +343,12 @@ svg {
 
 .posts {
   margin-bottom: 60px;
+}
+
+.posts .collect-btn {
+  font-size: 13px;
+  max-width: 100px;
+  padding: 8px 16px;
 }
 
 .essence-mw-card,

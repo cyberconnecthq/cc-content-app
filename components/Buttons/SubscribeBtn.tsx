@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
 
-function SubscribeBtn({ profileID }: { profileID: number; }) {
+function SubscribeBtn({ profileID, isSubscribedByMe }: { profileID: number, isSubscribedByMe: boolean }) {
     const {
         accessToken,
         connectWallet,
@@ -13,6 +13,7 @@ function SubscribeBtn({ profileID }: { profileID: number; }) {
     const { handleModal } = useContext(ModalContext);
     const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA);
     const [relay] = useMutation(RELAY);
+    const [stateSubscribe, setStateSubscribe] = useState(isSubscribedByMe);
 
     const handleOnClick = async () => {
         try {
@@ -76,6 +77,9 @@ function SubscribeBtn({ profileID }: { profileID: number; }) {
             console.log("~~ Tx hash ~~");
             console.log(txHash);
 
+            /* Set the state to true */
+            setStateSubscribe(true);
+
             /* Display success message */
             handleModal("success", "Subscribed to profile!");
         } catch (error) {
@@ -89,8 +93,9 @@ function SubscribeBtn({ profileID }: { profileID: number; }) {
         <button
             className="subscribe-btn"
             onClick={handleOnClick}
+            disabled={stateSubscribe}
         >
-            Subscribe
+            {stateSubscribe ? "Subscribed" : "Subscribe"}
         </button>
     );
 }

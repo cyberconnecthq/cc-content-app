@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { IAccountCard } from "../../types";
+import SubscribeBtn from "../Buttons/SubscribeBtn";
+import { IProfileCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
-import Loader from "../Loader";
 
-const AccountCard = ({ profileID, handle, avatar, metadata, isPrimary, isIndexed }: IAccountCard) => {
+const SuggestedProfileCard = ({
+    handle,
+    avatar,
+    metadata,
+    profileID,
+    isSubscribedByMe,
+}: IProfileCard) => {
     const [src, setSrc] = useState(parseURL(avatar));
     const [data, setData] = useState({
         name: "",
@@ -31,40 +37,28 @@ const AccountCard = ({ profileID, handle, avatar, metadata, isPrimary, isIndexed
     }, [metadata]);
 
     return (
-        <div className="account-card">
-            <div className="account-card-img center">
+        <div className="panel-profile-card">
+            <div className="panel-profile-card-img">
                 <Image
                     src={src}
                     alt="avatar"
-                    width={60}
-                    height={60}
+                    width={42}
+                    height={42}
                     onError={() => setSrc("/assets/avatar-placeholder.svg")}
                     placeholder="blur"
                     blurDataURL="/assets/avatar-placeholder.svg"
                 />
             </div>
-            <div>
-                <div className="account-card-info">
-                    <div className="account-card-name">{data.name} •</div>
-                    <div className="account-card-handle">@{handle}</div>
-                </div>
-                <div className="account-card-id">Profile ID: {profileID}</div>
+            <div className="profile-card-user">
+                <div>{data.name}</div>
+                <div>@{handle}</div>
             </div>
-            <div>
-                {
-                    !isIndexed
-                        ? <Loader />
-                        : <div>
-                            {
-                                isPrimary
-                                    ? <div className="account-card-primary">Primary</div>
-                                    : <div></div>
-                            }
-                        </div>
-                }
-            </div>
+            <SubscribeBtn
+                profileID={profileID}
+                isSubscribedByMe={isSubscribedByMe}
+            />
         </div>
     );
 };
 
-export default AccountCard;
+export default SuggestedProfileCard;

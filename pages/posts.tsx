@@ -1,10 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { AuthContext } from "../context/auth";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
 import { IPostCard } from "../types";
+import { useLazyQuery } from "@apollo/client";
+import { ESSENCES_BY_FILTER } from "../graphql";
+import { FEATURED_POSTS } from "../helpers/constants";
 
 const PostPage: NextPage = () => {
     const {
@@ -12,28 +15,26 @@ const PostPage: NextPage = () => {
         indexingPosts,
         posts
     } = useContext(AuthContext);
-    const featuredPosts: IPostCard[] = [
-        {
-            essenceID: 2,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/Qmd7G1BVZ3EQ3w2mNWBqgi4DaRrnkv5thy5UR1ParwM7AG",
-            createdBy: {
-                avatar: "https://gateway.pinata.cloud/ipfs/QmNcqSpCvhiyHocUaVf7qB8qwEGerSpnELeAi567YEraYm",
-                handle: "ccprotocol",
-                profileID: 15,
-                metadata: "QmRiyArHF4abhXo4pdKVQj3fVg6jLvcnH4DitVijuTaoyq"
-            }
-        },
-        {
-            essenceID: 1,
-            tokenURI: "https://cyberconnect.mypinata.cloud/ipfs/QmWBjgu6Mhx1txRfzKkemoQDHjgmuwCJBp3HNUB7vZFi5F",
-            createdBy: {
-                avatar: "https://gateway.pinata.cloud/ipfs/QmNcqSpCvhiyHocUaVf7qB8qwEGerSpnELeAi567YEraYm",
-                handle: "ccprotocol",
-                profileID: 15,
-                metadata: "QmRiyArHF4abhXo4pdKVQj3fVg6jLvcnH4DitVijuTaoyq"
-            }
-        },
-    ];
+    const [getEssencesByFilter] = useLazyQuery(ESSENCES_BY_FILTER);
+    const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
+
+    useEffect(() => {
+        const getEssences = async () => {
+            const { data } = await getEssencesByFilter({
+                variables: {
+                    appID: "cyberconnect"
+                },
+            });
+            const filtered = data?.essenceByFilter?.filter((post: any) => post.createdBy.handle == "snowdot") || [];
+            setFeaturedPosts([...filtered.slice(1, 3)]);
+        };
+
+        if (accessToken) {
+            getEssences();
+        } else {
+            setFeaturedPosts(FEATURED_POSTS);
+        }
+    }, [accessToken]);
 
     return (
         <div className="container">
@@ -42,21 +43,23 @@ const PostPage: NextPage = () => {
                 <div className="wrapper-content">
                     <h1>Posts</h1>
                     <hr></hr>
-                    <div>
+                    <div className="posts">
                         <h2>Featured</h2>
                         <br></br>
-                        <div className="posts">
+                        <div>
                             {
                                 featuredPosts.length > 0 &&
-                                featuredPosts.map((post, index) => (
+                                featuredPosts.map(post => (
                                     <PostCard
-                                        key={index}
+                                        key={post.essenceID}
                                         {...post}
                                         isIndexed={true}
                                     />
                                 ))
                             }
                         </div>
+                        <br></br>
+                        <br></br>
                         <h2>My posts</h2>
                         <br></br>
                         {
@@ -68,11 +71,11 @@ const PostPage: NextPage = () => {
                                             posts.length === 0 &&
                                             (
                                                 indexingPosts.length > 0
-                                                    ? (<div className="posts">
+                                                    ? (<div>
                                                         {
                                                             indexingPosts.length > 0 &&
-                                                            indexingPosts.map((post: IPostCard, index: number) => (
-                                                                <PostCard key={index} {...post} />
+                                                            indexingPosts.map(post => (
+                                                                <PostCard key={post.essenceID} {...post} />
                                                             ))
                                                         }
                                                     </div>)
@@ -81,11 +84,11 @@ const PostPage: NextPage = () => {
                                         }
                                         {
                                             posts.length > 0 &&
-                                            <div className="posts">
+                                            <div>
                                                 {
-                                                    posts.map((post, index) => (
+                                                    posts.map(post => (
                                                         <PostCard
-                                                            key={index}
+                                                            key={post.essenceID}
                                                             {...post}
                                                             isIndexed={true}
                                                         />

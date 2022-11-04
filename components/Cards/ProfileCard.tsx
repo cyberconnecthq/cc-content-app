@@ -4,7 +4,13 @@ import SubscribeBtn from "../Buttons/SubscribeBtn";
 import { IProfileCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
 
-const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCard) => {
+const ProfileCard = ({
+    handle,
+    avatar,
+    metadata,
+    profileID,
+    isSubscribedByMe,
+}: IProfileCard) => {
     const [src, setSrc] = useState(parseURL(avatar));
     const [data, setData] = useState({
         name: "",
@@ -33,16 +39,21 @@ const ProfileCard = ({ handle, avatar, metadata, profileID }: IProfileCard) => {
     return (
         <div className="profile-card">
             <div className="profile-card-img">
-                <Image
-                    src={src}
-                    alt="avatar"
-                    width={80}
-                    height={80}
-                    onError={() => setSrc("/assets/avatar-placeholder.svg")}
-                    placeholder="blur"
-                    blurDataURL="/assets/avatar-placeholder.svg"
+                <div>
+                    <Image
+                        src={src}
+                        alt="avatar"
+                        width={80}
+                        height={80}
+                        onError={() => setSrc("/assets/avatar-placeholder.svg")}
+                        placeholder="blur"
+                        blurDataURL="/assets/avatar-placeholder.svg"
+                    />
+                </div>
+                <SubscribeBtn
+                    profileID={profileID}
+                    isSubscribedByMe={isSubscribedByMe}
                 />
-                <SubscribeBtn profileID={profileID} />
             </div>
             <div>
                 <div className="profile-card-name">{data.name}</div>

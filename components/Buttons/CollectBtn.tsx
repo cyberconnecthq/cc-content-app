@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_COLLECT_ESSENCE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
@@ -6,10 +6,12 @@ import { ModalContext } from "../../context/modal";
 
 function CollectBtn({
     profileID,
-    essenceID
+    essenceID,
+    isCollectedByMe,
 }: {
     profileID: number,
     essenceID: number;
+    isCollectedByMe: boolean;
 }) {
     const {
         accessToken,
@@ -21,6 +23,7 @@ function CollectBtn({
         CREATE_COLLECT_ESSENCE_TYPED_DATA
     );
     const [relay] = useMutation(RELAY);
+    const [stateCollect, setStateCollect] = useState(isCollectedByMe);
 
     const handleOnClick = async () => {
         try {
@@ -86,6 +89,9 @@ function CollectBtn({
             console.log("~~ Tx hash ~~");
             console.log(txHash);
 
+            /* Set the state to true */
+            setStateCollect(true);
+
             /* Display success message */
             handleModal("success", "Post was collected!");
         } catch (error) {
@@ -99,8 +105,9 @@ function CollectBtn({
         <button
             className="collect-btn"
             onClick={handleOnClick}
+            disabled={stateCollect}
         >
-            Collect
+            {stateCollect ? "Collected" : "Collect"}
         </button>
     );
 }
