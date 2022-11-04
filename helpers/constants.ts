@@ -4,7 +4,7 @@ export const PROFILE_NFT_CONTRACT =
     "0x57e12b7a5f38a7f9c23ebd0400e6e53f2a45f271"; // Link3 ProfileNFT contract address
 
 export const PROFILE_NFT_OPERATOR =
-    "0x0000000000000000000000000000000000000000"; // Zero Address
+    "0xaB24749c622AF8FC567CA2b4d3EC53019F83dB8F";
 
 export const DOMAIN = "test.com"; // Domain name
 
