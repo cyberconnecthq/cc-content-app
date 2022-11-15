@@ -37,18 +37,13 @@ const Home: NextPage = () => {
       <Navbar />
       <div className="wrapper">
         <div className="wrapper-content">
-          <h1>Profiles</h1>
+          <h1 className="text-2xl font-bold">Profiles</h1>
           <hr></hr>
           <div className="profiles">
-            {
-              profiles.length > 0 &&
-              profiles.map(profile => (
-                <ProfileCard
-                  key={profile.profileID}
-                  {...profile}
-                />
-              ))
-            }
+            {profiles.length > 0 &&
+              profiles.map((profile) => (
+                <ProfileCard key={profile.profileID} {...profile} />
+              ))}
           </div>
         </div>
         <div className="wrapper-details">
@@ -56,7 +51,7 @@ const Home: NextPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Home;

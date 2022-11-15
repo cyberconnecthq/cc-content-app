@@ -10,58 +10,54 @@ import SuggestedProfileCard from "../Cards/SuggestedProfileCard";
 import { IProfileCard } from "../../types";
 
 const Panel = () => {
-    const { accessToken, primaryProfile } = useContext(AuthContext);
-    const { handleModal } = useContext(ModalContext);
-    const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
-    const [profiles, setProfiles] = useState<IProfileCard[]>([]);
+  const { accessToken, primaryProfile } = useContext(AuthContext);
+  const { handleModal } = useContext(ModalContext);
+  const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
+  const [profiles, setProfiles] = useState<IProfileCard[]>([]);
 
-    useEffect(() => {
-        const getProfiles = async () => {
-            const { data } = await getProfilesByIDs({
-                variables: {
-                    chainID: 5,
-                    profileIDs: [15, 16, 44, 5],
-                },
-            });
-            setProfiles([...data.profilesByIDs]);
-        };
+  useEffect(() => {
+    const getProfiles = async () => {
+      const { data } = await getProfilesByIDs({
+        variables: {
+          chainID: 5,
+          profileIDs: [15, 16, 44, 5],
+        },
+      });
+      setProfiles([...data.profilesByIDs]);
+    };
 
-        if (accessToken) {
-            getProfiles();
-        } else {
-            setProfiles(SUGGESTED_PROFILES);
-        }
-    }, [accessToken]);
+    if (accessToken) {
+      getProfiles();
+    } else {
+      setProfiles(SUGGESTED_PROFILES);
+    }
+  }, [accessToken]);
 
-    return (
-        <div className="panel">
-            <div>
-                {
-                    primaryProfile &&
-                    <PrimaryProfileCard {...primaryProfile} />
-                }
-                <div>
-                    {!accessToken && <SigninBtn />}
-                    {
-                        !primaryProfile?.profileID &&
-                        <button
-                            className="signup-btn"
-                            onClick={() => handleModal("signup", "")}
-                        >Sign up</button>
-                    }
-                </div>
-            </div>
-            <div className="panel-profiles">
-                <h2>Who to subscribe</h2>
-                {
-                    profiles.length > 0 &&
-                    profiles.map(profile => (
-                        <SuggestedProfileCard key={profile.profileID} {...profile} />
-                    ))
-                }
-            </div>
+  return (
+    <div className="panel">
+      <div>
+        {primaryProfile && <PrimaryProfileCard {...primaryProfile} />}
+        <div>
+          {!accessToken && <SigninBtn />}
+          {!primaryProfile?.profileID && (
+            <button
+              className="signup-btn"
+              onClick={() => handleModal("signup", "")}
+            >
+              Sign up
+            </button>
+          )}
         </div>
-    );
+      </div>
+      <div className="panel-profiles">
+        <h2>Who to subscribe</h2>
+        {profiles.length > 0 &&
+          profiles.map((profile) => (
+            <SuggestedProfileCard key={profile.profileID} {...profile} />
+          ))}
+      </div>
+    </div>
+  );
 };
 
 export default Panel;

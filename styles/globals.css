@@ -1,12 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --black: rgba(17, 17, 17, 1);
-  --white: #FFFEFC;
+  --white: #fffefc;
   --gray: rgba(17, 17, 17, 0.1);
   --dark-gray: #00000099;
-  --orange: #EB5757;
+  --orange: #eb5757;
   --green: #65c819;
   --red: #c8192a;
-  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 html {
@@ -124,11 +128,10 @@ svg {
 .subscribe-btn,
 .collect-btn,
 .middleware-btn {
-  background: #fdf5f2;
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
+  background: #fff;
+  border: 1px solid #000;
   border-radius: 50px;
-  color: var(--orange);
+  color: #000;
   cursor: pointer;
   font-size: 18px;
   width: 100%;
@@ -141,7 +144,7 @@ svg {
 .post-btn,
 .set-essence-btn,
 .set-subscribe-btn {
-  background: var(--orange);
+  background: #000;
   border: 1px solid rgba(235, 87, 87, 0.3);
   box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
   border-radius: 50px;
@@ -170,13 +173,12 @@ svg {
   display: grid;
   grid-template-columns: 54px 1fr 80px;
   grid-gap: 20px;
-  height: 54px;
   align-items: center;
   margin-top: 20px;
 }
 
 .account-card-primary {
-  background-color: var(--orange);
+  background-color: #000;
   border-radius: 20px;
   color: var(--white);
   font-size: 12px;
@@ -419,7 +421,7 @@ svg {
 
 /* SETTINGS PAGE */
 .middleware {
-  border: 1px solid rgba(235, 87, 87, 0.3);
+  border: 1px solid #000;
   border-radius: 8px;
   padding: 16px 20px;
   margin-top: 20px;
@@ -525,9 +527,8 @@ svg {
 
 .form textarea,
 .form input {
-  background: #fdf5f2;
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  accent-color: var(--orange);
+  border: 1px solid black;
+  accent-color: #000;
   width: 100%;
   outline: none;
   padding: 10px 12px;
@@ -555,15 +556,13 @@ svg {
 }
 
 .form-post-middleware div:last-child {
-  background: #fdf5f2;
-  border: 1px solid rgba(235, 87, 87, 0.3);
+  border: 1px solid #000;
   box-shadow: 0px 1px 2px rgb(15 15 15 / 10%);
 }
 
 .form .dropdown {
-  background: #fdf5f2;
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  color: var(--orange);
+  border: 1px solid #000;
+  color: #000;
   cursor: pointer;
   min-width: 250px;
   max-width: 70%;
@@ -573,7 +572,7 @@ svg {
 }
 
 .form .dropdown-options {
-  border: 1px solid rgba(235, 87, 87, 0.3);
+  border: 1px solid #000;
   background-color: var(--white);
   color: var(--dark-gray);
   width: calc(100% + 2px);

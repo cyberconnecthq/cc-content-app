@@ -3,6 +3,7 @@ import Image from "next/image";
 import SubscribeBtn from "../Buttons/SubscribeBtn";
 import { IProfileCard } from "../../types";
 import { parseURL } from "../../helpers/functions";
+import Avatar from '@/components/Avatar';
 
 const SuggestedProfileCard = ({
     handle,
@@ -39,15 +40,7 @@ const SuggestedProfileCard = ({
     return (
         <div className="panel-profile-card">
             <div className="panel-profile-card-img">
-                <Image
-                    src={src}
-                    alt="avatar"
-                    width={42}
-                    height={42}
-                    onError={() => setSrc("/assets/avatar-placeholder.svg")}
-                    placeholder="blur"
-                    blurDataURL="/assets/avatar-placeholder.svg"
-                />
+	    <Avatar value={handle} size={42} />
             </div>
             <div className="profile-card-user">
                 <div>{data.name}</div>
