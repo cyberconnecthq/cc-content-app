@@ -38,7 +38,7 @@ const PrimaryProfileCard = ({
   }, [metadata]);
 
   return (
-    <div className="profile-card">
+    <div className="profile-card w-full">
       <div className="profile-card-img center">
         <Link href="/settings">
           <div>

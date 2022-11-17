@@ -6,26 +6,28 @@ import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
 import { IPostCard } from "../types";
 import { useLazyQuery } from "@apollo/client";
-import { ESSENCES_BY_FILTER } from "../graphql";
+import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../graphql";
 import { FEATURED_POSTS } from "../helpers/constants";
 
 const PostPage: NextPage = () => {
   const { accessToken, indexingPosts, posts } = useContext(AuthContext);
-  const [getEssencesByFilter] = useLazyQuery(ESSENCES_BY_FILTER);
+  const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
   const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
 
   useEffect(() => {
     const getEssences = async () => {
       const { data } = await getEssencesByFilter({
         variables: {
-          appID: "cyberconnect",
+          address: "0xbd358966445e1089e3AdD528561719452fB78198",
+          chainID: 5,
         },
       });
-      const filtered =
-        data?.essenceByFilter?.filter(
-          (post: any) => post.createdBy.profileID == "snowdot"
-        ) || [];
-      setFeaturedPosts([...filtered.slice(1, 2)]);
+
+      setFeaturedPosts(
+        data?.address.wallet.primaryProfile.essences.edges.map(
+          (item: any) => item.node
+        ) || []
+      );
     };
 
     if (accessToken) {

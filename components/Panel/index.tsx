@@ -23,7 +23,10 @@ const Panel = () => {
           profileIDs: [15, 16, 44, 5],
         },
       });
-      setProfiles([...data.profilesByIDs]);
+
+      if (data) {
+        setProfiles([...data.profilesByIDs]);
+      }
     };
 
     if (accessToken) {
@@ -35,9 +38,14 @@ const Panel = () => {
 
   return (
     <div className="panel">
-      <div>
-        {primaryProfile && <PrimaryProfileCard {...primaryProfile} />}
-        <div>
+      <div className="min-h-[193px] flex flex-col justify-center w-full">
+        {primaryProfile && (
+          <div className="w-full">
+            <PrimaryProfileCard {...primaryProfile} />
+          </div>
+        )}
+
+        <div className="w-full">
           {!accessToken && <SigninBtn />}
           {!primaryProfile?.profileID && (
             <button

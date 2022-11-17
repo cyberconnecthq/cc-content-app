@@ -12,3 +12,4 @@ export { PRIMARY_PROFILE_ESSENCES } from "./PrimaryProfileEssences";
 export { ADDRESS } from "./Address";
 export { PROFILES_BY_IDS } from "./ProfilesByIds";
 export { ESSENCES_BY_FILTER } from "./EssencesByFilter";
+export { PROFILE_BY_HANDLE } from "./ProfileByHandle";

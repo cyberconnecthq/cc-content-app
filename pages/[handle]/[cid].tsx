@@ -1,0 +1,209 @@
+import { useRouter } from "next/router";
+import { parseURL, timeSince } from "../../helpers/functions";
+import SubscribeBtn from "@/components/Buttons/SubscribeBtn";
+import Panel from "@/components/Panel";
+import Navbar from "@/components/Navbar";
+import { CHAIN_ID } from "../../helpers/constants";
+import { useCancellableQuery } from "../../hooks/useCancellableQuery";
+import { PROFILE_BY_HANDLE } from "../../graphql";
+import Image from "next/image";
+import React from "react";
+import { useLazyQuery } from "@apollo/client";
+import Avatar from "@/components/Avatar";
+import AccessCover from "@/components/AccessCover";
+import { formatDate } from "@/helpers/functions";
+// @ts-ignore
+import LitJsSdk from "@lit-protocol/sdk-browser";
+
+const decryptWithLit = async (
+  encryptedSymmetricKey: string,
+  blob: Blob,
+  profileId: string
+) => {
+  const client = new LitJsSdk.LitNodeClient({ alertWhenUnauthorized: false });
+  await client.connect();
+  const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "goerli" });
+  const chain = "goerli";
+
+  const evmContractConditions = [
+    {
+      permanent: false,
+      contractAddress: "0xa52cc9b8219dce25bc791a8b253dec61f16d5ff0",
+      functionName: "isSubscribedByMe",
+      functionParams: [profileId, ":userAddress"],
+      functionAbi: {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "profileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "me",
+            type: "address",
+          },
+        ],
+        name: "isSubscribedByMe",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      chain: "goerli",
+      returnValueTest: {
+        key: "",
+        comparator: "=",
+        value: "true",
+      },
+    },
+  ];
+
+  const accessControlConditions = [
+    {
+      contractAddress: "",
+      standardContractType: "",
+      chain,
+      method: "",
+      parameters: [":userAddress"],
+      returnValueTest: {
+        comparator: "=",
+        value: "0xbd358966445e1089e3AdD528561719452fB78198",
+      },
+    },
+  ];
+
+  console.log("Evm contract conditions", accessControlConditions);
+  const symmetricKey = await client.getEncryptionKey({
+    evmContractConditions,
+    toDecrypt: encryptedSymmetricKey,
+    chain: "goerli",
+    authSig,
+  });
+
+  const decryptedString = await LitJsSdk.decryptString(blob, symmetricKey);
+
+  return decryptedString;
+};
+
+const Post = () => {
+  const router = useRouter();
+  const [post, setPost] = React.useState<any>(null);
+  const [profile, setProfile] = React.useState<any>(null);
+  const [getProfile] = useLazyQuery(PROFILE_BY_HANDLE);
+  const [content, setContent] = React.useState<any>("");
+  const [accessFailed, setAccessFailed] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    const { handle, cid } = router.query;
+
+    if (handle && cid) {
+      getPostFromIPFS(cid as string);
+      const getAddressInfo = async () => {
+        try {
+          /* Fetch primary profile */
+          let query = await getProfile({
+            variables: {
+              handle,
+              chainID: CHAIN_ID,
+            },
+          });
+
+          const res = await query;
+          setProfile(res.data.profileByHandle);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      getAddressInfo();
+    }
+  }, [router.query, getProfile]);
+
+  const getPostFromIPFS = async (cid: string) => {
+    const res = await fetch(parseURL(cid as string));
+    if (res.status === 200) {
+      const data = await res.json();
+
+      setPost(data);
+      console.log("data", data);
+      const encryptedStringBlobResp = await fetch(
+        parseURL(JSON.parse(data.content).contentHash.ipfshash)
+      );
+
+      const blob = await encryptedStringBlobResp.blob();
+
+      const { encryptedSymmetricKey } = JSON.parse(data.content);
+
+      try {
+        const content = await decryptWithLit(
+          encryptedSymmetricKey,
+          blob,
+          router.query.profileID as string
+        );
+        setContent(content);
+        setAccessFailed(false);
+      } catch (error) {
+        console.error(error);
+        setAccessFailed(true);
+      }
+    }
+  };
+
+  return (
+    <div className="container">
+      <Navbar />
+      <div className="wrapper">
+        {post && (
+          <div className="pt-8 grow">
+            <div className="flex gap-x-4">
+              <Avatar value={profile?.handle} size={50} />
+              <div>
+                <div className="font-semibold text-lg">{profile?.handle}</div>
+                <div className="text-stone-500 text-sm">
+                  {formatDate(post.issue_date)}
+                </div>
+              </div>
+            </div>
+            <div className="text-center py-8">
+              <Image
+                className="object-cover  "
+                src={post.image}
+                width={800}
+                height={400}
+                alt={post.description}
+              />
+            </div>
+            {!accessFailed ? (
+              <div className="px-24 mx-auto">
+                <div className="text-4xl font-bold">{post.name}</div>
+                <div className="my-8 text-gray-500">{post.description}</div>
+                <div className="text-xl">{content}</div>
+              </div>
+            ) : (
+              <div className="px-24 mx-auto pt-16 ">
+                <div className="text-3xl">🔒 This post is protected.</div>
+                <div className="mt-6 ">
+                  <SubscribeBtn
+                    profileID={Number(router.query.profileID)}
+                    isSubscribedByMe={false}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="wrapper-details">
+          <Panel />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Post;

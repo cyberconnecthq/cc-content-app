@@ -7,6 +7,8 @@ const PostForm = () => {
     nftImageURL: "",
     content: "",
     middleware: "free",
+    title: "",
+    description: "",
   });
 
   const handleOnChange = (
@@ -22,7 +24,7 @@ const PostForm = () => {
 
   return (
     <div className="form post-form">
-      <h2>Create post</h2>
+      <h2 className="text-2xl font-bold">Create post</h2>
       <div>
         <label>NFT image url</label>
         <input
@@ -30,15 +32,37 @@ const PostForm = () => {
           value={postInput.nftImageURL}
           onChange={handleOnChange}
           placeholder="https://"
+          required
         />
       </div>
       <div>
-        <label>Post message</label>
+        <label>Title</label>
+        <input
+          name="title"
+          value={postInput.title}
+          onChange={handleOnChange}
+          placeholder="A Perfect Post Title"
+          required
+        />
+      </div>
+      <div>
+        <label>Description</label>
+        <input
+          name="description"
+          value={postInput.description}
+          onChange={handleOnChange}
+          placeholder="Give a short description of your post"
+          required
+        />
+      </div>
+      <div>
+        <label>Content</label>
         <textarea
           name="content"
           value={postInput.content}
           onChange={handleOnChange}
           placeholder="What's on your mind?"
+          required
         ></textarea>
       </div>
       <div className="form-post-middleware">

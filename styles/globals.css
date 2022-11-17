@@ -351,6 +351,7 @@ svg {
 
 .post-content {
   margin-top: 10px;
+  word-break: break-all;
 }
 
 .posts {
@@ -371,7 +372,9 @@ svg {
 
 .essence-mw-card:hover,
 .subscribe-mw-card:hover {
-  background: #fdf5f2;
+  background: #000;
+  color: #fff;
+  pointer: cursor;
 }
 
 /* PANEL */

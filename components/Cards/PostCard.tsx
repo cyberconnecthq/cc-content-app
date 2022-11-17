@@ -1,111 +1,145 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import CollectBtn from "../Buttons/CollectBtn";
+import SubscribeBtn from "../Buttons/SubscribeBtn";
 import { IPostCard } from "../../types";
 import { parseURL, timeSince } from "../../helpers/functions";
 import Loader from "../Loader";
+import Avatar from "@/components/Avatar";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const PostCard = ({ essenceID, tokenURI, createdBy, isCollectedByMe, isIndexed }: IPostCard) => {
-    const { avatar, handle, profileID, metadata } = createdBy;
-    const [name, setName] = useState("");
-    const [data, setData] = useState({
+const PostCard = ({
+  essenceID,
+  tokenURI,
+  createdBy,
+  isCollectedByMe,
+  isIndexed,
+}: IPostCard) => {
+  const router = useRouter();
+  const { avatar, handle, profileID, metadata } = createdBy;
+  console.log("Created by: ", createdBy);
+  const [name, setName] = useState("");
+  const [data, setData] = useState<any>({
+    image: "",
+    image_data: "",
+    content: "",
+    issue_date: "",
+    attributes: [],
+    name: "",
+    tags: [],
+    description: "",
+  });
+  const [loadFromIPFSFailed, setLoadFromIPFSFailed] = useState(false);
+
+  const [nftSrc, setNftSrc] = useState(
+    data.image ? parseURL(data.image) : data.image_data
+  );
+
+  useEffect(() => {
+    if (!tokenURI) return;
+    (async () => {
+      setData({
         image: "",
         image_data: "",
         content: "",
         issue_date: "",
         attributes: [],
-    });
-    const [avatarSrc, setAvatarSrc] = useState(parseURL(avatar));
-    const [nftSrc, setNftSrc] = useState(data.image ? parseURL(data.image) : data.image_data);
+      });
+      try {
+        const res = await fetch(parseURL(tokenURI));
+        if (res.status === 200) {
+          const data = await res.json();
+          console.log("Data", data);
+          setData(data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, [tokenURI]);
 
-    useEffect(() => {
-        if (!tokenURI) return;
-        (async () => {
-            setData({
-                image: "",
-                image_data: "",
-                content: "",
-                issue_date: "",
-                attributes: [],
-            });
-            try {
-                const res = await fetch(parseURL(tokenURI));
-                if (res.status === 200) {
-                    const data = await res.json();
-                    setData(data);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }, [tokenURI]);
+  useEffect(() => {
+    if (!metadata) return;
+    (async () => {
+      setName("");
+      try {
+        const res = await fetch(parseURL(metadata));
+        if (res.status === 200) {
+          const data = await res.json();
+          setName(data?.name);
+        } else {
+          setLoadFromIPFSFailed(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, [metadata]);
 
-    useEffect(() => {
-        if (!metadata) return;
-        (async () => {
-            setName("");
-            try {
-                const res = await fetch(parseURL(metadata));
-                if (res.status === 200) {
-                    const data = await res.json();
-                    setName(data?.name);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }, [metadata]);
+  const handleClick = (e: any) => {
+    console.log(e.target);
 
-    return (
-        <>
-            {
-                data?.attributes?.length === 0 &&
-                <div className="post-card">
-                    <div className="post-avatar center">
-                        <Image
-                            src={avatarSrc}
-                            alt="avatar"
-                            width={50}
-                            height={50}
-                            onError={() => setAvatarSrc("/assets/avatar-placeholder.svg")}
-                            placeholder="blur"
-                            blurDataURL="/assets/avatar-placeholder.svg"
-                        />
-                    </div>
-                    <div className="post-profile">
-                        <div className="post-profile-details">
-                            <div className="post-profile-name">{name}</div>
-                            <div className="post-profile-handle">@{handle} •</div>
-                            <div className="post-profile-time">{timeSince(new Date(data.issue_date))}</div>
-                        </div>
-                        <div className="post-content">{data.content}</div>
-                    </div>
-                    <div className="post-nft center">
-                        <Image
-                            src={nftSrc}
-                            alt="nft"
-                            width={350}
-                            height={350}
-                            onError={() => setNftSrc("/assets/essence-placeholder.svg")}
-                            placeholder="blur"
-                            blurDataURL="/assets/essence-placeholder.svg"
-                        />
-                    </div>
-                    <div className="post-collect">
-                        {
-                            isIndexed
-                                ? <CollectBtn
-                                    profileID={profileID}
-                                    essenceID={essenceID}
-                                    isCollectedByMe={isCollectedByMe}
-                                />
-                                : <Loader />
-                        }
-                    </div>
-                </div>
-            }
-        </>
+    if (e.target.tagName.toLowerCase() === "button") {
+      return;
+    }
+    router.push(
+      `/${handle}/${encodeURIComponent(
+        tokenURI
+      )}?essenceID=${essenceID}&profileID=${profileID}&isCollectedByMe=${isCollectedByMe}`
     );
+  };
+
+  return (
+    <>
+      {!loadFromIPFSFailed && data?.content && data.tags.includes("lit") && (
+        <div onClick={handleClick} className="mt-8">
+          <div className="flex border border-gray-300 p-4 rounded-xl cursor-pointer hover:bg-neutral-50 justify-between">
+            <div className="flex flex-col">
+              <div className="flex gap-x-4">
+                <div>
+                  <Avatar value={handle} size={50} />
+                </div>
+                <div className="flex items-center gap-x-4">
+                  <div className="flex items-center">
+                    <div>{name}</div>
+                    <div>@{handle} •</div>
+                  </div>
+                  <div>{timeSince(new Date(data.issue_date))}</div>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="text-xl font-bold">{data.name}</div>
+                <div className="text-base mt-4">{data.description}</div>
+              </div>
+              <div className="mt-16">
+                {isIndexed ? (
+                  <SubscribeBtn
+                    isSubscribedByMe={false}
+                    profileID={profileID}
+                  />
+                ) : (
+                  <Loader />
+                )}
+              </div>
+            </div>
+            <div>
+              <Image
+                className="rounded-xl"
+                src={data?.image}
+                alt="nft"
+                width={350}
+                height={350}
+                onError={() => setNftSrc("/assets/essence-placeholder.svg")}
+                placeholder="blur"
+                blurDataURL="/assets/essence-placeholder.svg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default PostCard;
