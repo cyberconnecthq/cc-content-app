@@ -17,6 +17,9 @@ export const PRIMARY_PROFILE_ESSENCES = gql`
                   metadata
                   avatar
                   profileID
+                  owner {
+                    address
+                  }
                 }
               }
             }

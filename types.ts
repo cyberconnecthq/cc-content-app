@@ -126,6 +126,9 @@ export interface IPostCard {
     avatar: string;
     metadata: string;
     profileID: number;
+    owner: {
+      address: string;
+    };
   };
   essenceID: number;
   tokenURI: string;

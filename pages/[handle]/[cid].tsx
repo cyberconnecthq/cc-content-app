@@ -14,6 +14,7 @@ import AccessCover from "@/components/AccessCover";
 import { formatDate } from "@/helpers/functions";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
+import { TailSpin } from "react-loading-icons";
 
 const decryptWithLit = async (
   encryptedSymmetricKey: string,
@@ -98,6 +99,7 @@ const Post = () => {
   const [getProfile] = useLazyQuery(PROFILE_BY_HANDLE);
   const [content, setContent] = React.useState<any>("");
   const [accessFailed, setAccessFailed] = React.useState<boolean>(true);
+  const [validating, setValidating] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     const { handle, cid } = router.query;
@@ -148,9 +150,11 @@ const Post = () => {
         );
         setContent(content);
         setAccessFailed(false);
+        setValidating(false);
       } catch (error) {
         console.error(error);
         setAccessFailed(true);
+        setValidating(false);
       }
     }
   };
@@ -186,14 +190,29 @@ const Post = () => {
                 <div className="text-xl">{content}</div>
               </div>
             ) : (
-              <div className="px-24 mx-auto pt-16 ">
-                <div className="text-3xl">🔒 This post is protected.</div>
-                <div className="mt-6 ">
-                  <SubscribeBtn
-                    profileID={Number(router.query.profileID)}
-                    isSubscribedByMe={false}
-                  />
-                </div>
+              <div className="px-24 mx-auto pt-8 ">
+                <div className="text-3xl">🔒 This post is protected</div>
+                {validating ? (
+                  <div className="flex items-center gap-x-2 mt-4">
+                    <TailSpin
+                      stroke="#000"
+                      height={20}
+                      className="m-0"
+                      strokeWidth={2}
+                    />
+                    <div>Validating your access...</div>
+                  </div>
+                ) : (
+                  <div className="mt-6 ">
+                    <div className="mb-4">
+                      You don&apos;t have access to this post, subscribe to view
+                    </div>
+                    <SubscribeBtn
+                      profileID={Number(router.query.profileID)}
+                      isSubscribedByMe={false}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

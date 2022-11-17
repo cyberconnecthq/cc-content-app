@@ -1,39 +1,45 @@
 import { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { AuthContext } from "../context/auth";
-import Navbar from "../components/Navbar";
-import Panel from "../components/Panel";
-import PostCard from "../components/Cards/PostCard";
-import { IPostCard } from "../types";
+import { AuthContext } from "@/context/auth";
+import Navbar from "@/components/Navbar";
+import Panel from "@/components/Panel";
+import PostCard from "@/components/Cards/PostCard";
+import { IPostCard } from "@/types";
 import { useLazyQuery } from "@apollo/client";
-import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../graphql";
-import { FEATURED_POSTS } from "../helpers/constants";
+import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../../graphql";
+import { FEATURED_POSTS } from "@/helpers/constants";
+import { useRouter } from "next/router";
 
-const PostPage: NextPage = () => {
+const Profile: NextPage = () => {
   const { accessToken, indexingPosts, posts, address } =
     useContext(AuthContext);
   const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
   const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
+    if (!router.query.address) {
+      return;
+    }
+
     const getEssences = async () => {
       const { data } = await getEssencesByFilter({
         variables: {
-          address,
+          address: router.query.address as string,
           chainID: 5,
           me: address,
         },
       });
 
       setFeaturedPosts(
-        data?.address?.wallet?.primaryProfile?.essences?.edges?.map(
+        data?.address.wallet.primaryProfile.essences.edges.map(
           (item: any) => item.node
         ) || []
       );
     };
 
     getEssences();
-  }, [address, getEssencesByFilter]);
+  }, [router.query.address, getEssencesByFilter]);
 
   return (
     <div className="container">
@@ -80,4 +86,4 @@ const PostPage: NextPage = () => {
   );
 };
 
-export default PostPage;
+export default Profile;

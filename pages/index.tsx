@@ -1,49 +1,58 @@
+import { useContext, useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { useContext, useState, useEffect } from "react";
+import { AuthContext } from "../context/auth";
 import Navbar from "../components/Navbar";
 import Panel from "../components/Panel";
+import PostCard from "../components/Cards/PostCard";
+import { IPostCard } from "../types";
 import { useLazyQuery } from "@apollo/client";
-import { PROFILES_BY_IDS } from "../graphql";
-import { PROFILES } from "../helpers/constants";
-import ProfileCard from "../components/Cards/ProfileCard";
-import { IProfileCard } from "../types";
-import { AuthContext } from "../context/auth";
+import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../graphql";
+import { FEATURED_POSTS } from "../helpers/constants";
 
 const Home: NextPage = () => {
-  const { accessToken } = useContext(AuthContext);
-  const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
-  const [profiles, setProfiles] = useState<IProfileCard[]>([]);
+  const { address } = useContext(AuthContext);
+  const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
+  const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
 
   useEffect(() => {
-    const getProfiles = async () => {
-      const { data } = await getProfilesByIDs({
+    const getEssences = async () => {
+      const { data } = await getEssencesByFilter({
         variables: {
+          address: "0xbd358966445e1089e3AdD528561719452fB78198",
           chainID: 5,
-          profileIDs: [2, 5, 12, 10, 15, 16, 77],
+          me: address,
         },
       });
-      setProfiles([...data.profilesByIDs]);
+
+      console.log(data);
+
+      setFeaturedPosts(
+        data?.address.wallet.primaryProfile.essences.edges.map(
+          (item: any) => item.node
+        ) || []
+      );
     };
 
-    if (accessToken) {
-      getProfiles();
-    } else {
-      setProfiles(PROFILES);
-    }
-  }, [accessToken]);
+    getEssences();
+  }, [getEssencesByFilter]);
 
   return (
     <div className="container">
       <Navbar />
       <div className="wrapper">
         <div className="wrapper-content">
-          <h1 className="text-2xl font-bold">Profiles</h1>
-          <hr></hr>
-          <div className="profiles">
-            {profiles.length > 0 &&
-              profiles.map((profile) => (
-                <ProfileCard key={profile.profileID} {...profile} />
-              ))}
+          <h1 className="text-2xl font-bold">Recommendations</h1>
+          <div className="posts">
+            <div>
+              {featuredPosts.length > 0 &&
+                featuredPosts.map((post) => (
+                  <PostCard
+                    key={`${post.createdBy.profileID}-${post.essenceID}`}
+                    {...post}
+                    isIndexed={true}
+                  />
+                ))}
+            </div>
           </div>
         </div>
         <div className="wrapper-details">

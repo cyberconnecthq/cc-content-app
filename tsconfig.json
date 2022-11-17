@@ -18,7 +18,10 @@
     "baseUrl": "./",
     "paths": {
       "@/components/*": ["./components/*"],
-      "@/helpers/*": ["./helpers/*"]
+      "@/helpers/*": ["./helpers/*"],
+      "@/context/*": ["./context/*"]
+      "@/types": ["./types"],
+      "@/graphql/*": ["./graphql/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

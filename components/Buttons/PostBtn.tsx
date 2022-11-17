@@ -1,4 +1,6 @@
+import React from "react";
 import { useContext } from "react";
+import { TailSpin } from "react-loading-icons";
 import { useMutation } from "@apollo/client";
 import {
   pinFileToIPFS,
@@ -29,6 +31,7 @@ function PostBtn({
     connectWallet,
     checkNetwork,
   } = useContext(AuthContext);
+  const [loading, setLoading] = React.useState(false);
   const { handleModal } = useContext(ModalContext);
   const [createRegisterEssenceTypedData] = useMutation(
     CREATE_REGISTER_ESSENCE_TYPED_DATA
@@ -93,8 +96,6 @@ function PostBtn({
       },
     ];
 
-    console.log("Evm contract conditions", evmContractConditions);
-
     const authSig = await LitJsSdk.checkAndSignAuthMessage({
       chain: "goerli",
     });
@@ -109,8 +110,6 @@ function PostBtn({
       chain: "goerli",
     });
 
-    console.log("Encrypted string: ", encryptedString);
-
     return {
       encryptedString,
       encryptedSymmetricKey: LitJsSdk.uint8arrayToString(
@@ -121,6 +120,7 @@ function PostBtn({
   };
 
   const handleOnClick = async () => {
+    setLoading(true);
     try {
       /* Check if the user logged in */
       if (!accessToken) {
@@ -158,7 +158,7 @@ function PostBtn({
             encryptedSymmetricKey: encryptedContent.encryptedSymmetricKey,
           }) || randPhrase(),
         media: [],
-        tags: ["lit"],
+        tags: ["lit-v1"],
         image: nftImageURL ? nftImageURL : "",
         image_data: !nftImageURL ? svg_data : "",
         name: title,
@@ -278,11 +278,20 @@ function PostBtn({
       /* Display error message */
       const message = error.message as string;
       handleModal("error", message);
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (
-    <button className="post-btn" type="submit" onClick={handleOnClick}>
+    <button
+      className="post-btn flex items-center justify-center"
+      type="submit"
+      onClick={handleOnClick}
+    >
+      {loading && (
+        <TailSpin stroke="#fff" height={20} className="m-0" strokeWidth={2} />
+      )}
       Post
     </button>
   );

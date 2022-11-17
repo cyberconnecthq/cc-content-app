@@ -17,8 +17,7 @@ const PostCard = ({
   isIndexed,
 }: IPostCard) => {
   const router = useRouter();
-  const { avatar, handle, profileID, metadata } = createdBy;
-  console.log("Created by: ", createdBy);
+  const { avatar, handle, profileID, metadata, owner } = createdBy;
   const [name, setName] = useState("");
   const [data, setData] = useState<any>({
     image: "",
@@ -50,7 +49,7 @@ const PostCard = ({
         const res = await fetch(parseURL(tokenURI));
         if (res.status === 200) {
           const data = await res.json();
-          console.log("Data", data);
+          console.log("data", data);
           setData(data);
         }
       } catch (error) {
@@ -77,12 +76,7 @@ const PostCard = ({
     })();
   }, [metadata]);
 
-  const handleClick = (e: any) => {
-    console.log(e.target);
-
-    if (e.target.tagName.toLowerCase() === "button") {
-      return;
-    }
+  const viewDetail = (e: any) => {
     router.push(
       `/${handle}/${encodeURIComponent(
         tokenURI
@@ -90,12 +84,18 @@ const PostCard = ({
     );
   };
 
+  const goToProfile = (e: any) => {
+    if (owner?.address) {
+      router.push(`/u/${owner.address}`);
+    }
+  };
+
   return (
     <>
       {!loadFromIPFSFailed && data?.content && data.tags.includes("lit") && (
-        <div onClick={handleClick} className="mt-8">
-          <div className="flex border border-gray-300 p-4 rounded-xl cursor-pointer hover:bg-neutral-50 justify-between">
-            <div className="flex flex-col">
+        <div className="mt-8">
+          <div className="flex border border-gray-300 p-4 rounded-xl  hover:bg-neutral-50 justify-between">
+            <div className="flex flex-col" onClick={goToProfile}>
               <div className="flex gap-x-4">
                 <div>
                   <Avatar value={handle} size={50} />
@@ -108,7 +108,7 @@ const PostCard = ({
                   <div>{timeSince(new Date(data.issue_date))}</div>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-4 cursor-pointer" onClick={viewDetail}>
                 <div className="text-xl font-bold">{data.name}</div>
                 <div className="text-base mt-4">{data.description}</div>
               </div>
@@ -123,7 +123,7 @@ const PostCard = ({
                 )}
               </div>
             </div>
-            <div>
+            <div onClick={viewDetail} className="cursor-pointer">
               <Image
                 className="rounded-xl"
                 src={data?.image}
