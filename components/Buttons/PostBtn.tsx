@@ -249,21 +249,6 @@ function PostBtn({
       handleModal(null, "");
 
       /* Set the indexingPosts in the state variables */
-      setIndexingPosts([
-        ...indexingPosts,
-        {
-          createdBy: {
-            handle: primaryProfile?.handle,
-            avatar: primaryProfile?.avatar,
-            metadata: primaryProfile?.metadata,
-            profileID: primaryProfile?.profileID,
-          },
-          essenceID: 0, // Value will be updated once it's indexed
-          tokenURI: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
-          isIndexed: false,
-          isCollectedByMe: false,
-        },
-      ]);
 
       /* Log the transaction hash */
       console.log("~~ Tx hash ~~");
