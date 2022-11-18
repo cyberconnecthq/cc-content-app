@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY } from "../../graphql";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
+import { BiCheck } from "react-icons/bi";
 
 function SubscribeBtn({
   profileID,
@@ -15,7 +16,6 @@ function SubscribeBtn({
   const { handleModal } = useContext(ModalContext);
   const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA);
   const [relay] = useMutation(RELAY);
-  const [stateSubscribe, setStateSubscribe] = useState(isSubscribedByMe);
 
   const handleOnClick = async () => {
     try {
@@ -79,9 +79,6 @@ function SubscribeBtn({
       console.log("~~ Tx hash ~~");
       console.log(txHash);
 
-      /* Set the state to true */
-      setStateSubscribe(true);
-
       /* Display success message */
       handleModal("success", "Subscribed to profile!");
     } catch (error) {
@@ -93,11 +90,20 @@ function SubscribeBtn({
 
   return (
     <button
-      className="px-2 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-sm"
+      className={`px-3 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-sm flex items-center ${
+        isSubscribedByMe ? "bg-stone-900 text-white" : "bg-white text-black"
+      }`}
       onClick={handleOnClick}
-      disabled={stateSubscribe}
+      disabled={isSubscribedByMe}
     >
-      {stateSubscribe ? "Subscribed" : "Subscribe"}
+      {isSubscribedByMe ? (
+        <>
+          <BiCheck size={20} />
+          Subscribed
+        </>
+      ) : (
+        "Subscribe"
+      )}
     </button>
   );
 }

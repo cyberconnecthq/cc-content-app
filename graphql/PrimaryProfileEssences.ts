@@ -1,7 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const PRIMARY_PROFILE_ESSENCES = gql`
-  query PrimaryProfileEssences($address: AddressEVM!, $chainID: ChainID!) {
+  query PrimaryProfileEssences(
+    $address: AddressEVM!
+    $chainID: ChainID!
+    $myAddress: AddressEVM!
+  ) {
     address(address: $address, chainID: $chainID) {
       chainID
       wallet {
@@ -19,6 +23,9 @@ export const PRIMARY_PROFILE_ESSENCES = gql`
                   profileID
                   owner {
                     address
+                    primaryProfile {
+                      isSubscribedByMe(me: $myAddress)
+                    }
                   }
                 }
               }

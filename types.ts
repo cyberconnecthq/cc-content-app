@@ -128,6 +128,9 @@ export interface IPostCard {
     profileID: number;
     owner: {
       address: string;
+      primaryProfile: {
+        isSubscribedByMe: boolean;
+      };
     };
   };
   essenceID: number;

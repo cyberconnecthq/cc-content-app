@@ -6,13 +6,14 @@ import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
 import { IPostCard } from "../types";
 import { useLazyQuery } from "@apollo/client";
-import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../graphql";
-import { FEATURED_POSTS } from "../helpers/constants";
+import { PRIMARY_PROFILE_ESSENCES } from "../graphql";
+import Loading from "@/components/Loading";
 
 const Home: NextPage = () => {
   const { address } = useContext(AuthContext);
   const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
   const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getEssences = async () => {
@@ -20,21 +21,23 @@ const Home: NextPage = () => {
         variables: {
           address: "0xbd358966445e1089e3AdD528561719452fB78198",
           chainID: 5,
-          me: address,
+          myAddress: address,
         },
       });
-
-      console.log(data);
 
       setFeaturedPosts(
         data?.address.wallet.primaryProfile.essences.edges.map(
           (item: any) => item.node
         ) || []
       );
+
+      setIsLoading(false);
     };
 
-    getEssences();
-  }, [getEssencesByFilter]);
+    if (address) {
+      getEssences();
+    }
+  }, [getEssencesByFilter, address]);
 
   return (
     <div className="container">
@@ -42,18 +45,22 @@ const Home: NextPage = () => {
       <div className="wrapper">
         <div className="wrapper-content">
           <h1 className="text-2xl font-bold">Recommendations</h1>
-          <div className="posts">
-            <div>
-              {featuredPosts.length > 0 &&
-                featuredPosts.map((post) => (
-                  <PostCard
-                    key={`${post.createdBy.profileID}-${post.essenceID}`}
-                    {...post}
-                    isIndexed={true}
-                  />
-                ))}
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="posts">
+              <div>
+                {featuredPosts.length > 0 &&
+                  featuredPosts.map((post) => (
+                    <PostCard
+                      key={`${post.createdBy.profileID}-${post.essenceID}`}
+                      {...post}
+                      isIndexed={true}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="wrapper-details">
           <Panel />

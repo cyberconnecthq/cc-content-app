@@ -6,14 +6,15 @@ import Panel from "../components/Panel";
 import PostCard from "../components/Cards/PostCard";
 import { IPostCard } from "../types";
 import { useLazyQuery } from "@apollo/client";
-import { ESSENCES_BY_FILTER, PRIMARY_PROFILE_ESSENCES } from "../graphql";
-import { FEATURED_POSTS } from "../helpers/constants";
+import { PRIMARY_PROFILE_ESSENCES } from "../graphql";
+import Loading from "@/components/Loading";
 
 const PostPage: NextPage = () => {
   const { accessToken, indexingPosts, posts, address } =
     useContext(AuthContext);
   const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
   const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
+  const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getEssences = async () => {
@@ -21,7 +22,7 @@ const PostPage: NextPage = () => {
         variables: {
           address,
           chainID: 5,
-          me: address,
+          myAddress: address,
         },
       });
 
@@ -30,6 +31,8 @@ const PostPage: NextPage = () => {
           (item: any) => item.node
         ) || []
       );
+
+      setIsLoading(false);
     };
 
     getEssences();
@@ -46,6 +49,8 @@ const PostPage: NextPage = () => {
               <div>
                 You need to <strong>Sign in</strong> to view your posts.
               </div>
+            ) : loading ? (
+              <Loading />
             ) : (
               <div>
                 {posts.length > 0 ? (

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import CollectBtn from "../Buttons/CollectBtn";
 import SubscribeBtn from "../Buttons/SubscribeBtn";
 import { IPostCard } from "../../types";
 import { parseURL, timeSince } from "../../helpers/functions";
 import Loader from "../Loader";
 import Avatar from "@/components/Avatar";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const PostCard = ({
@@ -17,7 +15,9 @@ const PostCard = ({
   isIndexed,
 }: IPostCard) => {
   const router = useRouter();
-  const { avatar, handle, profileID, metadata, owner } = createdBy;
+  const { handle, profileID, metadata, owner } = createdBy;
+
+  console.log("Owner", owner);
   const [name, setName] = useState("");
   const [data, setData] = useState<any>({
     image: "",
@@ -30,10 +30,6 @@ const PostCard = ({
     description: "",
   });
   const [loadFromIPFSFailed, setLoadFromIPFSFailed] = useState(false);
-
-  const [nftSrc, setNftSrc] = useState(
-    data.image ? parseURL(data.image) : data.image_data
-  );
 
   useEffect(() => {
     if (!tokenURI) return;
@@ -76,7 +72,7 @@ const PostCard = ({
     })();
   }, [metadata]);
 
-  const viewDetail = (e: any) => {
+  const viewDetail = () => {
     router.push(
       `/${handle}/${encodeURIComponent(
         tokenURI
@@ -84,7 +80,7 @@ const PostCard = ({
     );
   };
 
-  const goToProfile = (e: any) => {
+  const goToProfile = () => {
     if (owner?.address) {
       router.push(`/u/${owner.address}`);
     }
@@ -112,10 +108,10 @@ const PostCard = ({
                 <div className="text-xl font-bold">{data.name}</div>
                 <div className="text-base mt-4">{data.description}</div>
               </div>
-              <div className="mt-16">
+              <div className="mt-16 grow flex items-end">
                 {isIndexed ? (
                   <SubscribeBtn
-                    isSubscribedByMe={false}
+                    isSubscribedByMe={owner.primaryProfile.isSubscribedByMe}
                     profileID={profileID}
                   />
                 ) : (
@@ -130,7 +126,6 @@ const PostCard = ({
                 alt="nft"
                 width={350}
                 height={350}
-                onError={() => setNftSrc("/assets/essence-placeholder.svg")}
                 placeholder="blur"
                 blurDataURL="/assets/essence-placeholder.svg"
               />

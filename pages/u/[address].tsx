@@ -27,7 +27,7 @@ const Profile: NextPage = () => {
         variables: {
           address: router.query.address as string,
           chainID: 5,
-          me: address,
+          myAddress: address,
         },
       });
 

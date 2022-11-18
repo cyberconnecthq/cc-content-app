@@ -110,6 +110,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           variables: {
             address: address,
             chainID: CHAIN_ID,
+            myAddress: address,
           },
         });
         const res = await query;
@@ -225,7 +226,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           variables: {
             address: address,
             chainID: CHAIN_ID,
-            me: address,
+            myAddress: address,
           },
         });
         const res = await query;

@@ -272,7 +272,7 @@ function PostBtn({
     <button
       className="post-btn flex items-center justify-center"
       type="submit"
-      onClick={handleOnClick}
+      onSubmit={handleOnClick}
     >
       {loading && (
         <TailSpin stroke="#fff" height={20} className="m-0" strokeWidth={2} />

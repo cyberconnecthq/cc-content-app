@@ -50,9 +50,9 @@ const Navbar = () => {
           </div>
         </Link>
         <hr></hr>
-        <button className="create-btn center" onClick={handleOnClick}>
-          {<MdHistoryEdu />}
-        </button>
+        <Link href="/create-post">
+          <button className="create-btn center">{<MdHistoryEdu />}</button>
+        </Link>
       </div>
     </nav>
   );
