@@ -91,8 +91,11 @@ const PostCard = ({
       {!loadFromIPFSFailed && data?.content && data.tags.includes("lit") && (
         <div className="mt-8">
           <div className="flex border border-gray-300 p-4 rounded-xl  hover:bg-neutral-50 justify-between">
-            <div className="flex flex-col" onClick={goToProfile}>
-              <div className="flex gap-x-4">
+            <div className="flex flex-col">
+              <div
+                className="flex gap-x-4 cursor-pointer"
+                onClick={goToProfile}
+              >
                 <div>
                   <Avatar value={handle} size={50} />
                 </div>
