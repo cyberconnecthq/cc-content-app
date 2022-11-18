@@ -119,13 +119,13 @@ const PostCard = ({
                 )}
               </div>
             </div>
-            <div onClick={viewDetail} className="cursor-pointer">
+            <div onClick={viewDetail} className="cursor-pointer shrink-0">
               <Image
-                className="rounded-xl"
+                className="rounded-xl object-cover"
                 src={data?.image}
                 alt="nft"
-                width={350}
-                height={350}
+                width={280}
+                height={200}
                 placeholder="blur"
                 blurDataURL="/assets/essence-placeholder.svg"
               />

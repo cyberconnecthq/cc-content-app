@@ -191,7 +191,7 @@ const Post = () => {
               </div>
             ) : (
               <div className="px-24 mx-auto pt-8 ">
-                <div className="text-3xl">🔒 This post is protected</div>
+                <div className="text-3xl">🔒 This post is protected.</div>
                 {validating ? (
                   <div className="flex items-center gap-x-2 mt-4">
                     <TailSpin
