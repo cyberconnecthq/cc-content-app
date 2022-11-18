@@ -244,20 +244,6 @@ svg {
   margin-top: 10px;
 }
 
-.profile-card-address {
-  display: grid;
-  grid-template-columns: 1fr 10px;
-  grid-gap: 10px;
-  align-items: center;
-}
-
-.profile-card-address div:last-child {
-  background-color: var(--green);
-  border-radius: 50%;
-  width: 10px;
-  height: 10px;
-}
-
 .profiles {
   display: grid;
   grid-template-columns: 1fr;

@@ -37,18 +37,28 @@ const PrimaryProfileCard = ({
     })();
   }, [metadata]);
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
   return (
     <div className="profile-card w-full">
       <div className="profile-card-img center">
-        <Link href="/settings">
+        <Link href="/post">
           <div>
             <Avatar value={handle} size={80} />
           </div>
         </Link>
         {address && (
-          <div className="profile-card-address">
+          <div className="profile-card-address flex flex-col">
             <div>{`${address.slice(0, 6)}..`}</div>
-            <div></div>
+            <button
+              className="bg-black text-white rounded-xl w-24 h-8 px-2 py-sm mt-4"
+              onClick={handleLogOut}
+            >
+              Log out
+            </button>
           </div>
         )}
       </div>

@@ -71,7 +71,7 @@ const PostForm = () => {
                 required
               ></textarea>
             </div>
-            <div className="form-post-middleware">
+            {/*<div className="form-post-middleware">
               <div>Middleware</div>
               <div>
                 <label>
@@ -95,6 +95,7 @@ const PostForm = () => {
                 </label>
               </div>
             </div>
+	      */}
             <div className="form-note">
               <strong>Note:</strong> For empty fields we will randomly generate
               values.

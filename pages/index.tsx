@@ -16,10 +16,10 @@ const Home: NextPage = () => {
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getEssences = async () => {
+    const getEssences = async (publisherAddress: string) => {
       const { data } = await getEssencesByFilter({
         variables: {
-          address: "0xbd358966445e1089e3AdD528561719452fB78198",
+          address: publisherAddress,
           chainID: 5,
           myAddress: address,
         },
@@ -35,8 +35,12 @@ const Home: NextPage = () => {
     };
 
     if (address) {
-      getEssences();
+      getEssences("0x5C3bFb3D45aeB173687C5F2497195990aC4d3790");
     }
+
+    return () => {
+      setFeaturedPosts([]);
+    };
   }, [getEssencesByFilter, address]);
 
   return (

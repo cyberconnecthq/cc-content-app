@@ -17,7 +17,6 @@ const PostCard = ({
   const router = useRouter();
   const { handle, profileID, metadata, owner } = createdBy;
 
-  console.log("Owner", owner);
   const [name, setName] = useState("");
   const [data, setData] = useState<any>({
     image: "",
@@ -45,7 +44,6 @@ const PostCard = ({
         const res = await fetch(parseURL(tokenURI));
         if (res.status === 200) {
           const data = await res.json();
-          console.log("data", data);
           setData(data);
         }
       } catch (error) {
@@ -88,7 +86,7 @@ const PostCard = ({
 
   return (
     <>
-      {!loadFromIPFSFailed && data?.content && data.tags.includes("lit") && (
+      {!loadFromIPFSFailed && data?.content && data.tags.includes("lit-v1.2") && (
         <div className="mt-8">
           <div className="flex border border-gray-300 p-4 rounded-xl  hover:bg-neutral-50 justify-between">
             <div className="flex flex-col">

@@ -40,7 +40,7 @@ const Navbar = () => {
             {<MdOutlineDashboard />}
           </div>
         </Link>
-        <Link href="/settings">
+        {/*<Link href="/settings">
           <div
             className={`navbar-link ${
               router.pathname === "/settings" && "active"
@@ -49,6 +49,7 @@ const Navbar = () => {
             {<FiSettings />}
           </div>
         </Link>
+	*/}
         <hr></hr>
         <Link href="/create-post">
           <button className="create-btn center">{<MdHistoryEdu />}</button>

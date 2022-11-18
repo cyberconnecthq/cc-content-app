@@ -62,16 +62,11 @@ const PostPage: NextPage = () => {
                         isIndexed={true}
                       />
                     ))}
-                    {indexingPosts.length > 0 &&
-                      indexingPosts.map((post) => (
-                        <PostCard
-                          key={`${post.createdBy.profileID}-${post.essenceID}`}
-                          {...post}
-                        />
-                      ))}
                   </div>
                 ) : (
-                  <div>You haven&apos;t created any posts yet.</div>
+                  <div className="h-96 flex items-center justify-center">
+                    You haven&apos;t created any posts yet.
+                  </div>
                 )}
               </div>
             )}

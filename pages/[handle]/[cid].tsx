@@ -65,21 +65,6 @@ const decryptWithLit = async (
     },
   ];
 
-  const accessControlConditions = [
-    {
-      contractAddress: "",
-      standardContractType: "",
-      chain,
-      method: "",
-      parameters: [":userAddress"],
-      returnValueTest: {
-        comparator: "=",
-        value: "0xbd358966445e1089e3AdD528561719452fB78198",
-      },
-    },
-  ];
-
-  console.log("Evm contract conditions", accessControlConditions);
   const symmetricKey = await client.getEncryptionKey({
     evmContractConditions,
     toDecrypt: encryptedSymmetricKey,
@@ -108,7 +93,6 @@ const Post = () => {
       getPostFromIPFS(cid as string);
       const getAddressInfo = async () => {
         try {
-          /* Fetch primary profile */
           let query = await getProfile({
             variables: {
               handle,
@@ -133,7 +117,6 @@ const Post = () => {
       const data = await res.json();
 
       setPost(data);
-      console.log("data", data);
       const encryptedStringBlobResp = await fetch(
         parseURL(JSON.parse(data.content).contentHash.ipfshash)
       );

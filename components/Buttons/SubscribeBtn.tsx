@@ -90,7 +90,7 @@ function SubscribeBtn({
 
   return (
     <button
-      className={`px-3 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-sm flex items-center ${
+      className={`px-3 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-sm flex items-center justify-center ${
         isSubscribedByMe ? "bg-stone-900 text-white" : "bg-white text-black"
       }`}
       onClick={handleOnClick}

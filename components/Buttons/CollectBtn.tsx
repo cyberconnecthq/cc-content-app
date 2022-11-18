@@ -46,11 +46,6 @@ function CollectBtn({
       /* Get the chain id from the network */
       const chainID = network.chainId;
 
-      console.log("chainID", chainID);
-      console.log("address", address);
-      console.log("essenceID", essenceID);
-      console.log("profileID", profileID);
-
       /* Create typed data in a readable format */
       const typedDataResult = await createCollectEssenceTypedData({
         variables: {

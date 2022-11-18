@@ -119,7 +119,8 @@ function PostBtn({
     };
   };
 
-  const handleOnClick = async () => {
+  const handleOnClick = async (e: any) => {
+    e.preventDefault();
     setLoading(true);
     try {
       /* Check if the user logged in */
@@ -158,7 +159,7 @@ function PostBtn({
             encryptedSymmetricKey: encryptedContent.encryptedSymmetricKey,
           }) || randPhrase(),
         media: [],
-        tags: ["lit-v1"],
+        tags: ["lit-v1.2"],
         image: nftImageURL ? nftImageURL : "",
         image_data: !nftImageURL ? svg_data : "",
         name: title,
@@ -245,11 +246,6 @@ function PostBtn({
       });
       const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
-      /* Close Post Modal */
-      handleModal(null, "");
-
-      /* Set the indexingPosts in the state variables */
-
       /* Log the transaction hash */
       console.log("~~ Tx hash ~~");
       console.log(txHash);
@@ -271,8 +267,7 @@ function PostBtn({
   return (
     <button
       className="post-btn flex items-center justify-center"
-      type="submit"
-      onSubmit={handleOnClick}
+      onClick={handleOnClick}
     >
       {loading && (
         <TailSpin stroke="#fff" height={20} className="m-0" strokeWidth={2} />

@@ -10,17 +10,21 @@ import SuggestedProfileCard from "../Cards/SuggestedProfileCard";
 import { IProfileCard } from "../../types";
 
 const Panel = () => {
-  const { accessToken, primaryProfile } = useContext(AuthContext);
+  const { accessToken, primaryProfile, address } = useContext(AuthContext);
   const { handleModal } = useContext(ModalContext);
   const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
   const [profiles, setProfiles] = useState<IProfileCard[]>([]);
 
   useEffect(() => {
+    if (!address) {
+      return;
+    }
     const getProfiles = async () => {
       const { data } = await getProfilesByIDs({
         variables: {
           chainID: 5,
-          profileIDs: [15, 16, 44, 5],
+          profileIDs: [155],
+          myAddress: address,
         },
       });
 
@@ -29,12 +33,8 @@ const Panel = () => {
       }
     };
 
-    if (accessToken) {
-      getProfiles();
-    } else {
-      setProfiles(SUGGESTED_PROFILES);
-    }
-  }, [accessToken]);
+    getProfiles();
+  }, [accessToken, address]);
 
   return (
     <div className="panel">
