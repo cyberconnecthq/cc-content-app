@@ -55,10 +55,7 @@ const SuggestedProfileCard = ({
         <div className="whitespace-nowrap">{data.name}</div>
         <div>@{handle}</div>
       </div>
-      <SubscribeBtn
-        profileID={profileID}
-        isSubscribedByMe={owner?.primaryProfile?.isSubscribedByMe}
-      />
+      <SubscribeBtn profileID={profileID} isSubscribedByMe={isSubscribedByMe} />
     </div>
   );
 };

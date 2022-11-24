@@ -9,10 +9,8 @@ export const PROFILES_BY_IDS = gql`
     profilesByIDs(chainID: $chainID, profileIDs: $profileIDs) {
       owner {
         address
-        primaryProfile {
-          isSubscribedByMe(me: $myAddress)
-        }
       }
+      isSubscribedByMe(me: $myAddress)
       handle
       profileID
       metadata
