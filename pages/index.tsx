@@ -10,27 +10,29 @@ import { IProfileCard } from "../types";
 import { AuthContext } from "../context/auth";
 
 const Home: NextPage = () => {
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, address } = useContext(AuthContext);
   const [getProfilesByIDs] = useLazyQuery(PROFILES_BY_IDS);
   const [profiles, setProfiles] = useState<IProfileCard[]>([]);
 
   useEffect(() => {
+    console.log("address", address);
     const getProfiles = async () => {
       const { data } = await getProfilesByIDs({
         variables: {
           chainID: 5,
           profileIDs: [2, 5, 12, 10, 15, 16, 77],
+          myAddress: address,
         },
       });
       setProfiles([...data.profilesByIDs]);
     };
 
-    if (accessToken) {
+    if (accessToken && address) {
       getProfiles();
     } else {
       setProfiles(PROFILES);
     }
-  }, [accessToken]);
+  }, [accessToken, address, getProfilesByIDs]);
 
   return (
     <div className="container">
@@ -40,15 +42,10 @@ const Home: NextPage = () => {
           <h1>Profiles</h1>
           <hr></hr>
           <div className="profiles">
-            {
-              profiles.length > 0 &&
-              profiles.map(profile => (
-                <ProfileCard
-                  key={profile.profileID}
-                  {...profile}
-                />
-              ))
-            }
+            {profiles.length > 0 &&
+              profiles.map((profile) => (
+                <ProfileCard key={profile.profileID} {...profile} />
+              ))}
           </div>
         </div>
         <div className="wrapper-details">
@@ -56,7 +53,7 @@ const Home: NextPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Home;

@@ -349,6 +349,7 @@ svg {
 
 .post-content {
   margin-top: 10px;
+  word-break: break-all;
 }
 
 .posts {

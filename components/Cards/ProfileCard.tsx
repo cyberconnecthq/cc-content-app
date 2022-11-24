@@ -10,7 +10,9 @@ const ProfileCard = ({
     metadata,
     profileID,
     isSubscribedByMe,
-}: IProfileCard) => {
+    owner
+}: any) => {
+console.log("owner", owner)
     const [src, setSrc] = useState(parseURL(avatar));
     const [data, setData] = useState({
         name: "",
@@ -52,7 +54,7 @@ const ProfileCard = ({
                 </div>
                 <SubscribeBtn
                     profileID={profileID}
-                    isSubscribedByMe={isSubscribedByMe}
+                    isSubscribedByMe={owner?.primaryProfile?.isSubscribedByMe}
                 />
             </div>
             <div>

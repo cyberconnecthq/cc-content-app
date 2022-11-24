@@ -78,7 +78,7 @@ const PostCard = ({ essenceID, tokenURI, createdBy, isCollectedByMe, isIndexed }
                             <div className="post-profile-handle">@{handle} •</div>
                             <div className="post-profile-time">{timeSince(new Date(data.issue_date))}</div>
                         </div>
-                        <div className="post-content">{data.content}</div>
+                        <div className="post-content">{JSON.stringify(data.content)}</div>
                     </div>
                     <div className="post-nft center">
                         <Image
