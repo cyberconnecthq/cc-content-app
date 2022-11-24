@@ -24,7 +24,10 @@ const Panel = () => {
         variables: {
           chainID: 5,
           profileIDs: [155],
-          myAddress: address,
+          myAddress:
+            address && accessToken
+              ? address
+              : "0x0000000000000000000000000000000000000000",
         },
       });
 
@@ -34,7 +37,7 @@ const Panel = () => {
     };
 
     getProfiles();
-  }, [accessToken, address]);
+  }, [accessToken, address, accessToken]);
 
   return (
     <div className="panel">

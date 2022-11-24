@@ -10,7 +10,7 @@ import { PRIMARY_PROFILE_ESSENCES } from "../graphql";
 import Loading from "@/components/Loading";
 
 const Home: NextPage = () => {
-  const { address } = useContext(AuthContext);
+  const { address, accessToken } = useContext(AuthContext);
   const [getEssencesByFilter] = useLazyQuery(PRIMARY_PROFILE_ESSENCES);
   const [featuredPosts, setFeaturedPosts] = useState<IPostCard[]>([]);
   const [loading, setIsLoading] = useState(true);
@@ -21,7 +21,10 @@ const Home: NextPage = () => {
         variables: {
           address: publisherAddress,
           chainID: 5,
-          myAddress: address,
+          myAddress:
+            address && accessToken
+              ? address
+              : "0x0000000000000000000000000000000000000000",
         },
       });
 
@@ -34,14 +37,12 @@ const Home: NextPage = () => {
       setIsLoading(false);
     };
 
-    if (address) {
-      getEssences("0x5C3bFb3D45aeB173687C5F2497195990aC4d3790");
-    }
+    getEssences("0x5C3bFb3D45aeB173687C5F2497195990aC4d3790");
 
     return () => {
       setFeaturedPosts([]);
     };
-  }, [getEssencesByFilter, address]);
+  }, [getEssencesByFilter, address, accessToken]);
 
   return (
     <div className="container">

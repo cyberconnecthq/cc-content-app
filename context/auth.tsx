@@ -79,9 +79,11 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     connectWallet();
 
     const accessToken = localStorage.getItem("accessToken");
+    const address = localStorage.getItem("address");
 
-    if (accessToken) {
+    if (accessToken && address) {
       setAccessToken(accessToken);
+      setAddress(address);
     }
   }, []);
 
@@ -317,6 +319,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
       /* Set the address in the state variable */
       setAddress(address);
+      localStorage.setItem("address", address);
 
       return web3Provider;
     } catch (error) {
