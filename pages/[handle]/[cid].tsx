@@ -78,9 +78,84 @@ const decryptWithLit = async (
 
   return decryptedString;
 };
+const decryptWithLitUnifiedConditions = async (
+  encryptedSymmetricKey: string,
+  blob: Blob,
+  profileId: string,
+  address: string
+) => {
+  const client = new LitJsSdk.LitNodeClient({ alertWhenUnauthorized: false });
+  await client.connect();
+  const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "goerli" });
+  const chain = "goerli";
+
+  const unifiedAccessControlConditions = [
+    {
+      conditionType: "evmBasic",
+      contractAddress: "",
+      standardContractType: "",
+      chain,
+      method: "",
+      parameters: [":userAddress"],
+      returnValueTest: {
+        comparator: "=",
+        value: address,
+      },
+    },
+    { operator: "or" },
+    {
+      conditionType: "evmContract",
+      permanent: false,
+      contractAddress: "0xa52cc9b8219dce25bc791a8b253dec61f16d5ff0",
+      functionName: "isSubscribedByMe",
+      functionParams: [profileId, ":userAddress"],
+      functionAbi: {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "profileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "me",
+            type: "address",
+          },
+        ],
+        name: "isSubscribedByMe",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      chain: "goerli",
+      returnValueTest: {
+        key: "",
+        comparator: "=",
+        value: "true",
+      },
+    },
+  ];
+
+  const symmetricKey = await client.getEncryptionKey({
+    unifiedAccessControlConditions,
+    toDecrypt: encryptedSymmetricKey,
+    chain: "goerli",
+    authSig,
+  });
+
+  const decryptedString = await LitJsSdk.decryptString(blob, symmetricKey);
+
+  return decryptedString;
+};
 
 const Post = () => {
-  const { accessToken } = React.useContext(AuthContext);
+  const { accessToken, address } = React.useContext(AuthContext);
   const router = useRouter();
   const [post, setPost] = React.useState<any>(null);
   const [profile, setProfile] = React.useState<any>(null);
@@ -94,7 +169,7 @@ const Post = () => {
     setValidating(true);
 
     if (handle && cid) {
-      getPostFromIPFS(cid as string);
+      getPostFromIPFS(cid as string, address as string);
       const getAddressInfo = async () => {
         try {
           let query = await getProfile({
@@ -113,14 +188,16 @@ const Post = () => {
 
       getAddressInfo();
     }
-  }, [router.query, getProfile, accessToken]);
+  }, [router.query, getProfile, accessToken, address]);
 
-  const getPostFromIPFS = async (cid: string) => {
+  const getPostFromIPFS = async (cid: string, address: string) => {
     const res = await fetch(parseURL(cid as string));
     if (res.status === 200) {
       const data = await res.json();
 
       setPost(data);
+      console.log("data", data);
+
       const encryptedStringBlobResp = await fetch(
         parseURL(JSON.parse(data.content).contentHash.ipfshash)
       );
@@ -129,25 +206,39 @@ const Post = () => {
 
       const { encryptedSymmetricKey } = JSON.parse(data.content);
 
-      if (!accessToken) {
+      if (!accessToken || !address) {
         setAccessFailed(true);
         setValidating(false);
         return;
       }
 
       try {
-        const content = await decryptWithLit(
+        const content = await decryptWithLitUnifiedConditions(
           encryptedSymmetricKey,
           blob,
-          router.query.profileID as string
+          router.query.profileID as string,
+          address as string
         );
         setContent(content);
         setAccessFailed(false);
         setValidating(false);
       } catch (error) {
-        console.error(error);
-        setAccessFailed(true);
-        setValidating(false);
+        try {
+          const content = await decryptWithLit(
+            encryptedSymmetricKey,
+            blob,
+            router.query.profileID as string
+          );
+          setContent(content);
+          setAccessFailed(false);
+          setValidating(false);
+        } catch (error) {
+          setAccessFailed(true);
+          setValidating(false);
+          console.error(error);
+          setAccessFailed(true);
+          setValidating(false);
+        }
       }
     }
   };

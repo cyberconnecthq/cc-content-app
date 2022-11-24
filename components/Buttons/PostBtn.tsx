@@ -24,6 +24,7 @@ function PostBtn({
   description,
 }: IPostInput) {
   const {
+    address,
     accessToken,
     primaryProfile,
     indexingPosts,
@@ -57,8 +58,22 @@ function PostBtn({
       },
     ];
 
-    const evmContractConditions = [
+    const unifiedAccessControlConditions = [
       {
+        conditionType: "evmBasic",
+        contractAddress: "",
+        standardContractType: "",
+        chain,
+        method: "",
+        parameters: [":userAddress"],
+        returnValueTest: {
+          comparator: "=",
+          value: address,
+        },
+      },
+      { operator: "or" },
+      {
+        conditionType: "evmContract",
         permanent: false,
         contractAddress: "0xa52cc9b8219dce25bc791a8b253dec61f16d5ff0",
         functionName: "isSubscribedByMe",
@@ -104,7 +119,7 @@ function PostBtn({
     );
 
     const encryptedSymmetricKey = await client.saveEncryptionKey({
-      evmContractConditions,
+      unifiedAccessControlConditions,
       symmetricKey,
       authSig,
       chain: "goerli",
