@@ -45,7 +45,7 @@ const PrimaryProfileCard = ({
   return (
     <div className="profile-card w-full">
       <div className="profile-card-img center">
-        <Link href="/post">
+        <Link href="/posts">
           <div>
             <Avatar value={handle} size={80} />
           </div>

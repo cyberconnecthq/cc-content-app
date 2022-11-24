@@ -30,7 +30,10 @@ const Profile: NextPage = () => {
         variables: {
           address: router.query.address,
           chainID: 5,
-          myAddress: address,
+          myAddress:
+            accessToken && address
+              ? address
+              : "0x0000000000000000000000000000000000000000",
         },
       });
     } catch (error) {
@@ -49,7 +52,10 @@ const Profile: NextPage = () => {
         variables: {
           address: router.query.address as string,
           chainID: 5,
-          myAddress: address,
+          myAddress:
+            accessToken && address
+              ? address
+              : "0x0000000000000000000000000000000000000000",
         },
       });
 
@@ -74,11 +80,7 @@ const Profile: NextPage = () => {
         <div className="wrapper-content">
           <h1 className="text-2xl font-bold">Posts</h1>
           <div className="posts">
-            {!accessToken ? (
-              <div>
-                You need to <strong>Sign in</strong> to view your posts.
-              </div>
-            ) : loading ? (
+            {loading ? (
               <Loading />
             ) : (
               <div>
