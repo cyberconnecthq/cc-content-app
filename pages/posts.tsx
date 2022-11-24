@@ -46,8 +46,9 @@ const PostPage: NextPage = () => {
           <h1 className="text-2xl font-bold">My posts</h1>
           <div className="posts">
             {!accessToken ? (
-              <div>
-                You need to <strong>Sign in</strong> to view your posts.
+              <div className="h-96 flex items-center justify-center">
+                You need to <strong className="m-1">Sign in</strong> to view
+                your posts.
               </div>
             ) : loading ? (
               <Loading />
