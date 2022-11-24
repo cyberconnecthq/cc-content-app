@@ -79,11 +79,9 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     connectWallet();
 
     const accessToken = localStorage.getItem("accessToken");
-    const address = localStorage.getItem("address");
 
-    if (accessToken && address) {
+    if (accessToken) {
       setAccessToken(accessToken);
-      setAddress(address);
     }
   }, []);
 
@@ -314,12 +312,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       /* Get the address of the connected wallet */
       const address = await signer.getAddress();
 
-      /* Set the providers in the state variables */
-      setProvider(web3Provider);
+      const oldAddress = localStorage.getItem("address");
+      console.log("old address", oldAddress);
+      console.log("address", address);
+      if (!oldAddress) {
+        localStorage.setItem("address", address);
+      } else if (oldAddress !== address) {
+        localStorage.clear();
+        window.location.reload();
+      } else {
+        /* Set the providers in the state variables */
+        setProvider(web3Provider);
 
-      /* Set the address in the state variable */
-      setAddress(address);
-      localStorage.setItem("address", address);
+        /* Set the address in the state variable */
+        setAddress(address);
+      }
 
       return web3Provider;
     } catch (error) {

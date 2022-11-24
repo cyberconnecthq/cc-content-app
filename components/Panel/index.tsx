@@ -39,6 +39,10 @@ const Panel = () => {
     getProfiles();
   }, [accessToken, address, accessToken]);
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <div className="panel">
       <div className="min-h-[193px] flex flex-col justify-center w-full">
@@ -49,14 +53,30 @@ const Panel = () => {
         )}
 
         <div className="w-full">
-          {!accessToken && <SigninBtn />}
-          {!primaryProfile?.profileID && (
-            <button
-              className="signup-btn"
-              onClick={() => handleModal("signup", "")}
-            >
-              Sign up
-            </button>
+          {accessToken ? (
+            !primaryProfile?.profileID && (
+              <div>
+                <button
+                  className="signup-btn"
+                  onClick={() => handleModal("signup", "")}
+                >
+                  Sign up
+                </button>
+                <button className="signup-btn" onClick={handleLogOut}>
+                  Log out
+                </button>
+              </div>
+            )
+          ) : (
+            <div>
+              <SigninBtn />
+              <button
+                className="signup-btn"
+                onClick={() => handleModal("signup", "")}
+              >
+                Sign up
+              </button>
+            </div>
           )}
         </div>
       </div>

@@ -52,7 +52,7 @@ const SuggestedProfileCard = ({
         className="profile-card-user cursor-pointer"
         onClick={() => router.push(`/u/${owner.address}`)}
       >
-        <div>{data.name}</div>
+        <div className="whitespace-nowrap">{data.name}</div>
         <div>@{handle}</div>
       </div>
       <SubscribeBtn

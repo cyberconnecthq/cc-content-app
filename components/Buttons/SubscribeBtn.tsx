@@ -64,6 +64,8 @@ function SubscribeBtn({
       const method = "eth_signTypedData_v4";
       const signature = await signer.provider.send(method, params);
 
+      console.log("signature", signature);
+
       /* Call the relay to broadcast the transaction */
       const relayResult = await relay({
         variables: {
@@ -90,7 +92,7 @@ function SubscribeBtn({
 
   return (
     <button
-      className={`px-3 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-sm flex items-center justify-center ${
+      className={`px-3 py-1 rounded-full border-black border hover:bg-stone-900 hover:text-white ease-in duration-100 text-xs flex items-center ${
         isSubscribedByMe ? "bg-stone-900 text-white" : "bg-white text-black"
       }`}
       onClick={handleOnClick}
