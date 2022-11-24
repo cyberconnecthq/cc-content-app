@@ -7,6 +7,7 @@ import Loader from "../Loader";
 import Avatar from "@/components/Avatar";
 import { AiOutlineFileProtect } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { formatDate } from "@/helpers/functions";
 
 const PostCard = ({
   essenceID,
@@ -98,13 +99,17 @@ const PostCard = ({
                 <div>
                   <Avatar value={handle} size={50} />
                 </div>
-                <div className="flex items-center gap-x-4">
-                  <div className="flex items-center">
-                    <div>{name}</div>
-                    <div>@{handle} •</div>
+                <div className="flex items-center gap-x-1">
+                  <div className="flex flex-col">
+                    <div className="leading-6">{name}</div>
+                    <div className="leading-6 text-gray-500 text-xs">
+                      @{handle}
+                    </div>
                   </div>
-                  <div>{timeSince(new Date(data.issue_date))}</div>
                 </div>
+              </div>
+              <div className="text-xs mt-4">
+                {formatDate(new Date(data.issue_date))}
               </div>
               <div className="mt-4 cursor-pointer" onClick={viewDetail}>
                 <div className="text-xl font-bold">{data.name}</div>
