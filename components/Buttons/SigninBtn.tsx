@@ -68,6 +68,7 @@ function SigninBtn() {
 
       /* Display success message */
       handleModal("success", "You are now logged in!");
+      setTimeout(() => handleModal(null, ""), 1000);
     } catch (error) {
       /* Display error message */
       const message = error.message as string;

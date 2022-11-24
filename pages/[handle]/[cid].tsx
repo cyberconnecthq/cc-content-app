@@ -11,6 +11,8 @@ import React from "react";
 import { useLazyQuery } from "@apollo/client";
 import Avatar from "@/components/Avatar";
 import AccessCover from "@/components/AccessCover";
+
+import { AuthContext } from "../../context/auth";
 import { formatDate } from "@/helpers/functions";
 // @ts-ignore
 import LitJsSdk from "@lit-protocol/sdk-browser";
@@ -78,6 +80,7 @@ const decryptWithLit = async (
 };
 
 const Post = () => {
+  const { accessToken } = React.useContext(AuthContext);
   const router = useRouter();
   const [post, setPost] = React.useState<any>(null);
   const [profile, setProfile] = React.useState<any>(null);
@@ -88,6 +91,7 @@ const Post = () => {
 
   React.useEffect(() => {
     const { handle, cid } = router.query;
+    setValidating(true);
 
     if (handle && cid) {
       getPostFromIPFS(cid as string);
@@ -109,7 +113,7 @@ const Post = () => {
 
       getAddressInfo();
     }
-  }, [router.query, getProfile]);
+  }, [router.query, getProfile, accessToken]);
 
   const getPostFromIPFS = async (cid: string) => {
     const res = await fetch(parseURL(cid as string));
@@ -124,6 +128,12 @@ const Post = () => {
       const blob = await encryptedStringBlobResp.blob();
 
       const { encryptedSymmetricKey } = JSON.parse(data.content);
+
+      if (!accessToken) {
+        setAccessFailed(true);
+        setValidating(false);
+        return;
+      }
 
       try {
         const content = await decryptWithLit(
