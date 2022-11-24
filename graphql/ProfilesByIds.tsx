@@ -11,11 +11,7 @@ export const PROFILES_BY_IDS = gql`
       profileID
       metadata
       avatar
-      owner {
-        primaryProfile {
-          isSubscribedByMe(me: $myAddress)
-        }
-      }
+      isSubscribedByMe(me: $myAddress)
     }
   }
 `;

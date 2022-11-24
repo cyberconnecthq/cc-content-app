@@ -15,7 +15,7 @@ function SubscribeBtn({
   const { handleModal } = useContext(ModalContext);
   const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA);
   const [relay] = useMutation(RELAY);
-  const [stateSubscribe, setStateSubscribe] = useState(isSubscribedByMe);
+  const [stateSubscribe, setStateSubscribe] = useState(false);
 
   const handleOnClick = async () => {
     try {
@@ -95,9 +95,9 @@ function SubscribeBtn({
     <button
       className="subscribe-btn"
       onClick={handleOnClick}
-      disabled={isSubscribedByMe}
+      disabled={stateSubscribe || isSubscribedByMe}
     >
-      {isSubscribedByMe ? "Subscribed" : "Subscribe"}
+      {stateSubscribe || isSubscribedByMe ? "Subscribed" : "Subscribe"}
     </button>
   );
 }
