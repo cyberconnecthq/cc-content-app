@@ -19,7 +19,7 @@ const Home: NextPage = () => {
     const getProfiles = async () => {
       const { data } = await getProfilesByIDs({
         variables: {
-          chainID: 5,
+          chainID: 97,
           profileIDs: [2, 5, 12, 10, 15, 16, 77],
           myAddress: address,
         },

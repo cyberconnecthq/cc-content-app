@@ -49,7 +49,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
       const metadata: IEssenceMetadata = {
         metadata_id: uuidv4(),
         version: "1.0.0",
-        app_id: "cyberconnect",
+        app_id: "cyberconnect-bnbt",
         lang: "en",
         issue_date: new Date().toISOString(),
         content: content || randPhrase(),
@@ -106,7 +106,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
                       /* Number of times the Essence can be collected */
                       totalSupply: 1000,
                       /* Amount that needs to be paid to collect essence */
-                      amount: 1,
+                      amount: 1000000000000000000,
                       /* The currency for the  amount. Chainlink token contract on Goerli */
                       currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
                       /* If it require that the collector is also subscribed */

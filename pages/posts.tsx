@@ -19,12 +19,14 @@ const PostPage: NextPage = () => {
     const getEssences = async () => {
       const { data } = await getEssencesByFilter({
         variables: {
-          appID: "cyberconnect",
+          appID: "cyberconnect-bnbt",
           me: address,
         },
       });
       const filtered = data?.essenceByFilter || [];
       setFeaturedPosts(filtered);
+
+      console.log("filtered", filtered);
     };
 
     if (accessToken) {

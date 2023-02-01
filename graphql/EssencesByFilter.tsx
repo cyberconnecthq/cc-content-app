@@ -11,6 +11,10 @@ export const ESSENCES_BY_FILTER = gql`
         profileID
         metadata
       }
+      collectMw {
+        contractAddress
+        type
+      }
       isCollectedByMe(me: $me)
     }
   }
