@@ -82,7 +82,7 @@ export interface IEssenceMetadata {
 	content?: string;
 
 	/* Media refers to any image, video, or any other MIME type attached to the content.
-	  Limited to max. 10 media objects. */
+		Limited to max. 10 media objects. */
 	media?: Media[];
 
 	/* Field indicating the tags associated with the content. Limited to max. 5 tags. */
@@ -93,7 +93,7 @@ export interface IEssenceMetadata {
 	image?: string;
 
 	/* SVG image data when the image is not passed. Only use this if you're not 
-		      including the image parameter. */
+			    including the image parameter. */
 	image_data?: string;
 
 	/* Name of the item. */
@@ -131,7 +131,7 @@ export interface IPostCard {
 	tokenURI: string;
 	isCollectedByMe: boolean;
 	isIndexed?: boolean;
-	collectMw: any;
+	collectMw?: any;
 }
 
 export interface IEssenceMwCard {

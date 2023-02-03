@@ -66,20 +66,9 @@ const PostPage: NextPage = () => {
               </div>
             ) : (
               <div>
-                {posts.length === 0 &&
-                  (indexingPosts.length > 0 ? (
-                    <div>
-                      {indexingPosts.length > 0 &&
-                        indexingPosts.map((post) => (
-                          <PostCard
-                            key={`${post.createdBy.profileID}-${post.essenceID}`}
-                            {...post}
-                          />
-                        ))}
-                    </div>
-                  ) : (
-                    <div>You haven&apos;t created any posts yet.</div>
-                  ))}
+                {posts.length === 0 && (
+                  <div>You haven&apos;t created any posts yet.</div>
+                )}
                 {posts.length > 0 && (
                   <div>
                     {posts.map((post) => (
@@ -89,15 +78,18 @@ const PostPage: NextPage = () => {
                         isIndexed={true}
                       />
                     ))}
-                    {indexingPosts.length > 0 &&
-                      indexingPosts.map((post) => (
-                        <PostCard
-                          key={`${post.createdBy.profileID}-${post.essenceID}`}
-                          {...post}
-                        />
-                      ))}
                   </div>
                 )}
+                <div>
+                  <h3>Relaying Posts</h3>
+                  {indexingPosts.length > 0 &&
+                    indexingPosts.map((post) => (
+                      <PostCard
+                        key={`${post.createdBy.profileID}-${post.essenceID}`}
+                        {...post}
+                      />
+                    ))}
+                </div>
               </div>
             )}
           </div>
