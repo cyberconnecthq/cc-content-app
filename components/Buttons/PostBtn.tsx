@@ -37,7 +37,7 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
 
 			/* Check if the has signed up */
 			if (!primaryProfile?.profileID) {
-				throw Error("Youn need to Sign up.");
+				throw Error("Youn need to mint a profile.");
 			}
 
 			/* Connect wallet and get provider */
