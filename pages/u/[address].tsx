@@ -29,7 +29,7 @@ const Profile: NextPage = () => {
       const { data } = await getProfile({
         variables: {
           address: router.query.address,
-          chainID: 5,
+          // chainID: 5,
           myAddress:
             accessToken && address
               ? address
@@ -51,7 +51,7 @@ const Profile: NextPage = () => {
       const { data } = await getEssencesByFilter({
         variables: {
           address: router.query.address as string,
-          chainID: 5,
+          // chainID: 5,
           myAddress:
             accessToken && address
               ? address

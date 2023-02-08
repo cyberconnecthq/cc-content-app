@@ -109,7 +109,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           query: PRIMARY_PROFILE,
           variables: {
             address: address,
-            chainID: CHAIN_ID,
+            // chainID: CHAIN_ID,
             myAddress: address,
           },
         });
@@ -146,7 +146,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           query: ACCOUNTS,
           variables: {
             address: address,
-            chainID: CHAIN_ID,
+            // chainID: CHAIN_ID,
           },
         });
         const res = await query;
@@ -225,7 +225,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           query: PRIMARY_PROFILE_ESSENCES,
           variables: {
             address: address,
-            chainID: CHAIN_ID,
+            // chainID: CHAIN_ID,
             myAddress: address,
           },
         });

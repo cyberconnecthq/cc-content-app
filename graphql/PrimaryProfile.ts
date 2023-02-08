@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const PRIMARY_PROFILE = gql`
-  query PrimaryProfile($address: AddressEVM!, $chainID: ChainID!) {
-    address(address: $address, chainID: $chainID) {
+  query PrimaryProfile($address: AddressEVM!) {
+    address(address: $address) {
       chainID
       wallet {
         primaryProfile {

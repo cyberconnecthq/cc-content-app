@@ -21,7 +21,7 @@ const PostPage: NextPage = () => {
       const { data } = await getEssencesByFilter({
         variables: {
           address,
-          chainID: 5,
+          // chainID: 5,
           myAddress: address,
         },
       });

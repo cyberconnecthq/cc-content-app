@@ -40,15 +40,13 @@ function SubscribeBtn({
       const network = await provider.getNetwork();
 
       /* Get the chain id from the network */
-      const chainID = network.chainId;
+      // const chainID = network.chainId;
 
       /* Create typed data in a readable format */
       const typedDataResult = await createSubscribeTypedData({
         variables: {
           input: {
-            options: {
-              chainID: chainID,
-            },
+            options: {},
             profileIDs: [profileID],
           },
         },

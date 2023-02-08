@@ -20,7 +20,7 @@ const Home: NextPage = () => {
       const { data } = await getEssencesByFilter({
         variables: {
           address: publisherAddress,
-          chainID: 5,
+          // chainID: 5,
           myAddress:
             address && accessToken
               ? address

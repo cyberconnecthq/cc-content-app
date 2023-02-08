@@ -79,11 +79,11 @@ function CollectBtn({
           },
         },
       });
-      const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
+      // const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
       /* Log the transation hash */
       console.log("~~ Tx hash ~~");
-      console.log(txHash);
+      // console.log(txHash);
 
       /* Set the state to true */
       setStateCollect(true);

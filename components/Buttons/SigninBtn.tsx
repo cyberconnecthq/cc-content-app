@@ -30,7 +30,7 @@ function SigninBtn() {
       const network = await provider.getNetwork();
 
       /* Get the chain id from the network */
-      const chainID = network.chainId;
+      // const chainID = network.chainId;
 
       /* Get the message from the server */
       const messageResult = await loginGetMessage({
@@ -38,7 +38,6 @@ function SigninBtn() {
           input: {
             address: account,
             domain: DOMAIN,
-            chainID: chainID,
           },
         },
       });
@@ -53,7 +52,6 @@ function SigninBtn() {
           input: {
             address: account,
             domain: DOMAIN,
-            chainID: chainID,
             signature: signature,
           },
         },

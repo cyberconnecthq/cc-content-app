@@ -203,10 +203,7 @@ function PostBtn({
       const typedDataResult = await createRegisterEssenceTypedData({
         variables: {
           input: {
-            options: {
-              /* The chain id on which the Essence NFT will be minted on */
-              chainID: chainID,
-            },
+            options: {},
             /* The profile id under which the Essence is registered */
             profileID: primaryProfile?.profileID,
             /* Name of the Essence */
@@ -259,11 +256,11 @@ function PostBtn({
           },
         },
       });
-      const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
+      // const txHash = relayResult.data?.relay?.relayTransaction?.txHash;
 
       /* Log the transaction hash */
-      console.log("~~ Tx hash ~~");
-      console.log(txHash);
+      // console.log("~~ Tx hash ~~");
+      // console.log(txHash);
 
       /* Display success message */
       handleModal("success", "Post was created!");

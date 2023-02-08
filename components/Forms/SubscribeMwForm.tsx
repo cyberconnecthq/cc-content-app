@@ -41,7 +41,7 @@ const SubscribeMwForm = () => {
       const res = await getAddress({
         variables: {
           address: address,
-          chainID: CHAIN_ID,
+          // chainID: CHAIN_ID,
         },
       });
       const edges = res?.data?.address?.wallet?.profiles?.edges;

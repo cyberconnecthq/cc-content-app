@@ -175,7 +175,7 @@ const Post = () => {
           let query = await getProfile({
             variables: {
               handle,
-              chainID: CHAIN_ID,
+              // chainID: CHAIN_ID,
             },
           });
 
