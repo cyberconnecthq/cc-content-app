@@ -3,7 +3,6 @@ import { Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { ExternalProvider } from "@ethersproject/providers";
-import { CHAIN_ID } from "../helpers/constants";
 import {
 	IAuthContext,
 	IPrimaryProfileCard,
@@ -86,7 +85,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 					query: PRIMARY_PROFILE_ESSENCES,
 					variables: {
 						address: address,
-						chainID: CHAIN_ID,
 					},
 				});
 				const res = await query;
@@ -179,7 +177,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 					query: PRIMARY_PROFILE,
 					variables: {
 						address: address,
-						chainID: CHAIN_ID,
 					},
 				});
 				const res = await query;
@@ -215,7 +212,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 					query: ACCOUNTS,
 					variables: {
 						address: address,
-						chainID: CHAIN_ID,
 					},
 				});
 				const res = await query;
@@ -294,7 +290,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 					query: PRIMARY_PROFILE_ESSENCES,
 					variables: {
 						address: address,
-						chainID: CHAIN_ID,
 					},
 				});
 				const res = await query;
@@ -376,10 +371,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 			const network = await provider.getNetwork();
 
 			/* Check if the network is the correct one */
-			if (network.chainId !== CHAIN_ID) {
+			if (network.chainId !== (Number(process.env.NEXT_PUBLIC_CHAIN_ID) || 0)) {
 				/* Switch network if the chain id doesn't correspond to Goerli Testnet Network */
 				await provider.send("wallet_switchEthereumChain", [
-					{ chainId: "0x" + CHAIN_ID.toString(16) },
+					{
+						chainId:
+							"0x" + Number(process.env.NEXT_PUBLIC_CHAIN_ID)?.toString(16),
+					},
 				]);
 
 				/* Trigger a page reload */
@@ -390,7 +388,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 			if (error.code === 4902) {
 				await provider.send("wallet_addEthereumChain", [
 					{
-						chainId: "0x" + CHAIN_ID.toString(16),
+						chainId:
+							"0x" + Number(process.env.NEXT_PUBLIC_CHAIN_ID)?.toString(16),
 						rpcUrls: ["https://goerli.infura.io/v3/"],
 					},
 				]);

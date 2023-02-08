@@ -81,17 +81,10 @@ function PostBtn({ nftImageURL, content, middleware }: IPostInput) {
 			/* Get the network from the provider */
 			const network = await provider.getNetwork();
 
-			/* Get the chain id from the network */
-			const chainID = network.chainId;
-
 			/* Create typed data in a readable format */
 			const typedDataResult = await createRegisterEssenceTypedData({
 				variables: {
 					input: {
-						options: {
-							/* The chain id on which the Essence NFT will be minted on */
-							chainID: chainID,
-						},
 						/* The profile id under which the Essence is registered */
 						profileID: primaryProfile?.profileID,
 						/* Name of the Essence */

@@ -21,7 +21,6 @@ const Panel = () => {
 		const getProfiles = async () => {
 			const { data } = await getProfilesByIDs({
 				variables: {
-					chainID: 5,
 					profileIDs: [15, 16, 44, 5, 227],
 					myAddress: address,
 				},
