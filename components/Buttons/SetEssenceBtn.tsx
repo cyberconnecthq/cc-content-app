@@ -68,9 +68,9 @@ function SetEssenceBtn({
 										/* Address that will receive the amount */
 										recipient: address,
 										/* Number of times the Essence can be collected */
-										totalSupply: 1000,
+										totalSupply: "1000",
 										/* Amount that needs to be paid to collect essence */
-										amount: 1,
+										amount: "1000000000000000000",
 										/* The currency for the  amount. Chainlink token contract on Goerli */
 										currency: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
 										/* If it require that the collector is also subscribed */
@@ -109,6 +109,7 @@ function SetEssenceBtn({
 			/* Display success message */
 			handleModal("success", "Essence middleware was set!");
 		} catch (error) {
+			console.log(error);
 			/* Display error message */
 			const message = error.message as string;
 			handleModal("error", message);
