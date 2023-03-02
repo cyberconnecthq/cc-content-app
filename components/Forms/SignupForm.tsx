@@ -66,6 +66,7 @@ const SignupForm = () => {
                 ></input>
             </div>
             <div className="form-note"><strong>Note:</strong> For empty fields we will randomly generate values.</div>
+            <label>Mint your ccProfile NFT</label>
             <SignupBtn {...signupInput} />
         </div>
     );

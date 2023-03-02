@@ -34,20 +34,47 @@ const Panel = () => {
 			setProfiles(SUGGESTED_PROFILES);
 		}
 	}, [accessToken, address]);
-
+	const handleLogOut = () => {
+		localStorage.clear();
+		window.location.reload();
+	  };
 	return (
 		<div className="panel">
-			<div>
-				{primaryProfile && <PrimaryProfileCard {...primaryProfile} />}
+			<div className="min-h-[193px] flex flex-col justify-center w-full">
+			{primaryProfile && (
+					<div className="w-full">
+						<PrimaryProfileCard {...primaryProfile} />
+					</div>
+					)}
 				<div>
 					{!accessToken && <SigninBtn />}
-					{!primaryProfile?.profileID && (
-						<button
-							className="signup-btn"
-							onClick={() => router.push("https://testnet.cyberconnect.me/")}
-						>
-							Mint Profile
-						</button>
+					{accessToken && !primaryProfile?.profileID && (
+						<div>
+							<button
+								className="signup-btn"
+								onClick={() => handleModal("signup", "")}
+							>
+								Mint Profile
+							</button>
+							<button className="signup-btn" onClick={handleLogOut}>
+									Log out
+									</button>
+						</div>
+						
+					)}
+					{accessToken && primaryProfile?.profileID && (
+						<div>
+							<button
+								className="signup-btn"
+								onClick={() => handleModal("signup", "")}
+							>
+								Mint Another Profile
+							</button>
+							<button className="signup-btn" onClick={handleLogOut}>
+									Log out
+									</button>
+						</div>
+						
 					)}
 				</div>
 			</div>

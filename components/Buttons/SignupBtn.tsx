@@ -1,9 +1,5 @@
-import { useRouter } from "next/router";
-import { useContext } from "react";
-import { ethers } from "ethers";
-import ProfileNFTABI from "../../abi/ProfileNFT.json";
+import { useContext, useState } from "react";
 import {
-	PROFILE_NFT_CONTRACT,
 	PROFILE_NFT_OPERATOR,
 } from "../../helpers/constants";
 import { pinJSONToIPFS } from "../../helpers/functions";
@@ -16,12 +12,37 @@ import {
 import { IProfileMetadata, ISignupInput } from "../../types";
 import { AuthContext } from "../../context/auth";
 import { ModalContext } from "../../context/modal";
+import { CREATE_CREATE_PROFILE_TYPED_DATA, RELAY, RELAY_ACTION_STATUS, PROFILE_BY_HANDLE, PRIMARY_PROFILE } from "../../graphql";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { useCancellableQuery } from "../../hooks/useCancellableQuery";
+
 
 function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
-	const router = useRouter();
-	const { indexingProfiles, setIndexingProfiles, connectWallet, checkNetwork } =
+	// const router = useRouter();
+	const { address, indexingProfiles, setIndexingProfiles, connectWallet, checkNetwork, setPrimaryProfile } =
 		useContext(AuthContext);
 	const { handleModal } = useContext(ModalContext);
+    const [createTypedData, { data: dataCreateTypedData, loading: loadingCreateTypedData, error: errorCreateTypedData }] = useMutation(CREATE_CREATE_PROFILE_TYPED_DATA);
+    const [relay, { data: relayData, loading: relayLoading, error: relayError }] = useMutation(RELAY);
+    const [relayActionStatus, { data: relayActionStatusData, loading: relayActionStatusLoading, error: relayActionStatusError }] = useLazyQuery(RELAY_ACTION_STATUS);
+    const [profileByHandle, { data: profileByHandleData, loading: profileByHandleLoading, error: profileByHandleError }] = useLazyQuery(PROFILE_BY_HANDLE);
+    const [primaryProfile] = useLazyQuery(PRIMARY_PROFILE);
+	
+	
+	const pollRelayActionStatus = async (id: string) => {
+		console.log("start polling");
+		const relayActionStatusResult = await relayActionStatus({variables:{relayActionId:id}, fetchPolicy:"network-only"});
+		console.log("relayActionStatusResult", relayActionStatusResult);
+		if (relayActionStatusResult.data?.relayActionStatus?.txHash) {
+			handleModal("success", "Profile was created!");
+		  return;
+		} else if (relayActionStatusResult.data?.relayActionStatus?.reason) {
+			alert("Error: " + relayActionStatusResult.data?.relayActionStatus?.reason);
+			return;
+		}
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		await pollRelayActionStatus(id);
+	  };
 
 	const handleOnClick = async () => {
 		try {
@@ -52,36 +73,42 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
 
 			/* Get the address from the provider */
 			const address = await signer.getAddress();
+            
 
-			/* Get the contract instance */
-			const contract = new ethers.Contract(
-				PROFILE_NFT_CONTRACT,
-				ProfileNFTABI,
-				signer
-			);
+            const createTypedDataResult = await createTypedData({variables:{to: address,
+                handle: handle || randUserName(),
+                avatar: avatar || randAvatar({ size: 200 }),
+                metadata: ipfsHash,
+                operator: operator || PROFILE_NFT_OPERATOR}});
+            console.log("createTypedDataResult", createTypedDataResult);
+            console.log(createTypedDataResult.data)
+            const typedDataId = createTypedDataResult.data?.createCreateProfileTypedData?.typedDataID;
+            console.log("typedDataId", typedDataId);
 
-			/* Call the createProfile function to create the profile */
-			const tx = await contract.createProfile(
-				/* CreateProfileParams */
-				{
-					to: address,
-					handle: handle || randUserName(),
-					avatar: avatar || randAvatar({ size: 200 }),
-					metadata: ipfsHash,
-					operator: operator || PROFILE_NFT_OPERATOR,
-				},
-				/* preData */
-				0x0,
-				/* postData */
-				0x0
-			);
+            const relayResult = await relay({variables:{input:{typedDataID:typedDataId}}});
+            console.log("relayResult", relayResult);
+            const relayActionId = relayResult.data?.relay?.relayActionId;
+            console.log("relayActionId", relayActionId);
 
 			/* Close Signup Modal */
 			handleModal(null, "");
+			/* Set the indexingProfiles in the state variables */
+            await pollRelayActionStatus(relayActionId);
+            console.log("peroidic polling end");
+			
+			
 
 			/* Call the getProfileIdByHandle function to get the profile id */
-			const profileID = await contract.getProfileIdByHandle(handle);
-
+			// const profileID = await contract.getProfileIdByHandle(handle);
+            const profileIdData = await profileByHandle({variables:{handle:handle || randUserName()}});
+            const profileID = profileIdData.data?.profileByHandle?.id;
+			
+			/* Set the primary profile */
+			// const res = await primaryProfile({variables:{address:address}});
+			// const primaryProfileRes = res?.data?.address?.wallet?.primaryProfile;
+			// console.log("primaryProfileRes", primaryProfileRes);
+			// setPrimaryProfile(primaryProfileRes);
+			
 			/* Set the indexingProfiles in the state variables */
 			setIndexingProfiles([
 				...indexingProfiles,
@@ -94,15 +121,6 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
 				},
 			]);
 
-			/* Wait for the transaction to be executed */
-			await tx.wait();
-
-			/* Log the transaction hash */
-			console.log("~~ Tx hash ~~");
-			console.log(tx.hash);
-
-			/* Display success message */
-			handleModal("success", "Profile was created!");
 		} catch (error) {
 			/* Set the indexingProfiles in the state variables */
 			setIndexingProfiles([...indexingProfiles]);
@@ -116,8 +134,7 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
 	return (
 		<button
 			className="signup-btn"
-			onClick={() => router.push("https://testnet.cyberconnect.me/")}
-		>
+			onClick={handleOnClick}>
 			Mint Profile
 		</button>
 	);

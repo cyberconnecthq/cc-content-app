@@ -13,3 +13,5 @@ export { ADDRESS } from "./Address";
 export { PROFILES_BY_IDS } from "./ProfilesByIds";
 export { ESSENCES_BY_FILTER } from "./EssencesByFilter";
 export { RELAY_ACTION_STATUS } from "./RelayActionStatus";
+export { CREATE_CREATE_PROFILE_TYPED_DATA } from "./CreateCreateProfileTypedData";
+export { PROFILE_BY_HANDLE } from "./ProfileByHandle";
