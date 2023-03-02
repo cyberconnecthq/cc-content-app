@@ -33,6 +33,13 @@ const Modal = () => {
                         <div><strong>Error</strong>: {modalText}</div>
                     </div>
                 );
+            case "info":
+                return (
+                    <div className="modal-info">
+                        <TiWarning />
+                        <div><strong>Info</strong>: {modalText}</div>
+                    </div>
+                );
             case "signup":
                 return (
                     <div className="modal-signup">

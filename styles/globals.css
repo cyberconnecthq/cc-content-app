@@ -481,7 +481,8 @@ svg {
 }
 
 .modal-success,
-.modal-error {
+.modal-error,
+.modal-info {
   border-radius: 4px;
   display: grid;
   grid-template-columns: 30px 1fr;
@@ -493,12 +494,14 @@ svg {
 }
 
 .modal-success div,
-.modal-error div {
+.modal-error div,
+.modal-info div {
   overflow: hidden;
 }
 
 .modal-success svg,
-.modal-error svg {
+.modal-error svg,
+.modal-info svg {
   width: 30px;
 }
 
@@ -508,6 +511,10 @@ svg {
 
 .modal-error svg path {
   fill: var(--red);
+}
+
+.modal-error svg path {
+  fill: var(--gray);
 }
 
 .modal-post textarea {

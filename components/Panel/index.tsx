@@ -41,12 +41,20 @@ const Panel = () => {
 				{primaryProfile && <PrimaryProfileCard {...primaryProfile} />}
 				<div>
 					{!accessToken && <SigninBtn />}
-					{!primaryProfile?.profileID && (
+					{accessToken && !primaryProfile?.profileID && (
 						<button
 							className="signup-btn"
-							onClick={() => router.push("https://testnet.cyberconnect.me/")}
+							onClick={() => handleModal("signup", "")}
 						>
 							Mint Profile
+						</button>
+					)}
+					{accessToken && primaryProfile?.profileID && (
+						<button
+							className="signup-btn"
+							onClick={() => handleModal("signup", "")}
+						>
+							Mint Another Profile
 						</button>
 					)}
 				</div>
