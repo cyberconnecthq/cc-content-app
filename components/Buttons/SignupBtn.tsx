@@ -96,6 +96,7 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
             await pollRelayActionStatus(relayActionId);
             console.log("peroidic polling end");
 			
+			
 
 			/* Call the getProfileIdByHandle function to get the profile id */
 			// const profileID = await contract.getProfileIdByHandle(handle);
@@ -103,10 +104,10 @@ function SignupBtn({ handle, avatar, name, bio, operator }: ISignupInput) {
             const profileID = profileIdData.data?.profileByHandle?.id;
 			
 			/* Set the primary profile */
-			const res = await primaryProfile({variables:{address:address}});
-			const primaryProfileRes = res?.data?.address?.wallet?.primaryProfile;
-			console.log("primaryProfileRes", primaryProfileRes);
-			setPrimaryProfile(primaryProfileRes);
+			// const res = await primaryProfile({variables:{address:address}});
+			// const primaryProfileRes = res?.data?.address?.wallet?.primaryProfile;
+			// console.log("primaryProfileRes", primaryProfileRes);
+			// setPrimaryProfile(primaryProfileRes);
 			
 			/* Set the indexingProfiles in the state variables */
 			setIndexingProfiles([
